@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Bitcoin, MessageCircle, Tag, ArrowRight, Loader2 } from "lucide-react";
@@ -13,7 +13,7 @@ interface Product {
   imageUrl?: string | null;
 }
 
-export default function CheckoutPage() {
+function CheckoutPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const productId = searchParams.get("productId");
@@ -198,5 +198,13 @@ export default function CheckoutPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense>
+      <CheckoutPageInner />
+    </Suspense>
   );
 }
