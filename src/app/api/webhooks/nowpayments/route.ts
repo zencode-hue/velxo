@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
       data: {
         provider: "nowpayments",
         eventType: paymentStatus ?? "unknown",
-        payload: payload as Record<string, unknown>,
+        payload: payload as import("@prisma/client").Prisma.InputJsonValue,
         status: logStatus,
       },
     });
