@@ -48,22 +48,19 @@ export async function POST(req: NextRequest) {
         email: normalizedEmail,
         passwordHash,
         name: name ?? null,
+        emailVerified: new Date(), // auto-verify; email is sent as confirmation only
       },
     });
 
-    // Generate email verification token
-    const token = crypto.randomBytes(32).toString("hex");
-    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-
-    await db.verificationToken.create({
-      data: {
-        identifier: normalizedEmail,
-        token,
-        expires,
-      },
-    });
-
-    await sendVerificationEmail(normalizedEmail, token);
+    // Send verification/welcome email (non-blocking — fails silently if email not configured)
+    try {
+      const token = crypto.randomBytes(32).toString("hex");
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      await db.verificationToken.create({ data: { identifier: normalizedEmail, token, expires } });
+      await sendVerificationEmail(normalizedEmail, token);
+    } catch {
+      // Email not configured — user is already verified above
+    }
 
     // Referral tracking: associate new user with affiliate if ref code provided
     if (ref) {
