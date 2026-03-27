@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Category } from "@prisma/client";
 import { db } from "@/lib/db";
 import ProductGrid from "@/components/storefront/ProductGrid";
 import type { CategoryOption } from "@/components/storefront/CategoryNav";
@@ -31,10 +32,10 @@ const VALID_CATEGORIES: CategoryOption[] = [
 ];
 
 async function getAllProducts(category?: string) {
-  const where: { isActive: boolean; category?: string } = { isActive: true };
+  const where: { isActive: boolean; category?: Category } = { isActive: true };
 
   if (category && VALID_CATEGORIES.includes(category as CategoryOption)) {
-    where.category = category;
+    where.category = category as Category;
   }
 
   const products = await db.product.findMany({
