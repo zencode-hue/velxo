@@ -6,27 +6,46 @@ import { Zap } from "lucide-react";
 
 function Footer() {
   return (
-    <footer className="border-t border-white/5 mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2 font-bold text-lg">
-            <Zap size={18} className="text-purple-500" />
-            <span className="gradient-text">Velxo</span>
+    <footer className="border-t border-white/5 mt-20" style={{ background: "rgba(10,10,10,0.8)" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
+          <div className="col-span-2 sm:col-span-1">
+            <div className="flex items-center gap-2 font-bold text-xl mb-3">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}>
+                <Zap size={14} className="text-white" />
+              </div>
+              <span style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Velxo</span>
+            </div>
+            <p className="text-xs text-gray-600 leading-relaxed">Premium digital marketplace. Instant delivery, secure payments.</p>
           </div>
-          <nav className="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
-            <Link href="/products" className="hover:text-white transition-colors">
-              Products
-            </Link>
-            <Link href="/auth/login" className="hover:text-white transition-colors">
-              Sign In
-            </Link>
-            <Link href="/auth/register" className="hover:text-white transition-colors">
-              Register
-            </Link>
-          </nav>
-          <p className="text-xs text-gray-600">
-            © {new Date().getFullYear()} Velxo. All rights reserved.
-          </p>
+          <div>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Products</p>
+            <div className="space-y-2">
+              {[["All Products", "/products"], ["Streaming", "/products?category=STREAMING"], ["AI Tools", "/products?category=AI_TOOLS"], ["Software", "/products?category=SOFTWARE"], ["Gaming", "/products?category=GAMING"], ["Hot Deals", "/deals"]].map(([label, href]) => (
+                <Link key={href} href={href} className="block text-sm text-gray-600 hover:text-gray-300 transition-colors">{label}</Link>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Company</p>
+            <div className="space-y-2">
+              {[["Blog", "/blog"], ["Affiliates", "/affiliate"], ["Support", "/support"]].map(([label, href]) => (
+                <Link key={href} href={href} className="block text-sm text-gray-600 hover:text-gray-300 transition-colors">{label}</Link>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Account</p>
+            <div className="space-y-2">
+              {[["Sign In", "/auth/login"], ["Register", "/auth/register"], ["Dashboard", "/dashboard"]].map(([label, href]) => (
+                <Link key={href} href={href} className="block text-sm text-gray-600 hover:text-gray-300 transition-colors">{label}</Link>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-gray-700">© {new Date().getFullYear()} Velxo. All rights reserved.</p>
+          <p className="text-xs text-gray-700">velxo.shop — Premium Digital Marketplace</p>
         </div>
       </div>
     </footer>
