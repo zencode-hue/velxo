@@ -44,11 +44,11 @@ export async function POST(req: NextRequest) {
     }
 
     const existing = await db.product.count();
-    if (existing > 0) {
+    if (existing >= 32) {
       return NextResponse.json({ message: `Skipped — ${existing} products already exist.` });
     }
 
-    await db.product.createMany({ data: products as never[] });
+    await db.product.createMany({ data: products as never[], skipDuplicates: true });
     return NextResponse.json({ message: `Seeded ${products.length} products successfully.` });
   } catch (err) {
     console.error("[seed-products]", err);
