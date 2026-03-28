@@ -1,8 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
-import { Upload, Download, Package } from "lucide-react";
+import Link from "next/link";
+import { Upload, Download, Package, ArrowLeft, RefreshCw } from "lucide-react";
+
+interface StockInfo {
+  stockCount: number;
+  unlimitedStock: boolean;
+  available: number;
+  delivered: number;
+}
 
 export default function AdminInventoryPage() {
   const params = useParams<{ id: string }>();
@@ -10,6 +18,23 @@ export default function AdminInventoryPage() {
   const [text, setText] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [stockInfo, setStockInfo] = useState<StockInfo | null>(null);
+  const [loadingStock, setLoadingStock] = useState(true);
+
+  const fetchStock = useCallback(async () => {
+    setLoadingStock(true);
+    try {
+      const res = await fetch(`/api/admin/products/${productId}/inventory`);
+      if (res.ok) {
+        const data = await res.json();
+        setStockInfo(data.data);
+      }
+    } finally {
+      setLoadingStock(false);
+    }
+  }, [productId]);
+
+  useEffect(() => { fetchStock(); }, [fetchStock]);
 
   async function handleUpload() {
     if (!text.trim()) return;
@@ -25,6 +50,7 @@ export default function AdminInventoryPage() {
       if (res.ok) {
         setStatus(`✅ Imported ${data.data.imported} item(s) successfully.`);
         setText("");
+        fetchStock();
       } else {
         setStatus(`❌ ${data.error}`);
       }
@@ -42,16 +68,46 @@ export default function AdminInventoryPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Package size={22} className="text-purple-400" /> Inventory Management
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">Upload credentials or license keys — one per line.</p>
+        <div className="flex items-center gap-3">
+          <Link href="/admin/products" className="text-gray-500 hover:text-white transition-colors">
+            <ArrowLeft size={18} />
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+              <Package size={22} className="text-purple-400" /> Inventory Management
+            </h1>
+            <p className="text-gray-500 text-sm mt-1">Upload credentials or license keys — one per line.</p>
+          </div>
         </div>
-        <button onClick={handleExport} className="btn-secondary text-sm px-5 py-2 gap-2">
-          <Download size={15} /> Export
-        </button>
+        <div className="flex items-center gap-2">
+          <button onClick={fetchStock} className="btn-secondary text-sm px-3 py-2">
+            <RefreshCw size={14} className={loadingStock ? "animate-spin" : ""} />
+          </button>
+          <button onClick={handleExport} className="btn-secondary text-sm px-5 py-2 gap-2">
+            <Download size={15} /> Export
+          </button>
+        </div>
       </div>
+
+      {/* Stock summary */}
+      {stockInfo && (
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="glass-card p-4 text-center">
+            <div className="text-2xl font-bold text-white">
+              {stockInfo.unlimitedStock ? "∞" : stockInfo.stockCount}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">Total Stock</div>
+          </div>
+          <div className="glass-card p-4 text-center">
+            <div className="text-2xl font-bold text-green-400">{stockInfo.available}</div>
+            <div className="text-xs text-gray-500 mt-1">Available Keys</div>
+          </div>
+          <div className="glass-card p-4 text-center">
+            <div className="text-2xl font-bold text-purple-400">{stockInfo.delivered}</div>
+            <div className="text-xs text-gray-500 mt-1">Delivered</div>
+          </div>
+        </div>
+      )}
 
       <div className="glass-card p-6 space-y-4">
         <label className="block text-sm text-gray-400 font-medium">
@@ -67,14 +123,19 @@ export default function AdminInventoryPage() {
         {status && (
           <p className={`text-sm ${status.startsWith("✅") ? "text-green-400" : "text-red-400"}`}>{status}</p>
         )}
-        <button
-          onClick={handleUpload}
-          disabled={loading || !text.trim()}
-          className="btn-primary text-sm px-6 py-2.5 gap-2"
-        >
-          <Upload size={15} />
-          {loading ? "Uploading..." : "Upload Stock"}
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleUpload}
+            disabled={loading || !text.trim()}
+            className="btn-primary text-sm px-6 py-2.5 gap-2"
+          >
+            <Upload size={15} />
+            {loading ? "Uploading..." : "Upload Stock"}
+          </button>
+          <p className="text-xs text-gray-600">
+            Each line = one inventory item. Encrypted at rest with AES-256-GCM.
+          </p>
+        </div>
       </div>
     </div>
   );

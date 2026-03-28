@@ -38,7 +38,8 @@ async function getAllProducts(category?: string) {
     where.category = category as Category;
   }
 
-  const products = await db.product.findMany({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const products = await (db.product.findMany as any)({
     where,
     orderBy: { createdAt: "desc" },
     take: 100,
@@ -50,10 +51,14 @@ async function getAllProducts(category?: string) {
       imageUrl: true,
       avgRating: true,
       stockCount: true,
+      unlimitedStock: true,
     },
-  });
+  }) as Array<{
+    id: string; title: string; price: { toString(): string }; category: string;
+    imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean;
+  }>;
 
-  return products.map((p: typeof products[number]) => ({
+  return products.map((p) => ({
     id: p.id,
     title: p.title,
     price: Number(p.price),
@@ -61,7 +66,8 @@ async function getAllProducts(category?: string) {
     imageUrl: p.imageUrl,
     avgRating: Number(p.avgRating),
     stockCount: p.stockCount,
-    inStock: p.stockCount > 0,
+    unlimitedStock: p.unlimitedStock,
+    inStock: p.unlimitedStock || p.stockCount > 0,
   }));
 }
 

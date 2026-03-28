@@ -28,7 +28,8 @@ export const metadata: Metadata = {
 };
 
 async function getFeaturedProducts() {
-  const products = await db.product.findMany({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const products = await (db.product.findMany as any)({
     where: { isActive: true },
     orderBy: { avgRating: "desc" },
     take: 8,
@@ -40,10 +41,14 @@ async function getFeaturedProducts() {
       imageUrl: true,
       avgRating: true,
       stockCount: true,
+      unlimitedStock: true,
     },
-  });
+  }) as Array<{
+    id: string; title: string; price: { toString(): string }; category: string;
+    imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean;
+  }>;
 
-  return products.map((p: typeof products[number]) => ({
+  return products.map((p) => ({
     id: p.id,
     title: p.title,
     price: Number(p.price),
@@ -51,7 +56,8 @@ async function getFeaturedProducts() {
     imageUrl: p.imageUrl,
     avgRating: Number(p.avgRating),
     stockCount: p.stockCount,
-    inStock: p.stockCount > 0,
+    unlimitedStock: p.unlimitedStock,
+    inStock: p.unlimitedStock || p.stockCount > 0,
   }));
 }
 
@@ -136,6 +142,71 @@ export default async function HomePage() {
                 className="text-gray-600 group-hover:text-purple-400 transition-colors mt-auto"
               />
             </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Why choose us */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5">
+        <div className="text-center mb-12">
+          <h2 className="text-2xl font-bold text-white mb-2">Why Choose Velxo?</h2>
+          <p className="text-gray-500">Everything you need, nothing you don&apos;t</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {[
+            {
+              icon: "⚡",
+              title: "Instant Delivery",
+              desc: "Your credentials are delivered automatically to your email the moment payment is confirmed. No waiting, no manual processing.",
+            },
+            {
+              icon: "🔒",
+              title: "Secure & Encrypted",
+              desc: "All inventory is encrypted with AES-256-GCM. Your data is safe and payments are processed through trusted providers.",
+            },
+            {
+              icon: "💎",
+              title: "Premium Quality",
+              desc: "Every product is verified before listing. We stand behind the quality of everything in our catalog.",
+            },
+          ].map((item) => (
+            <div key={item.title} className="glass-card p-6 text-center">
+              <div className="text-4xl mb-4">{item.icon}</div>
+              <h3 className="font-semibold text-white mb-2">{item.title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5">
+        <div className="text-center mb-12">
+          <h2 className="text-2xl font-bold text-white mb-2">Frequently Asked Questions</h2>
+        </div>
+        <div className="space-y-4">
+          {[
+            {
+              q: "How does delivery work?",
+              a: "After your payment is confirmed, your digital product (credentials, license key, etc.) is automatically sent to your registered email address.",
+            },
+            {
+              q: "What payment methods do you accept?",
+              a: "We accept crypto payments via NOWPayments (BTC, ETH, USDT, and 100+ coins) and manual payments via Discord.",
+            },
+            {
+              q: "What if I have an issue with my order?",
+              a: "Join our Discord server and open a support ticket. Our team will resolve any issues promptly.",
+            },
+            {
+              q: "Are the products legitimate?",
+              a: "Yes. All products are sourced and verified before being listed. We maintain high quality standards across our catalog.",
+            },
+          ].map((item) => (
+            <div key={item.q} className="glass-card p-5">
+              <h3 className="font-semibold text-white mb-2 text-sm">{item.q}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{item.a}</p>
+            </div>
           ))}
         </div>
       </section>

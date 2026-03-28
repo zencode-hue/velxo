@@ -17,62 +17,48 @@ interface PageProps {
   params: { id: string };
 }
 
+type ReviewItem = { id: string; rating: number; comment: string | null; createdAt: Date; user: { name: string | null } };
+
 async function getProduct(id: string) {
-  const product = await db.product.findFirst({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const product = await (db.product.findFirst as any)({
     where: { id, isActive: true },
     select: {
-      id: true,
-      title: true,
-      description: true,
-      price: true,
-      category: true,
-      imageUrl: true,
-      avgRating: true,
-      stockCount: true,
+      id: true, title: true, description: true, price: true, category: true,
+      imageUrl: true, avgRating: true, stockCount: true, unlimitedStock: true,
       reviews: {
         orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          rating: true,
-          comment: true,
-          createdAt: true,
-          user: { select: { name: true } },
-        },
+        select: { id: true, rating: true, comment: true, createdAt: true, user: { select: { name: true } } },
       },
     },
-  });
+  }) as ({
+    id: string; title: string; description: string; price: { toString(): string };
+    category: string; imageUrl: string | null; avgRating: { toString(): string };
+    stockCount: number; unlimitedStock: boolean; reviews: ReviewItem[];
+  } | null);
 
   if (!product) return null;
 
-  const relatedProducts = await db.product.findMany({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const relatedProducts = await (db.product.findMany as any)({
     where: { category: product.category, isActive: true, id: { not: product.id } },
     take: 3,
     orderBy: { avgRating: "desc" },
-    select: {
-      id: true,
-      title: true,
-      price: true,
-      category: true,
-      imageUrl: true,
-      avgRating: true,
-      stockCount: true,
-    },
-  });
+    select: { id: true, title: true, price: true, category: true, imageUrl: true, avgRating: true, stockCount: true, unlimitedStock: true },
+  }) as Array<{
+    id: string; title: string; price: { toString(): string }; category: string;
+    imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean;
+  }>;
 
   return {
     ...product,
     price: Number(product.price),
     avgRating: Number(product.avgRating),
-    inStock: product.stockCount > 0,
+    inStock: product.unlimitedStock || product.stockCount > 0,
     relatedProducts: relatedProducts.map((p) => ({
-      id: p.id,
-      title: p.title,
-      price: Number(p.price),
-      category: p.category,
-      imageUrl: p.imageUrl,
-      avgRating: Number(p.avgRating),
-      stockCount: p.stockCount,
-      inStock: p.stockCount > 0,
+      id: p.id, title: p.title, price: Number(p.price), category: p.category,
+      imageUrl: p.imageUrl, avgRating: Number(p.avgRating), stockCount: p.stockCount,
+      unlimitedStock: p.unlimitedStock, inStock: p.unlimitedStock || p.stockCount > 0,
     })),
   };
 }
@@ -130,8 +116,43 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
   if (!product) notFound();
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    description: product.description,
+    image: product.imageUrl ?? undefined,
+    url: `${appUrl}/products/${product.id}`,
+    offers: {
+      "@type": "Offer",
+      price: product.price.toFixed(2),
+      priceCurrency: "USD",
+      availability: product.inStock
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      seller: { "@type": "Organization", name: "Velxo" },
+    },
+    ...(product.reviews.length > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: product.avgRating.toFixed(1),
+            reviewCount: product.reviews.length,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Product detail */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
         {/* Image */}
@@ -159,7 +180,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               {CATEGORY_LABELS[product.category] ?? product.category}
             </span>
             {product.inStock ? (
-              <span className="badge-green">In Stock ({product.stockCount})</span>
+              <span className="badge-green">In Stock</span>
             ) : (
               <span className="badge-red">Out of Stock</span>
             )}

@@ -32,14 +32,15 @@ export async function POST(req: NextRequest) {
 
     const { productId, discountCode, paymentProvider } = parsed.data;
 
-    const product = await db.product.findUnique({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const product = await (db.product.findFirst as any)({
       where: { id: sanitizeString(productId), isActive: true },
-    });
+    }) as ({ unlimitedStock: boolean; stockCount: number; id: string; title: string; price: { toString(): string }; } | null);
 
     if (!product) {
       return NextResponse.json({ data: null, error: "Product not found", meta: {} }, { status: 400 });
     }
-    if (product.stockCount <= 0) {
+    if (!product.unlimitedStock && product.stockCount <= 0) {
       return NextResponse.json({ data: null, error: "Product is out of stock", meta: {} }, { status: 400 });
     }
 

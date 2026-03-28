@@ -10,6 +10,7 @@ const createSchema = z.object({
   category: z.enum(["STREAMING", "AI_TOOLS", "SOFTWARE", "GAMING"]),
   imageUrl: z.string().url().optional().or(z.literal("")),
   isActive: z.boolean().default(true),
+  unlimitedStock: z.boolean().default(false),
 });
 
 export async function POST(req: NextRequest) {
@@ -25,7 +26,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: parsed.error.errors[0].message }, { status: 400 });
     }
 
-    const { title, description, price, category, imageUrl, isActive } = parsed.data;
+    const { title, description, price, category, imageUrl, isActive, unlimitedStock } = parsed.data;
 
     const product = await db.product.create({
       data: {
@@ -35,6 +36,7 @@ export async function POST(req: NextRequest) {
         category,
         imageUrl: imageUrl || null,
         isActive,
+        unlimitedStock,
       },
     });
 

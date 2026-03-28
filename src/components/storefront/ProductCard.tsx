@@ -14,6 +14,7 @@ export interface ProductCardProps {
   avgRating: number;
   stockCount: number;
   inStock: boolean;
+  unlimitedStock?: boolean;
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -51,7 +52,9 @@ export default function ProductCard({
   avgRating,
   stockCount,
   inStock,
+  unlimitedStock,
 }: ProductCardProps) {
+  const available = unlimitedStock || inStock;
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -75,7 +78,7 @@ export default function ProductCard({
         )}
         {/* Stock badge overlay */}
         <div className="absolute top-2 right-2">
-          {inStock ? (
+          {available ? (
             <span className="badge-green">In Stock</span>
           ) : (
             <span className="badge-red">Out of Stock</span>
@@ -101,10 +104,10 @@ export default function ProductCard({
             ${price.toFixed(2)}
           </span>
           <Link
-            href={inStock ? `/checkout?productId=${id}` : "#"}
-            onClick={(e) => !inStock && e.preventDefault()}
-            className={`btn-primary text-xs px-4 py-2 ${!inStock ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
-            aria-disabled={!inStock}
+            href={available ? `/checkout?productId=${id}` : "#"}
+            onClick={(e) => !available && e.preventDefault()}
+            className={`btn-primary text-xs px-4 py-2 ${!available ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
+            aria-disabled={!available}
           >
             Buy Now
           </Link>

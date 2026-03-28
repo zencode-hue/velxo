@@ -12,7 +12,7 @@ export default async function AdminProductsPage() {
 
   const products = await db.product.findMany({
     orderBy: { createdAt: "desc" },
-    select: { id: true, title: true, category: true, price: true, stockCount: true, isActive: true, avgRating: true },
+    select: { id: true, title: true, category: true, price: true, stockCount: true, isActive: true, avgRating: true, unlimitedStock: true },
   });
 
   return (
@@ -49,7 +49,9 @@ export default async function AdminProductsPage() {
                   <td className="px-5 py-3"><span className="badge-purple">{CATEGORY_LABELS[p.category] ?? p.category}</span></td>
                   <td className="px-5 py-3 text-right text-white">${Number(p.price).toFixed(2)}</td>
                   <td className="px-5 py-3 text-right">
-                    <span className={p.stockCount > 0 ? "text-green-400" : "text-red-400"}>{p.stockCount}</span>
+                    <span className={p.unlimitedStock ? "text-blue-400 text-xs" : p.stockCount > 0 ? "text-green-400" : "text-red-400"}>
+                      {p.unlimitedStock ? "∞" : p.stockCount}
+                    </span>
                   </td>
                   <td className="px-5 py-3 text-center">
                     <span className={p.isActive ? "badge-green" : "badge-red"}>{p.isActive ? "Active" : "Inactive"}</span>

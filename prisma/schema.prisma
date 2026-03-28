@@ -70,9 +70,10 @@ model Product {
   price       Decimal  @db.Decimal(10, 2)
   category    Category
   imageUrl    String?
-  isActive    Boolean  @default(true)
-  avgRating   Decimal  @default(0) @db.Decimal(3, 2)
-  stockCount  Int      @default(0)
+  isActive        Boolean  @default(true)
+  unlimitedStock  Boolean  @default(false)
+  avgRating       Decimal  @default(0) @db.Decimal(3, 2)
+  stockCount      Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

@@ -24,6 +24,7 @@ export default function NewProductPage() {
     category: "STREAMING",
     imageUrl: "",
     isActive: true,
+    unlimitedStock: true,
   });
 
   function set(field: string, value: string | boolean) {
@@ -125,6 +126,17 @@ export default function NewProductPage() {
             className="input-field"
             placeholder="https://..."
           />
+        </div>
+
+        <div className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            id="unlimitedStock"
+            checked={form.unlimitedStock}
+            onChange={(e) => set("unlimitedStock", e.target.checked)}
+            className="w-4 h-4 accent-purple-500"
+          />
+          <label htmlFor="unlimitedStock" className="text-sm text-gray-400">Unlimited stock (no inventory required)</label>
         </div>
 
         <div className="flex items-center gap-3">

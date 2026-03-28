@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
     let discountAmount: number | null = null;
 
     if (productId) {
-      const product = await db.product.findUnique({
+      const product = await db.product.findFirst({
         where: { id: sanitizeString(productId), isActive: true },
         select: { price: true },
       });
