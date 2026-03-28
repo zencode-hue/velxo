@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import {
   LayoutDashboard, Package, ShoppingCart, Users,
   Tag, UserCheck, Settings, Zap, Menu,
-  TrendingUp, ExternalLink,
+  TrendingUp, ExternalLink, FileText,
 } from "lucide-react";
 
 const navItems = [
@@ -16,6 +16,7 @@ const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/discounts", label: "Discounts", icon: Tag },
   { href: "/admin/affiliates", label: "Affiliates", icon: UserCheck },
+  { href: "/admin/blog", label: "Blog", icon: FileText },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

@@ -165,6 +165,7 @@ export default function Navbar() {
               { href: "/blog", label: "📝 Blog" },
               { href: "/affiliate", label: "💰 Affiliates" },
               { href: "/support", label: "💬 Support" },
+              { href: "/about", label: "ℹ️ About" },
               { href: "/wishlist", label: "❤️ Wishlist" },
             ].map((link) => (
               <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}

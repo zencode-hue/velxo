@@ -2,6 +2,7 @@ import Navbar from "@/components/storefront/Navbar";
 import Providers from "@/components/storefront/Providers";
 import PageViewTracker from "@/components/PageViewTracker";
 import AnnouncementBar from "@/components/storefront/AnnouncementBar";
+import TawkChat from "@/components/TawkChat";
 import Link from "next/link";
 import { Zap, Twitter, MessageCircle, Mail } from "lucide-react";
 
@@ -41,7 +42,7 @@ function Footer() {
           <div>
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Company</p>
             <div className="space-y-2">
-              {[["Blog", "/blog"], ["Affiliates", "/affiliate"], ["Support", "/support"], ["Wishlist", "/wishlist"]].map(([label, href]) => (
+              {[["About", "/about"], ["Blog", "/blog"], ["Affiliates", "/affiliate"], ["Support", "/support"], ["Terms", "/terms"], ["Privacy", "/privacy"]].map(([label, href]) => (
                 <Link key={href} href={href} className="block text-sm text-gray-600 hover:text-gray-300 transition-colors">{label}</Link>
               ))}
             </div>
@@ -72,6 +73,7 @@ export default function StorefrontLayout({ children }: { children: React.ReactNo
   return (
     <Providers>
       <PageViewTracker />
+      <TawkChat />
       <AnnouncementBar />
       <Navbar />
       <main className="min-h-screen">{children}</main>

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Upload, Download, Package, ArrowLeft, RefreshCw } from "lucide-react";
+import { Upload, Download, Package, ArrowLeft, RefreshCw, FileText } from "lucide-react";
 
 interface StockInfo {
   stockCount: number;
@@ -20,6 +20,8 @@ export default function AdminInventoryPage() {
   const [loading, setLoading] = useState(false);
   const [stockInfo, setStockInfo] = useState<StockInfo | null>(null);
   const [loadingStock, setLoadingStock] = useState(true);
+  const [tab, setTab] = useState<"paste" | "file">("paste");
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const fetchStock = useCallback(async () => {
     setLoadingStock(true);
@@ -35,6 +37,17 @@ export default function AdminInventoryPage() {
   }, [productId]);
 
   useEffect(() => { fetchStock(); }, [fetchStock]);
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setText(ev.target?.result as string ?? "");
+      setTab("paste");
+    };
+    reader.readAsText(file);
+  }
 
   async function handleUpload() {
     if (!text.trim()) return;
@@ -110,19 +123,53 @@ export default function AdminInventoryPage() {
       )}
 
       <div className="glass-card p-6 space-y-4">
-        <label className="block text-sm text-gray-400 font-medium">
-          Paste credentials / license keys (one per line)
-        </label>
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          rows={12}
-          placeholder={"user1@example.com:password123\nuser2@example.com:password456\nLICENSE-KEY-XXXX"}
-          className="input-field font-mono text-sm resize-y"
-        />
+        {/* Tab switcher */}
+        <div className="flex gap-2 p-1 rounded-lg bg-white/5 w-fit">
+          <button onClick={() => setTab("paste")}
+            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${tab === "paste" ? "bg-purple-600 text-white" : "text-gray-400 hover:text-white"}`}>
+            Paste Text
+          </button>
+          <button onClick={() => setTab("file")}
+            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${tab === "file" ? "bg-purple-600 text-white" : "text-gray-400 hover:text-white"}`}>
+            Upload File
+          </button>
+        </div>
+
+        {tab === "file" ? (
+          <div>
+            <input ref={fileRef} type="file" accept=".txt,.csv" onChange={handleFileChange} className="hidden" />
+            <div
+              onClick={() => fileRef.current?.click()}
+              className="border-2 border-dashed border-white/10 rounded-xl p-10 text-center cursor-pointer hover:border-purple-600/40 hover:bg-purple-600/5 transition-all">
+              <FileText size={32} className="text-gray-600 mx-auto mb-3" />
+              <p className="text-sm text-gray-400 font-medium">Click to select a .txt or .csv file</p>
+              <p className="text-xs text-gray-600 mt-1">One credential per line</p>
+            </div>
+            {text && (
+              <p className="text-xs text-green-400 mt-2">
+                ✅ File loaded — {text.split("\n").filter((l) => l.trim()).length} lines ready to upload
+              </p>
+            )}
+          </div>
+        ) : (
+          <div>
+            <label className="block text-sm text-gray-400 font-medium mb-2">
+              Paste credentials / license keys (one per line)
+            </label>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={12}
+              placeholder={"user1@example.com:password123\nuser2@example.com:password456\nLICENSE-KEY-XXXX"}
+              className="input-field font-mono text-sm resize-y"
+            />
+          </div>
+        )}
+
         {status && (
           <p className={`text-sm ${status.startsWith("✅") ? "text-green-400" : "text-red-400"}`}>{status}</p>
         )}
+
         <div className="flex items-center gap-3">
           <button
             onClick={handleUpload}

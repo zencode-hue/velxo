@@ -284,9 +284,25 @@ model BalanceTransaction {
   @@index([userId, createdAt])
 }
 
-// ─── Page Analytics ───────────────────────────────────────────────────────────
+// ─── Blog ─────────────────────────────────────────────────────────────────────
 
-model PageView {
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String   @db.Text
+  category    String   @default("General")
+  emoji       String   @default("📝")
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([published, createdAt])
+}
+
+// ─── Page Analytics ───────────────────────────────────────────────────────────
   id        String   @id @default(cuid())
   path      String
   country   String?
