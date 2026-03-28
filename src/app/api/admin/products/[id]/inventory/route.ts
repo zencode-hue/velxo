@@ -64,8 +64,13 @@ export async function POST(
   }
 
   const inventoryData = lines.map((line) => {
-    const { encryptedData, iv, authTag } = encrypt(line);
-    return { productId: params.id, encryptedData, iv, authTag };
+    try {
+      const { encryptedData, iv, authTag } = encrypt(line);
+      return { productId: params.id, encryptedData, iv, authTag };
+    } catch (err) {
+      console.error("[inventory encrypt error]", err);
+      throw new Error("Encryption failed — check ENCRYPTION_KEY env var");
+    }
   });
 
   await db.$transaction([
