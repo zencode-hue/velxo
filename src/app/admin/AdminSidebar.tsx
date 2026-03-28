@@ -17,6 +17,7 @@ const navItems = [
   { href: "/admin/discounts", label: "Discounts", icon: Tag },
   { href: "/admin/affiliates", label: "Affiliates", icon: UserCheck },
   { href: "/admin/blog", label: "Blog", icon: FileText },
+  { href: "/admin/setup", label: "Setup", icon: Settings },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

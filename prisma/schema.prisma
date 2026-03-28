@@ -303,6 +303,8 @@ model BlogPost {
 }
 
 // ─── Page Analytics ───────────────────────────────────────────────────────────
+
+model PageView {
   id        String   @id @default(cuid())
   path      String
   country   String?
