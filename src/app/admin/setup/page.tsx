@@ -32,7 +32,8 @@ function SetupClient() {
   }
 
   const tasks = [
-    { name: "Seed Products", url: "/api/auth/seed-products", desc: "Add 29 products to the database" },
+    { name: "Seed Products", url: "/api/auth/seed-products", desc: "Add 37 products to the database" },
+    { name: "Fix Products (Unlimited Stock)", url: "/api/auth/fix-products", desc: "Set all products to unlimited stock + 100-999 count" },
     { name: "Seed Blog Posts", url: "/api/auth/seed-blog", desc: "Add 6 blog posts to the database" },
     { name: "Set Product Ratings", url: "/api/auth/seed-ratings", desc: "Give all products 4.2–5.0 star ratings" },
     { name: "Setup Admin", url: "/api/auth/setup-admin", desc: "Create the admin account" },
