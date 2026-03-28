@@ -1,5 +1,6 @@
 import Navbar from "@/components/storefront/Navbar";
 import Providers from "@/components/storefront/Providers";
+import PageViewTracker from "@/components/PageViewTracker";
 import Link from "next/link";
 import { Zap } from "lucide-react";
 
@@ -39,6 +40,7 @@ export default function StorefrontLayout({
 }) {
   return (
     <Providers>
+      <PageViewTracker />
       <Navbar />
       <main className="min-h-screen">{children}</main>
       <Footer />

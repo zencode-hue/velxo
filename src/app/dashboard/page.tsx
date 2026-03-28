@@ -4,31 +4,29 @@ import type { Metadata } from "next";
 import { getServerSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { decrypt } from "@/lib/crypto";
-import { Package, ShoppingBag, Star, Users, Copy } from "lucide-react";
+import { Package, ShoppingBag, Star, Users, Wallet } from "lucide-react";
+import AffiliateSection from "./AffiliateSection";
+import BalanceSection from "./BalanceSection";
+import CopyButton from "./CopyButton";
 
 export const metadata: Metadata = {
   title: "Dashboard — Velxo",
-  description: "View your orders, deliveries, and affiliate stats.",
+  description: "View your orders, balance, and affiliate stats.",
 };
 
 async function getDashboardData(userId: string) {
-  const [orders, affiliate] = await Promise.all([
+  const [user, orders, affiliate] = await Promise.all([
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (db.user.findUnique as any)({ where: { id: userId }, select: { balance: true, email: true, name: true } }) as Promise<{ balance: { toString(): string }; email: string; name: string | null } | null>,
     db.order.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
       include: {
         product: { select: { title: true, category: true } },
-        deliveryLog: {
-          include: {
-            inventoryItem: { select: { encryptedData: true, iv: true, authTag: true } },
-          },
-        },
+        deliveryLog: { include: { inventoryItem: { select: { encryptedData: true, iv: true, authTag: true } } } },
       },
     }),
-    db.affiliate.findUnique({
-      where: { userId },
-      include: { _count: { select: { referrals: true } } },
-    }),
+    db.affiliate.findUnique({ where: { userId }, include: { _count: { select: { referrals: true } } } }),
   ]);
 
   const ordersWithCredentials = orders.map((order) => {
@@ -37,9 +35,7 @@ async function getDashboardData(userId: string) {
       try {
         const { encryptedData, iv, authTag } = order.deliveryLog.inventoryItem;
         credentials = decrypt(encryptedData, iv, authTag);
-      } catch {
-        credentials = null;
-      }
+      } catch { credentials = null; }
     }
     return {
       id: order.id,
@@ -48,35 +44,28 @@ async function getDashboardData(userId: string) {
       amount: Number(order.amount),
       status: order.status,
       createdAt: order.createdAt,
-      deliveredAt: order.deliveryLog?.deliveredAt ?? null,
       credentials,
     };
   });
 
-  return { orders: ordersWithCredentials, affiliate };
+  return { user, orders: ordersWithCredentials, affiliate };
 }
 
 const STATUS_BADGE: Record<string, string> = {
-  PAID: "badge-green",
-  PENDING: "badge-yellow",
-  FAILED: "badge-red",
-  PENDING_STOCK: "badge-yellow",
-  REFUNDED: "badge-purple",
+  PAID: "badge-green", PENDING: "badge-yellow", FAILED: "badge-red",
+  PENDING_STOCK: "badge-yellow", REFUNDED: "badge-purple",
 };
-
 const CATEGORY_LABELS: Record<string, string> = {
-  STREAMING: "Streaming",
-  AI_TOOLS: "AI Tools",
-  SOFTWARE: "Software",
-  GAMING: "Gaming",
+  STREAMING: "Streaming", AI_TOOLS: "AI Tools", SOFTWARE: "Software", GAMING: "Gaming",
 };
 
 export default async function DashboardPage() {
   const session = await getServerSession();
   if (!session?.user?.id) redirect("/auth/login");
 
-  const { orders, affiliate } = await getDashboardData(session.user.id);
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const { user, orders, affiliate } = await getDashboardData(session.user.id);
+  const appUrl = "https://velxo.shop";
+  const balance = Number(user?.balance ?? 0);
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -85,47 +74,40 @@ export default async function DashboardPage() {
         <p className="text-gray-500 mt-1">Welcome back, {session.user.name ?? session.user.email}</p>
       </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-        {[
-          { label: "Total Orders", value: orders.length, icon: <ShoppingBag size={18} className="text-purple-400" /> },
-          { label: "Delivered", value: orders.filter((o) => o.status === "PAID" && o.credentials).length, icon: <Package size={18} className="text-green-400" /> },
-          { label: "Referrals", value: affiliate?._count.referrals ?? 0, icon: <Users size={18} className="text-blue-400" /> },
-          { label: "Earned", value: `$${(affiliate ? Number(affiliate.totalEarned) : 0).toFixed(2)}`, icon: <Star size={18} className="text-yellow-400" /> },
-        ].map((stat) => (
-          <div key={stat.label} className="glass-card p-5 flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-gray-500 text-sm">{stat.icon}{stat.label}</div>
-            <div className="text-2xl font-bold text-white">{stat.value}</div>
-          </div>
-        ))}
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div className="glass-card p-5 flex flex-col gap-2">
+          <div className="flex items-center gap-2 text-gray-500 text-sm"><ShoppingBag size={16} className="text-purple-400" />Orders</div>
+          <div className="text-2xl font-bold text-white">{orders.length}</div>
+        </div>
+        <div className="glass-card p-5 flex flex-col gap-2">
+          <div className="flex items-center gap-2 text-gray-500 text-sm"><Package size={16} className="text-green-400" />Delivered</div>
+          <div className="text-2xl font-bold text-white">{orders.filter((o) => o.credentials).length}</div>
+        </div>
+        <div className="glass-card p-5 flex flex-col gap-2">
+          <div className="flex items-center gap-2 text-gray-500 text-sm"><Wallet size={16} className="text-cyan-400" />Balance</div>
+          <div className="text-2xl font-bold text-cyan-400">${balance.toFixed(2)}</div>
+        </div>
+        <div className="glass-card p-5 flex flex-col gap-2">
+          <div className="flex items-center gap-2 text-gray-500 text-sm"><Star size={16} className="text-yellow-400" />Earned</div>
+          <div className="text-2xl font-bold text-white">${(affiliate ? Number(affiliate.totalEarned) : 0).toFixed(2)}</div>
+        </div>
       </div>
 
+      {/* Balance section */}
+      <BalanceSection balance={balance} />
+
       {/* Affiliate section */}
-      {affiliate && (
-        <div className="glass-card p-6 mb-10">
-          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-            <Users size={18} className="text-purple-400" /> Affiliate Program
-          </h2>
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-            <div className="flex-1">
-              <p className="text-sm text-gray-500 mb-1">Your referral link</p>
-              <code className="text-sm text-purple-300 break-all">
-                {appUrl}/auth/register?ref={affiliate.referralCode}
-              </code>
-            </div>
-            <div className="flex gap-4 text-sm">
-              <div className="text-center">
-                <div className="text-white font-bold">{affiliate._count.referrals}</div>
-                <div className="text-gray-500">Referrals</div>
-              </div>
-              <div className="text-center">
-                <div className="text-white font-bold">${Number(affiliate.pendingPayout).toFixed(2)}</div>
-                <div className="text-gray-500">Pending</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <AffiliateSection
+        affiliate={affiliate ? {
+          referralCode: affiliate.referralCode,
+          referralLink: `${appUrl}/auth/register?ref=${affiliate.referralCode}`,
+          totalReferrals: affiliate._count.referrals,
+          totalEarned: Number(affiliate.totalEarned),
+          pendingPayout: Number(affiliate.pendingPayout),
+          commissionPct: Number(affiliate.commissionPct),
+        } : null}
+      />
 
       {/* Orders */}
       <h2 className="text-xl font-bold text-white mb-5 flex items-center gap-2">
@@ -160,14 +142,14 @@ export default async function DashboardPage() {
                 <div className="mt-3 p-3 bg-black/40 rounded-lg border border-purple-600/20">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs text-gray-500">Credentials / License Key</span>
-                    <Copy size={13} className="text-gray-600 cursor-pointer hover:text-purple-400 transition-colors" />
+                    <CopyButton text={order.credentials} />
                   </div>
                   <code className="text-sm text-purple-300 break-all">{order.credentials}</code>
                 </div>
               )}
 
               {order.status === "PENDING_STOCK" && (
-                <p className="text-xs text-yellow-400 mt-2">⏳ Awaiting stock — you will be notified when your order is fulfilled.</p>
+                <p className="text-xs text-yellow-400 mt-2">Awaiting stock — you will be notified when fulfilled.</p>
               )}
             </div>
           ))}

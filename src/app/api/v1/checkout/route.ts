@@ -9,7 +9,7 @@ const DISCORD_SERVER_URL = process.env.DISCORD_SERVER_URL ?? "https://discord.gg
 const bodySchema = z.object({
   productId: z.string().min(1),
   discountCode: z.string().optional(),
-  paymentProvider: z.enum(["nowpayments", "discord"]),
+  paymentProvider: z.enum(["nowpayments", "discord", "balance"]),
 });
 
 export async function POST(req: NextRequest) {
@@ -70,6 +70,63 @@ export async function POST(req: NextRequest) {
 
     const finalAmount = Math.max(0, Number(product.price) - discountAmount);
 
+    // Balance payment — deduct immediately
+    if (paymentProvider === "balance") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const user = await (db.user.findUnique as any)({ where: { id: userId }, select: { balance: true } }) as { balance: { toString(): string } } | null;
+      if (!user) return NextResponse.json({ data: null, error: "User not found", meta: {} }, { status: 400 });
+      if (Number(user.balance) < finalAmount) {
+        return NextResponse.json({ data: null, error: "Insufficient balance", meta: {} }, { status: 400 });
+      }
+
+      const order = await db.$transaction(async (tx) => {
+        const newOrder = await tx.order.create({
+          data: {
+            userId,
+            productId: product.id,
+            amount: finalAmount,
+            discountAmount,
+            status: "PAID",
+            paymentProvider: "balance",
+            discountCodeId: discountCodeRecord?.id ?? null,
+          },
+        });
+
+        // Deduct balance
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (tx.user.update as any)({
+          where: { id: userId },
+          data: { balance: { decrement: finalAmount } },
+        });
+
+        // Record transaction
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (tx as any).balanceTransaction.create({
+          data: {
+            userId,
+            type: "PURCHASE",
+            amount: -finalAmount,
+            description: `Purchase: ${product.title}`,
+            orderId: newOrder.id,
+          },
+        });
+
+        if (discountCodeRecord) {
+          await tx.discountCode.update({ where: { id: discountCodeRecord.id }, data: { usageCount: { increment: 1 } } });
+          await tx.discountUsage.create({ data: { discountCodeId: discountCodeRecord.id, userId } });
+        }
+
+        return newOrder;
+      });
+
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+      return NextResponse.json({
+        data: { redirectUrl: `${appUrl}/checkout/success?orderId=${order.id}`, orderId: order.id },
+        error: null,
+        meta: {},
+      });
+    }
+
     const order = await db.$transaction(async (tx) => {
       const newOrder = await tx.order.create({
         data: {
@@ -93,7 +150,6 @@ export async function POST(req: NextRequest) {
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
-    // NOWPayments — crypto payment
     if (paymentProvider === "nowpayments") {
       const apiKey = process.env.NOWPAYMENTS_API_KEY;
       if (!apiKey) {
@@ -120,25 +176,17 @@ export async function POST(req: NextRequest) {
       }
 
       const npData = await npRes.json() as { invoice_url?: string; id?: string };
-
       await db.order.update({ where: { id: order.id }, data: { paymentRef: String(npData.id ?? "") } });
-
       return NextResponse.json({ data: { redirectUrl: npData.invoice_url }, error: null, meta: {} });
     }
 
-    // Discord — manual payment redirect
     if (paymentProvider === "discord") {
       const discordMessage = encodeURIComponent(
         `Hi! I want to purchase: ${product.title} ($${finalAmount.toFixed(2)}) — Order ID: ${order.id}`
       );
       const redirectUrl = `${DISCORD_SERVER_URL}?message=${discordMessage}`;
-
       return NextResponse.json({
-        data: {
-          redirectUrl,
-          orderId: order.id,
-          instructions: `Join our Discord server and send your payment details. Quote Order ID: ${order.id}`,
-        },
+        data: { redirectUrl, orderId: order.id, instructions: `Join our Discord server and send your payment details. Quote Order ID: ${order.id}` },
         error: null,
         meta: {},
       });

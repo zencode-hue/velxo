@@ -51,14 +51,16 @@ model User {
   name          String?
   role          Role      @default(CUSTOMER)
   emailVerified DateTime?
+  balance       Decimal   @default(0) @db.Decimal(10, 2)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  orders        Order[]
-  reviews       Review[]
-  affiliate     Affiliate?
-  sessions      Session[]
-  loginAttempts LoginAttempt[]
+  orders             Order[]
+  reviews            Review[]
+  affiliate          Affiliate?
+  sessions           Session[]
+  loginAttempts      LoginAttempt[]
+  balanceTransactions BalanceTransaction[]
 
   @@index([email])
 }
@@ -254,4 +256,46 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// ─── Balance / Wallet ─────────────────────────────────────────────────────────
+
+enum BalanceTxType {
+  TOPUP
+  PURCHASE
+  REFUND
+  ADMIN_CREDIT
+  ADMIN_DEBIT
+  AFFILIATE_PAYOUT
+}
+
+model BalanceTransaction {
+  id          String         @id @default(cuid())
+  userId      String
+  type        BalanceTxType
+  amount      Decimal        @db.Decimal(10, 2)
+  description String?
+  orderId     String?
+  createdAt   DateTime       @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+}
+
+// ─── Page Analytics ───────────────────────────────────────────────────────────
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  country   String?
+  city      String?
+  referrer  String?
+  userAgent String?
+  sessionId String?
+  createdAt DateTime @default(now())
+
+  @@index([path, createdAt])
+  @@index([createdAt])
+  @@index([country])
 }
