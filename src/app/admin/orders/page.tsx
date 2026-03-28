@@ -43,7 +43,9 @@ export default async function AdminOrdersPage() {
           <tbody>
             {orders.map((o) => (
               <tr key={o.id} className="border-b border-white/5 hover:bg-white/2 transition-colors">
-                <td className="px-4 py-3 font-mono text-xs text-gray-400">{o.id.slice(0, 8)}…</td>
+                <td className="px-4 py-3 font-mono text-xs text-purple-400 hover:text-purple-300">
+                  <a href={`/orders/${o.id}`} target="_blank" rel="noopener noreferrer">{o.id.slice(0, 8)}…</a>
+                </td>
                 <td className="px-4 py-3 text-gray-300 truncate max-w-[160px]">{o.user.email}</td>
                 <td className="px-4 py-3 text-white truncate max-w-[160px]">{o.product.title}</td>
                 <td className="px-4 py-3 text-right text-white">${Number(o.amount).toFixed(2)}</td>

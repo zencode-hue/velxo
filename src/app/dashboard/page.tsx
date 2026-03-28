@@ -132,7 +132,9 @@ export default async function DashboardPage() {
                     <span className={`${STATUS_BADGE[order.status] ?? "badge-purple"} text-xs`}>{order.status}</span>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
-                    Order #{order.id.slice(0, 8)} · {new Date(order.createdAt).toLocaleDateString()}
+                    <Link href={`/orders/${order.id}`} className="text-purple-400 hover:text-purple-300 transition-colors">
+                      Order #{order.id.slice(0, 8)}
+                    </Link> · {new Date(order.createdAt).toLocaleDateString()}
                   </p>
                 </div>
                 <span className="text-lg font-bold text-white">${order.amount.toFixed(2)}</span>
