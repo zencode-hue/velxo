@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const product = await db.product.create({
       data: {
         title,
-        description: description ?? null,
+        description: description ?? "",
         price,
         category,
         imageUrl: imageUrl || null,
