@@ -6,6 +6,8 @@ import { db } from "@/lib/db";
 import HeroSection from "@/components/storefront/HeroSection";
 import ProductCard from "@/components/storefront/ProductCard";
 import FeaturedCategories from "@/components/storefront/FeaturedCategories";
+import TrustBadges from "@/components/storefront/TrustBadges";
+import NewsletterSection from "@/components/storefront/NewsletterSection";
 import { ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -20,22 +22,6 @@ export const metadata: Metadata = {
   },
 };
 
-async function getFeaturedProducts() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const products = await (db.product.findMany as any)({
-    where: { isActive: true },
-    orderBy: { createdAt: "desc" },
-    take: 8,
-    select: { id: true, title: true, price: true, category: true, imageUrl: true, avgRating: true, stockCount: true, unlimitedStock: true },
-  }) as Array<{ id: string; title: string; price: { toString(): string }; category: string; imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean }>;
-
-  return products.map((p) => ({
-    id: p.id, title: p.title, price: Number(p.price), category: p.category,
-    imageUrl: p.imageUrl, avgRating: Number(p.avgRating), stockCount: p.stockCount,
-    unlimitedStock: p.unlimitedStock, inStock: p.unlimitedStock || p.stockCount > 0,
-  }));
-}
-
 async function getProductsByCategory(category: string, take = 4) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const products = await (db.product.findMany as any)({
@@ -44,7 +30,21 @@ async function getProductsByCategory(category: string, take = 4) {
     take,
     select: { id: true, title: true, price: true, category: true, imageUrl: true, avgRating: true, stockCount: true, unlimitedStock: true },
   }) as Array<{ id: string; title: string; price: { toString(): string }; category: string; imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean }>;
+  return products.map((p) => ({
+    id: p.id, title: p.title, price: Number(p.price), category: p.category,
+    imageUrl: p.imageUrl, avgRating: Number(p.avgRating), stockCount: p.stockCount,
+    unlimitedStock: p.unlimitedStock, inStock: p.unlimitedStock || p.stockCount > 0,
+  }));
+}
 
+async function getFeatured() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const products = await (db.product.findMany as any)({
+    where: { isActive: true },
+    orderBy: { createdAt: "desc" },
+    take: 8,
+    select: { id: true, title: true, price: true, category: true, imageUrl: true, avgRating: true, stockCount: true, unlimitedStock: true },
+  }) as Array<{ id: string; title: string; price: { toString(): string }; category: string; imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean }>;
   return products.map((p) => ({
     id: p.id, title: p.title, price: Number(p.price), category: p.category,
     imageUrl: p.imageUrl, avgRating: Number(p.avgRating), stockCount: p.stockCount,
@@ -54,7 +54,7 @@ async function getProductsByCategory(category: string, take = 4) {
 
 export default async function HomePage() {
   const [featured, streaming, aiTools, gaming, software] = await Promise.all([
-    getFeaturedProducts(),
+    getFeatured(),
     getProductsByCategory("STREAMING", 4),
     getProductsByCategory("AI_TOOLS", 4),
     getProductsByCategory("GAMING", 4),
@@ -71,13 +71,14 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection />
+      <TrustBadges />
 
-      {/* Featured Products */}
+      {/* Featured */}
       {featured.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-white">Featured Products</h2>
+              <h2 className="text-2xl font-bold text-white">New Arrivals</h2>
               <p className="text-gray-500 text-sm mt-1">Latest digital products</p>
             </div>
             <Link href="/products" className="flex items-center gap-1.5 text-sm text-purple-400 hover:text-purple-300 transition-colors">
@@ -107,7 +108,6 @@ export default async function HomePage() {
         </section>
       ))}
 
-      {/* Category browse */}
       <FeaturedCategories />
 
       {/* Why choose us */}
@@ -122,7 +122,7 @@ export default async function HomePage() {
             { icon: "🔒", title: "Secure & Encrypted", desc: "All inventory encrypted with AES-256-GCM. Payments processed through trusted providers." },
             { icon: "💎", title: "Premium Quality", desc: "Every product verified before listing. We stand behind everything in our catalog." },
           ].map((item) => (
-            <div key={item.title} className="glass-card p-6 text-center hover:border-purple-600/30 transition-colors">
+            <div key={item.title} className="rounded-xl border border-white/8 bg-[#111111] p-6 text-center hover:border-purple-600/30 transition-colors">
               <div className="text-4xl mb-4">{item.icon}</div>
               <h3 className="font-semibold text-white mb-2">{item.title}</h3>
               <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
@@ -131,8 +131,10 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <NewsletterSection />
+
       {/* FAQ */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5">
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-white/5">
         <h2 className="text-2xl font-bold text-white mb-8 text-center">Frequently Asked Questions</h2>
         <div className="space-y-3">
           {[
@@ -141,7 +143,7 @@ export default async function HomePage() {
             { q: "What if I have an issue?", a: "Join our Discord and open a support ticket. We resolve issues promptly." },
             { q: "Are the products legitimate?", a: "Yes. All products are sourced and verified before listing." },
           ].map((item) => (
-            <details key={item.q} className="glass-card group">
+            <details key={item.q} className="group rounded-xl border border-white/8 bg-[#111111] hover:border-purple-600/20 transition-all">
               <summary className="p-5 cursor-pointer font-semibold text-white text-sm flex items-center justify-between list-none">
                 {item.q}
                 <span className="text-gray-500 group-open:rotate-180 transition-transform">▾</span>

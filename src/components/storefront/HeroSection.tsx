@@ -2,60 +2,102 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Sparkles, Zap, Shield, Star } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Shield, Star, Users, Package } from "lucide-react";
+import { useEffect, useRef } from "react";
+
+function ParticleCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const particles: { x: number; y: number; vx: number; vy: number; size: number; opacity: number }[] = [];
+    for (let i = 0; i < 60; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        size: Math.random() * 2 + 0.5,
+        opacity: Math.random() * 0.4 + 0.1,
+      });
+    }
+    let animId: number;
+    function draw() {
+      if (!ctx || !canvas) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(139, 92, 246, ${p.opacity})`;
+        ctx.fill();
+      });
+      animId = requestAnimationFrame(draw);
+    }
+    draw();
+    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+    window.addEventListener("resize", resize);
+    return () => { cancelAnimationFrame(animId); window.removeEventListener("resize", resize); };
+  }, []);
+  return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />;
+}
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124,58,237,0.18) 0%, transparent 60%)" }} />
-        <div className="absolute top-0 left-0 w-full h-full" style={{ background: "radial-gradient(ellipse 40% 40% at 80% 80%, rgba(139,92,246,0.08) 0%, transparent 60%)" }} />
-        {/* Grid pattern */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-          backgroundSize: "60px 60px"
-        }} />
-      </div>
+    <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden">
+      {/* Layered backgrounds */}
+      <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 100% 70% at 50% -5%, rgba(124,58,237,0.25) 0%, transparent 55%)" }} />
+      <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 60% 50% at 80% 90%, rgba(139,92,246,0.08) 0%, transparent 50%)" }} />
+      <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 40% 40% at 10% 60%, rgba(124,58,237,0.06) 0%, transparent 50%)" }} />
+      {/* Grid */}
+      <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)", backgroundSize: "50px 50px" }} />
+      <ParticleCanvas />
 
       {/* Floating badges */}
-      <motion.div animate={{ y: [-6, 6, -6] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-28 left-12 hidden lg:flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-purple-300"
-        style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.25)", backdropFilter: "blur(8px)" }}>
-        <Zap size={14} className="text-yellow-400" /> Instant Delivery
-      </motion.div>
-
-      <motion.div animate={{ y: [6, -6, 6] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-36 right-16 hidden lg:flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-purple-300"
-        style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.25)", backdropFilter: "blur(8px)" }}>
-        <Shield size={14} className="text-green-400" /> Secure Payments
-      </motion.div>
-
-      <motion.div animate={{ y: [-4, 8, -4] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-36 right-24 hidden lg:flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-purple-300"
-        style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.25)", backdropFilter: "blur(8px)" }}>
-        <Star size={14} className="text-yellow-400 fill-yellow-400" /> 10k+ Customers
-      </motion.div>
+      {[
+        { icon: Zap, text: "Instant Delivery", color: "text-yellow-300", delay: 0, pos: "top-28 left-8 lg:left-16", y: [-6, 6] },
+        { icon: Shield, text: "Secure & Encrypted", color: "text-green-400", delay: 0.5, pos: "top-40 right-8 lg:right-20", y: [6, -6] },
+        { icon: Star, text: "10k+ Happy Customers", color: "text-yellow-400", delay: 1, pos: "bottom-40 right-12 lg:right-28", y: [-4, 8] },
+        { icon: Users, text: "Affiliate Program", color: "text-blue-400", delay: 1.5, pos: "bottom-52 left-8 lg:left-20", y: [4, -8] },
+      ].map((badge) => (
+        <motion.div key={badge.text}
+          animate={{ y: badge.y }}
+          transition={{ duration: 4 + badge.delay, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: badge.delay }}
+          className={`absolute ${badge.pos} hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium text-white`}
+          style={{ background: "rgba(17,17,17,0.85)", border: "1px solid rgba(124,58,237,0.25)", backdropFilter: "blur(12px)" }}>
+          <badge.icon size={13} className={badge.color} />
+          {badge.text}
+        </motion.div>
+      ))}
 
       {/* Main content */}
       <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium text-purple-300 mb-8"
-            style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.3)" }}>
+            style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.35)" }}>
             <Sparkles size={13} className="text-purple-400" />
-            Premium Digital Marketplace
+            #1 Premium Digital Marketplace
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
           </span>
         </motion.div>
 
-        <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
-          <span className="text-white">Your Digital </span>
-          <span style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed, #c4b5fd)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+        <motion.h1 initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.1 }}
+          className="text-5xl sm:text-6xl lg:text-8xl font-black tracking-tight mb-6 leading-[1.05]">
+          <span className="text-white">Digital </span>
+          <span style={{ background: "linear-gradient(135deg, #c4b5fd 0%, #a78bfa 40%, #7c3aed 80%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             Products
           </span>
           <br />
           <span className="text-white">Delivered </span>
-          <span style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+          <span style={{ background: "linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #c4b5fd 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             Instantly
           </span>
         </motion.h1>
@@ -63,41 +105,45 @@ export default function HeroSection() {
         <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg sm:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
           Streaming subscriptions, AI tools, software licenses, and gaming products.
-          Automated delivery straight to your inbox — no waiting, no hassle.
+          Automated delivery to your inbox — no waiting, no hassle.
         </motion.p>
 
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center">
+          className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
           <Link href="/products"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-white text-base transition-all duration-200 hover:-translate-y-0.5"
-            style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)", boxShadow: "0 4px 20px rgba(124,58,237,0.4)" }}>
-            Browse Products <ArrowRight size={18} />
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-white text-base transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl"
+            style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)", boxShadow: "0 4px 24px rgba(124,58,237,0.45)" }}>
+            <Package size={18} /> Browse Products <ArrowRight size={16} />
           </Link>
-          <Link href="#categories"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold text-white text-base transition-all duration-200 hover:border-purple-600/50"
-            style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}>
-            View Categories
+          <Link href="/deals"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-white text-base transition-all duration-200 hover:-translate-y-1"
+            style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", backdropFilter: "blur(8px)" }}>
+            🔥 Hot Deals
           </Link>
         </motion.div>
 
         {/* Stats */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-16 flex flex-wrap justify-center gap-10">
+          className="flex flex-wrap justify-center gap-8 sm:gap-12">
           {[
-            { value: "500+", label: "Products" },
-            { value: "10k+", label: "Happy Customers" },
-            { value: "100%", label: "Instant Delivery" },
-            { value: "24/7", label: "Support" },
+            { value: "500+", label: "Products", icon: "📦" },
+            { value: "10k+", label: "Customers", icon: "👥" },
+            { value: "100%", label: "Instant", icon: "⚡" },
+            { value: "24/7", label: "Support", icon: "💬" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
-              <div className="text-2xl font-bold" style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-                {stat.value}
+              <div className="text-2xl sm:text-3xl font-black mb-1"
+                style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+                {stat.icon} {stat.value}
               </div>
-              <div className="text-sm text-gray-500 mt-1">{stat.label}</div>
+              <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">{stat.label}</div>
             </div>
           ))}
         </motion.div>
       </div>
+
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" style={{ background: "linear-gradient(to bottom, transparent, #0a0a0a)" }} />
     </section>
   );
 }
