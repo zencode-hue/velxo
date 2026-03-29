@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Bitcoin, MessageCircle, Tag, ArrowRight, Loader2, Wallet, Shield, Zap, CheckCircle, Package } from "lucide-react";
+import { Bitcoin, MessageCircle, Tag, ArrowRight, Loader2, Wallet, Shield, Zap, CheckCircle, Package, ExternalLink } from "lucide-react";
 
 interface Product {
   id: string; title: string; price: number; category: string;
@@ -62,7 +62,7 @@ function ConfirmPageInner() {
     setDiscountInfo(data.data);
   }
 
-  async function handlePay(provider: "nowpayments" | "discord" | "balance") {
+  async function handlePay(provider: "nowpayments" | "discord" | "balance" | "binance_gift_card") {
     if (!productId) return;
     setPaying(true); setPayErr(null);
     const res = await fetch("/api/v1/checkout", {
@@ -73,6 +73,11 @@ function ConfirmPageInner() {
     const data = await res.json();
     setPaying(false);
     if (!res.ok) { setPayErr(data.error); return; }
+    if (provider === "binance_gift_card" && data.data?.codeSubmitUrl) {
+      window.open(data.data.redirectUrl, "_blank");
+      window.location.href = data.data.codeSubmitUrl;
+      return;
+    }
     if (data.data?.redirectUrl) window.location.href = data.data.redirectUrl;
     else if (data.data?.orderId) router.push(`/orders/${data.data.orderId}`);
   }
@@ -194,6 +199,19 @@ function ConfirmPageInner() {
                   {canPayWithBalance && <ArrowRight size={14} className="text-gray-600 shrink-0" />}
                 </button>
               )}
+
+              {/* Binance Gift Card */}
+              <button onClick={() => handlePay("binance_gift_card")} disabled={paying}
+                className="w-full flex items-center gap-3 p-3.5 rounded-xl border border-white/5 hover:border-yellow-500/40 hover:bg-yellow-500/5 transition-all text-left group">
+                <div className="w-9 h-9 rounded-lg bg-yellow-500/15 flex items-center justify-center shrink-0">
+                  <span className="text-base">💳</span>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-white">Binance Gift Card</p>
+                  <p className="text-xs text-gray-500">Buy a ${finalPrice.toFixed(2)} USDT gift card on Eneba</p>
+                </div>
+                <ExternalLink size={14} className="text-gray-600 group-hover:text-yellow-400 transition-colors shrink-0" />
+              </button>
 
               <button onClick={() => handlePay("nowpayments")} disabled={paying}
                 className="w-full flex items-center gap-3 p-3.5 rounded-xl border border-white/5 hover:border-orange-500/40 hover:bg-orange-500/5 transition-all text-left group">
