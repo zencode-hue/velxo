@@ -9,7 +9,7 @@ const DISCORD_SERVER_URL = process.env.DISCORD_SERVER_URL ?? "https://discord.gg
 const bodySchema = z.object({
   productId: z.string().min(1),
   discountCode: z.string().optional(),
-  paymentProvider: z.enum(["nowpayments", "discord", "balance"]),
+  paymentProvider: z.enum(["nowpayments", "discord", "balance", "binance_gift_card"]),
 });
 
 export async function POST(req: NextRequest) {
@@ -187,6 +187,38 @@ export async function POST(req: NextRequest) {
       const redirectUrl = `${DISCORD_SERVER_URL}?message=${discordMessage}`;
       return NextResponse.json({
         data: { redirectUrl, orderId: order.id, instructions: `Join our Discord server and send your payment details. Quote Order ID: ${order.id}` },
+        error: null,
+        meta: {},
+      });
+    }
+
+    if (paymentProvider === "binance_gift_card") {
+      // Map the final amount to the nearest Eneba Binance gift card denomination
+      const denominations = [
+        0.5, 1, 2, 3, 4, 5, 6, 7, 7.5, 8, 9, 10, 10.5, 11, 12, 13, 14, 15,
+        17, 18, 20, 20.5, 22, 25, 27, 28, 29, 30, 33, 33.5, 35, 40, 43, 43.5,
+        44, 44.5, 45, 45.5, 46, 50, 50.5, 55, 60, 65, 66, 70, 100, 150, 200,
+        250, 300, 400, 500, 750,
+      ];
+
+      // Find the smallest denomination >= finalAmount
+      const denomination = denominations.find((d) => d >= finalAmount) ?? finalAmount;
+
+      // Format: 0.5 → "0-5", 7.5 → "7-5", 25 → "25"
+      const denomStr = denomination % 1 === 0
+        ? String(denomination)
+        : denomination.toFixed(1).replace(".", "-");
+
+      const enebaUrl = `https://www.eneba.com/binance-binance-gift-card-usdt-${denomStr}-usd-key-global`;
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+
+      return NextResponse.json({
+        data: {
+          redirectUrl: enebaUrl,
+          orderId: order.id,
+          denomination,
+          codeSubmitUrl: `${appUrl}/checkout/gift-card?orderId=${order.id}&amount=${denomination}`,
+        },
         error: null,
         meta: {},
       });

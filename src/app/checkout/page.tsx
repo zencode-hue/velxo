@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Bitcoin, MessageCircle, Tag, ArrowRight, Loader2, Wallet } from "lucide-react";
+import { Bitcoin, MessageCircle, Tag, ArrowRight, Loader2, Wallet, ExternalLink } from "lucide-react";
 
 interface Product {
   id: string;
@@ -56,7 +56,7 @@ function CheckoutPageInner() {
     setDiscountInfo(data.data);
   }
 
-  async function handlePay(provider: "nowpayments" | "discord" | "balance") {
+  async function handlePay(provider: "nowpayments" | "discord" | "balance" | "binance_gift_card") {
     if (!productId) return;
     setPaying(true); setPayErr(null);
     const res = await fetch("/api/v1/checkout", {
@@ -67,6 +67,12 @@ function CheckoutPageInner() {
     const data = await res.json();
     setPaying(false);
     if (!res.ok) { setPayErr(data.error); return; }
+    if (provider === "binance_gift_card" && data.data?.codeSubmitUrl) {
+      // Open Eneba in new tab, redirect user to code submission page
+      window.open(data.data.redirectUrl, "_blank");
+      window.location.href = data.data.codeSubmitUrl;
+      return;
+    }
     if (data.data?.redirectUrl) window.location.href = data.data.redirectUrl;
   }
 
@@ -142,6 +148,19 @@ function CheckoutPageInner() {
               {canPayWithBalance && <ArrowRight size={16} className="text-gray-600 group-hover:text-cyan-400 transition-colors" />}
             </button>
           )}
+
+          {/* Binance Gift Card */}
+          <button onClick={() => handlePay("binance_gift_card")} disabled={paying}
+            className="w-full flex items-center gap-4 p-4 rounded-xl border border-white/5 hover:border-yellow-500/40 hover:bg-yellow-500/5 transition-all text-left group">
+            <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center shrink-0">
+              <span className="text-lg">💳</span>
+            </div>
+            <div className="flex-1">
+              <p className="font-medium text-white text-sm">Binance Gift Card</p>
+              <p className="text-xs text-gray-500">Buy a ${finalPrice.toFixed(2)} USDT gift card on Eneba and redeem here</p>
+            </div>
+            <ExternalLink size={16} className="text-gray-600 group-hover:text-yellow-400 transition-colors" />
+          </button>
 
           <button onClick={() => handlePay("nowpayments")} disabled={paying}
             className="w-full flex items-center gap-4 p-4 rounded-xl border border-white/5 hover:border-orange-500/40 hover:bg-orange-500/5 transition-all text-left group">
