@@ -156,7 +156,7 @@ function CheckoutPageInner() {
               <span className="text-lg">💳</span>
             </div>
             <div className="flex-1">
-              <p className="font-medium text-white text-sm">Binance Gift Card</p>
+              <p className="font-medium text-white text-sm">Card Payment (Key)</p>
               <p className="text-xs text-gray-500">Buy a ${finalPrice.toFixed(2)} USDT gift card on Eneba and redeem here</p>
             </div>
             <ExternalLink size={16} className="text-gray-600 group-hover:text-yellow-400 transition-colors" />

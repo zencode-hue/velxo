@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Wallet, Bitcoin, MessageCircle, Plus, X } from "lucide-react";
+import { Wallet, Bitcoin, MessageCircle, Plus, X, ExternalLink } from "lucide-react";
 
 export default function BalanceSection({ balance }: { balance: number }) {
   const [showTopup, setShowTopup] = useState(false);
@@ -11,7 +11,7 @@ export default function BalanceSection({ balance }: { balance: number }) {
 
   const PRESETS = [5, 10, 25, 50, 100];
 
-  async function handleTopup(provider: "nowpayments" | "discord") {
+  async function handleTopup(provider: "nowpayments" | "discord" | "binance_gift_card") {
     const amt = parseFloat(amount);
     if (!amt || amt < 1) { setErr("Minimum top-up is $1"); return; }
     setLoading(true); setErr(null);
@@ -23,6 +23,11 @@ export default function BalanceSection({ balance }: { balance: number }) {
     const data = await res.json();
     setLoading(false);
     if (!res.ok) { setErr(data.error); return; }
+    if (provider === "binance_gift_card" && data.data?.codeSubmitUrl) {
+      window.open(data.data.redirectUrl, "_blank");
+      window.location.href = data.data.codeSubmitUrl;
+      return;
+    }
     if (data.data?.redirectUrl) window.location.href = data.data.redirectUrl;
   }
 
@@ -60,7 +65,16 @@ export default function BalanceSection({ balance }: { balance: number }) {
 
           {err && <p className="text-red-400 text-xs">{err}</p>}
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
+            <button onClick={() => handleTopup("binance_gift_card")} disabled={loading}
+              className="flex items-center gap-3 p-3 rounded-xl border border-white/5 hover:border-yellow-500/40 hover:bg-yellow-500/5 transition-all text-left">
+              <ExternalLink size={18} className="text-yellow-400 shrink-0" />
+              <div>
+                <p className="text-sm font-medium text-white">Card Payment (Key)</p>
+                <p className="text-xs text-gray-500">Buy a Binance gift card on Eneba</p>
+              </div>
+            </button>
+            <div className="grid grid-cols-2 gap-3">
             <button onClick={() => handleTopup("nowpayments")} disabled={loading}
               className="flex items-center gap-3 p-3 rounded-xl border border-white/5 hover:border-orange-500/40 hover:bg-orange-500/5 transition-all text-left">
               <Bitcoin size={18} className="text-orange-400 shrink-0" />
@@ -77,6 +91,7 @@ export default function BalanceSection({ balance }: { balance: number }) {
                 <p className="text-xs text-gray-500">Manual payment</p>
               </div>
             </button>
+            </div>
           </div>
         </div>
       )}

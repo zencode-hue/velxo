@@ -5,7 +5,7 @@ import { getServerSession } from "@/lib/auth";
 
 const bodySchema = z.object({
   amount: z.number().min(1).max(500),
-  paymentProvider: z.enum(["nowpayments", "discord"]),
+  paymentProvider: z.enum(["nowpayments", "discord", "binance_gift_card"]),
 });
 
 export async function POST(req: NextRequest) {
@@ -54,6 +54,19 @@ export async function POST(req: NextRequest) {
 
     const npData = await npRes.json() as { invoice_url?: string; id?: string };
     return NextResponse.json({ data: { redirectUrl: npData.invoice_url, ref: topupRef }, error: null, meta: {} });
+  }
+
+  if (paymentProvider === "binance_gift_card") {
+    const denominations = [1, 2, 3, 4, 5, 6, 7, 7.5, 8, 9, 10, 10.5, 11, 12, 13, 14, 15, 17, 18, 20, 20.5, 22, 25, 27, 28, 29, 30, 33, 33.5, 35, 40, 43, 43.5, 44, 44.5, 45, 45.5, 46, 50, 50.5, 55, 60, 65, 66, 70, 100, 150, 200, 250, 300, 400, 500];
+    const denomination = denominations.find((d) => d >= amount) ?? amount;
+    const denomStr = denomination % 1 === 0 ? String(denomination) : denomination.toFixed(1).replace(".", "-");
+    const enebaUrl = `https://www.eneba.com/binance-binance-gift-card-usdt-${denomStr}-usd-key-global`;
+    const codeSubmitUrl = `${appUrl}/checkout/gift-card?orderId=${topupRef}&amount=${denomination}&topup=true`;
+    return NextResponse.json({
+      data: { redirectUrl: enebaUrl, codeSubmitUrl, ref: topupRef, denomination },
+      error: null,
+      meta: {},
+    });
   }
 
   if (paymentProvider === "discord") {

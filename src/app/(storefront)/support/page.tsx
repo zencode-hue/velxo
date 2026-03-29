@@ -12,7 +12,8 @@ const faqs = [
   { q: "What if my credentials don't work?", a: "Contact us on Discord immediately with your order ID. We'll replace your order within 24 hours, no questions asked." },
   { q: "Can I get a refund?", a: "Due to the digital nature of our products, all sales are final. However, if you receive invalid credentials, we will replace them." },
   { q: "How do I pay with crypto?", a: "Select 'Crypto Payment' at checkout. You'll be redirected to NOWPayments where you can pay with BTC, ETH, USDT, and 100+ other coins." },
-  { q: "What is the wallet balance?", a: "Your wallet balance can be used to purchase any product instantly without going through a payment gateway. Top up via crypto or Discord." },
+  { q: "What is Card Payment (Key)?", a: "Card Payment (Key) lets you pay using a Binance USDT Gift Card. At checkout, click 'Card Payment (Key)' and you'll be redirected to Eneba to purchase the exact gift card amount. After purchase, come back and enter the card code — we'll verify it and deliver your order." },
+  { q: "What is the wallet balance?", a: "Your wallet balance can be used to purchase any product instantly without going through a payment gateway. Top up via Card Payment (Key), crypto, or Discord." },
   { q: "How does the affiliate program work?", a: "Join from your dashboard, get a unique referral link, and earn 10% commission on every sale you refer. Earnings go directly to your wallet balance." },
   { q: "Is my data secure?", a: "Yes. All inventory credentials are encrypted with AES-256-GCM. We never store plain-text passwords or credentials." },
 ];

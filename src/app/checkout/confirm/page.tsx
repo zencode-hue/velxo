@@ -207,7 +207,7 @@ function ConfirmPageInner() {
                   <span className="text-base">💳</span>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-white">Binance Gift Card</p>
+                  <p className="text-sm font-medium text-white">Card Payment (Key)</p>
                   <p className="text-xs text-gray-500">Buy a ${finalPrice.toFixed(2)} USDT gift card on Eneba</p>
                 </div>
                 <ExternalLink size={14} className="text-gray-600 group-hover:text-yellow-400 transition-colors shrink-0" />
