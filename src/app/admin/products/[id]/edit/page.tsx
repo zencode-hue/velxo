@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Trash2 } from "lucide-react";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 const CATEGORIES = [
   { value: "STREAMING", label: "Streaming" },
@@ -157,11 +158,7 @@ export default function EditProductPage() {
           </div>
         </div>
 
-        <div>
-          <label className="block text-sm text-gray-400 mb-1.5">Image URL (optional)</label>
-          <input type="url" value={form.imageUrl} onChange={(e) => set("imageUrl", e.target.value)}
-            className="input-field" placeholder="https://…" />
-        </div>
+        <ImageUpload value={form.imageUrl} onChange={(url) => set("imageUrl", url)} />
 
         {/* Stock settings */}
         <div className="space-y-3 p-4 rounded-xl bg-white/3 border border-white/5">

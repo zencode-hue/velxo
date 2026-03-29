@@ -7,6 +7,8 @@ const nextConfig = {
         hostname: "**",
       },
     ],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
   },
   experimental: {
     serverActions: {
