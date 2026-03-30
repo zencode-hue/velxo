@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -6,11 +6,12 @@ import { useState, useEffect } from "react";
 import {
   LayoutDashboard, Package, ShoppingCart, Users,
   Tag, UserCheck, Settings, Zap, Menu,
-  TrendingUp, ExternalLink, FileText,
+  TrendingUp, ExternalLink, FileText, BarChart2,
 } from "lucide-react";
 
 const navItems = [
-  { href: "/admin", label: "Analytics", icon: LayoutDashboard },
+  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { href: "/admin/users", label: "Users", icon: Users },
@@ -30,12 +31,12 @@ function NavLinks({ pathname, onClick }: { pathname: string; onClick?: () => voi
           <Link key={href} href={href} onClick={onClick}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
               active
-                ? "text-white bg-purple-600/20 border border-purple-600/30"
+                ? "text-white bg-[#5865f2]/20 border border-[#5865f2]/30"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}>
-            <Icon size={16} className={active ? "text-purple-400" : ""} />
+            <Icon size={16} className={active ? "text-[#7289da]" : ""} />
             {label}
-            {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-400" />}
+            {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00d4ff]" />}
           </Link>
         );
       })}
@@ -54,13 +55,13 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex w-60 shrink-0 border-r border-white/5 bg-[#0d0d0d] flex-col fixed h-full z-30">
+      <aside className="hidden lg:flex w-60 shrink-0 border-r border-white/5 bg-[#13141a] flex-col fixed h-full z-30">
         <div className="h-16 flex items-center gap-2.5 px-5 border-b border-white/5 shrink-0">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}>
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
             <Zap size={14} className="text-white" />
           </div>
           <span className="font-bold text-white">Velxo Admin</span>
-          <TrendingUp size={14} className="text-purple-400 ml-auto" />
+          <TrendingUp size={14} className="text-accent ml-auto" />
         </div>
         <NavLinks pathname={pathname} />
         <div className="p-4 border-t border-white/5 shrink-0">
@@ -71,12 +72,12 @@ export default function AdminSidebar() {
       </aside>
 
       {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center gap-3 px-4 h-14 border-b border-white/5 bg-[#0d0d0d]">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center gap-3 px-4 h-14 border-b border-white/5 bg-[#13141a]">
         <button onClick={() => setOpen(true)} className="text-gray-400 hover:text-white transition-colors">
           <Menu size={20} />
         </button>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}>
+          <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
             <Zap size={12} className="text-white" />
           </div>
           <span className="font-bold text-white text-sm">Velxo Admin</span>
@@ -93,7 +94,7 @@ export default function AdminSidebar() {
           <div className="fixed inset-0 bg-black/70" onClick={() => setOpen(false)} />
           <aside className="relative w-64 bg-[#0d0d0d] border-r border-white/5 flex flex-col z-50 h-full">
             <div className="h-14 flex items-center gap-2.5 px-5 border-b border-white/5 shrink-0">
-              <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}>
+              <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
                 <Zap size={12} className="text-white" />
               </div>
               <span className="font-bold text-white text-sm">Velxo Admin</span>
@@ -110,3 +111,4 @@ export default function AdminSidebar() {
     </>
   );
 }
+

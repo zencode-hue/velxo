@@ -10,6 +10,7 @@ const updateSchema = z.object({
   category: z.enum(["STREAMING", "AI_TOOLS", "SOFTWARE", "GAMING"]).optional(),
   imageUrl: z.string().url().optional().or(z.literal("")).optional(),
   isActive: z.boolean().optional(),
+  isFeatured: z.boolean().optional(),
   unlimitedStock: z.boolean().optional(),
   stockCount: z.number().int().min(0).optional(),
 });

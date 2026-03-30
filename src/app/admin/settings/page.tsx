@@ -1,8 +1,15 @@
 import { requireAdmin } from "@/lib/admin-auth";
 import { Settings } from "lucide-react";
+import AnnouncementEditor from "./AnnouncementEditor";
+import { db } from "@/lib/db";
 
 export default async function AdminSettingsPage() {
   await requireAdmin();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const settings = await (db as any).siteSetting.findMany() as { key: string; value: string }[];
+  const map: Record<string, string> = {};
+  for (const s of settings) map[s.key] = s.value;
 
   return (
     <div>
@@ -10,32 +17,31 @@ export default async function AdminSettingsPage() {
         <Settings size={22} className="text-purple-400" /> Settings
       </h1>
 
-      <div className="glass-card p-6 max-w-lg space-y-6">
-        <div>
-          <h2 className="text-base font-semibold text-white mb-1">Discord Webhook</h2>
-          <p className="text-sm text-gray-500 mb-3">
-            Set <code className="text-purple-300">DISCORD_WEBHOOK_URL</code> in your environment variables to receive sale notifications.
-          </p>
-          <div className="p-3 bg-black/40 rounded-lg border border-white/5 font-mono text-xs text-gray-400">
-            DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
-          </div>
-        </div>
+      <div className="space-y-6 max-w-2xl">
+        {/* Announcement Bar Editor */}
+        <AnnouncementEditor
+          initialText={map["announcement_text"] ?? "🎉 New products added daily — Browse now · Instant delivery on all orders"}
+          initialEnabled={map["announcement_enabled"] !== "false"}
+          initialLink={map["announcement_link"] ?? "/products"}
+        />
 
-        <div>
-          <h2 className="text-base font-semibold text-white mb-1">Affiliate Commission</h2>
-          <p className="text-sm text-gray-500 mb-3">
-            Set <code className="text-purple-300">AFFILIATE_COMMISSION_PCT</code> in your environment variables (default: 10%).
-          </p>
-          <div className="p-3 bg-black/40 rounded-lg border border-white/5 font-mono text-xs text-gray-400">
-            AFFILIATE_COMMISSION_PCT=10
-          </div>
-        </div>
-
-        <div>
-          <h2 className="text-base font-semibold text-white mb-1">Encryption Key</h2>
-          <p className="text-sm text-gray-500">
-            Generate a 32-byte hex key: <code className="text-purple-300">openssl rand -hex 32</code>
-          </p>
+        {/* Env-based settings info */}
+        <div className="glass-card p-6 space-y-5">
+          <h2 className="text-base font-semibold text-white">Environment Variables</h2>
+          {[
+            { label: "Discord Webhook", key: "DISCORD_WEBHOOK_URL", hint: "Receive sale notifications" },
+            { label: "Affiliate Commission", key: "AFFILIATE_COMMISSION_PCT", hint: "Default: 10%" },
+            { label: "Encryption Key", key: "ENCRYPTION_KEY", hint: "openssl rand -hex 32" },
+            { label: "NOWPayments API Key", key: "NOWPAYMENTS_API_KEY", hint: "For crypto payments" },
+          ].map(({ label, key, hint }) => (
+            <div key={key}>
+              <p className="text-sm font-medium text-white mb-0.5">{label}</p>
+              <p className="text-xs text-gray-500 mb-1">{hint}</p>
+              <div className="p-2.5 bg-black/40 rounded-lg border border-white/5 font-mono text-xs text-gray-400">
+                {key}=...
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

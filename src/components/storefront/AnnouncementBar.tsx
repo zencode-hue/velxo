@@ -1,22 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { X, Zap } from "lucide-react";
 
 export default function AnnouncementBar() {
   const [visible, setVisible] = useState(true);
-  if (!visible) return null;
+  const [text, setText] = useState("🎉 New products added daily — Browse now · Instant delivery on all orders");
+  const [link, setLink] = useState("/products");
+  const [enabled, setEnabled] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/v1/settings")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.data?.announcement_text) setText(d.data.announcement_text);
+        if (d.data?.announcement_link) setLink(d.data.announcement_link);
+        if (d.data?.announcement_enabled === "false") setEnabled(false);
+      })
+      .catch(() => {});
+  }, []);
+
+  if (!visible || !enabled) return null;
 
   return (
     <div className="relative flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white"
       style={{ background: "linear-gradient(90deg, #7c3aed, #8b5cf6, #7c3aed)", backgroundSize: "200% 100%", animation: "shimmer 3s linear infinite" }}>
       <Zap size={14} className="text-yellow-300 shrink-0" />
-      <span>🎉 New products added daily — </span>
-      <Link href="/products" className="underline underline-offset-2 hover:text-purple-200 transition-colors">
-        Browse now
-      </Link>
-      <span className="hidden sm:inline"> · Instant delivery on all orders</span>
+      <Link href={link} className="hover:text-purple-200 transition-colors">{text}</Link>
       <button onClick={() => setVisible(false)} className="absolute right-3 text-white/60 hover:text-white transition-colors">
         <X size={14} />
       </button>

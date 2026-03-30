@@ -12,12 +12,13 @@ export default async function AdminUsersPage() {
     take: 200,
     select: {
       id: true, email: true, name: true, role: true, createdAt: true, balance: true,
+      isBanned: true, banReason: true,
       orders: { where: { status: "PAID" }, select: { amount: true } },
       affiliate: { select: { referralCode: true } },
     },
   }) as Array<{
     id: string; email: string; name: string | null; role: string; createdAt: Date;
-    balance: { toString(): string };
+    balance: { toString(): string }; isBanned: boolean; banReason: string | null;
     orders: { amount: { toString(): string } }[];
     affiliate: { referralCode: string } | null;
   }>;
@@ -52,13 +53,14 @@ export default async function AdminUsersPage() {
                   <td className="px-4 py-3 text-gray-400">{u.name ?? "—"}</td>
                   <td className="px-4 py-3 text-center">
                     <span className={u.role === "ADMIN" ? "badge-purple" : "badge-green"}>{u.role}</span>
+                    {u.isBanned && <span className="badge-red ml-1 text-xs">BANNED</span>}
                   </td>
                   <td className="px-4 py-3 text-right text-cyan-400 font-medium">${Number(u.balance).toFixed(2)}</td>
                   <td className="px-4 py-3 text-right text-white">{u.orders.length}</td>
                   <td className="px-4 py-3 text-right text-white">${totalSpend.toFixed(2)}</td>
                   <td className="px-4 py-3 text-gray-500 text-xs">{new Date(u.createdAt).toLocaleDateString()}</td>
                   <td className="px-4 py-3 text-right">
-                    <UserActions userId={u.id} email={u.email} name={u.name ?? ""} role={u.role} balance={Number(u.balance)} />
+                    <UserActions userId={u.id} email={u.email} name={u.name ?? ""} role={u.role} balance={Number(u.balance)} isBanned={u.isBanned} />
                   </td>
                 </tr>
               );

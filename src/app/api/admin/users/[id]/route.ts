@@ -13,6 +13,8 @@ const updateSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   email: z.string().email().optional(),
   role: z.enum(["CUSTOMER", "ADMIN"]).optional(),
+  isBanned: z.boolean().optional(),
+  banReason: z.string().max(200).optional(),
 });
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
@@ -27,7 +29,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const user = await db.user.update({
       where: { id: params.id },
       data: parsed.data,
-      select: { id: true, email: true, name: true, role: true },
+      select: { id: true, email: true, name: true, role: true, isBanned: true },
     });
     return NextResponse.json({ data: user, error: null });
   } catch {
@@ -39,7 +41,6 @@ export async function DELETE(_req: NextRequest, { params }: { params: { id: stri
   const admin = await requireAdmin();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  // Prevent self-deletion
   if (params.id === admin.user.id) {
     return NextResponse.json({ error: "Cannot delete your own account" }, { status: 400 });
   }

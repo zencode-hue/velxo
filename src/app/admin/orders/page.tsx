@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/admin-auth";
 import { ShoppingCart } from "lucide-react";
 import RedeliverButton from "./RedeliverButton";
+import OrderActions from "./OrderActions";
 
 const STATUS_BADGE: Record<string, string> = {
   PAID: "badge-green", PENDING: "badge-yellow", FAILED: "badge-red",
@@ -28,7 +29,7 @@ export default async function AdminOrdersPage() {
       </h1>
 
       <div className="glass-card overflow-x-auto">
-        <table className="w-full text-sm min-w-[700px]">
+        <table className="w-full text-sm min-w-[800px]">
           <thead>
             <tr className="border-b border-white/5 text-gray-500 text-xs uppercase">
               <th className="text-left px-4 py-3">Order ID</th>
@@ -45,6 +46,13 @@ export default async function AdminOrdersPage() {
               <tr key={o.id} className="border-b border-white/5 hover:bg-white/2 transition-colors">
                 <td className="px-4 py-3 font-mono text-xs text-purple-400 hover:text-purple-300">
                   <a href={`/orders/${o.id}`} target="_blank" rel="noopener noreferrer">{o.id.slice(0, 8)}…</a>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {(o as any).adminNote && (
+                    <p className="text-yellow-400/70 text-xs mt-0.5 truncate max-w-[120px]">
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      📝 {(o as any).adminNote}
+                    </p>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-gray-300 truncate max-w-[160px]">{o.user.email}</td>
                 <td className="px-4 py-3 text-white truncate max-w-[160px]">{o.product.title}</td>
@@ -55,10 +63,16 @@ export default async function AdminOrdersPage() {
                 <td className="px-4 py-3 text-gray-500 text-xs">
                   {new Date(o.createdAt).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-3 text-right">
-                  {o.status === "PAID" && !o.deliveryLog && (
-                    <RedeliverButton orderId={o.id} />
-                  )}
+                <td className="px-4 py-3 text-right relative">
+                  <div className="flex items-center justify-end gap-2">
+                    {o.status === "PAID" && !o.deliveryLog && <RedeliverButton orderId={o.id} />}
+                    <OrderActions
+                      orderId={o.id}
+                      currentStatus={o.status}
+                      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                      currentNote={(o as any).adminNote}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}

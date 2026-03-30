@@ -2,6 +2,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/admin-auth";
 import { Plus, Package } from "lucide-react";
+import FeaturedToggle from "./FeaturedToggle";
 
 const CATEGORY_LABELS: Record<string, string> = {
   STREAMING: "Streaming", AI_TOOLS: "AI Tools", SOFTWARE: "Software", GAMING: "Gaming",
@@ -12,7 +13,7 @@ export default async function AdminProductsPage() {
 
   const products = await db.product.findMany({
     orderBy: { createdAt: "desc" },
-    select: { id: true, title: true, category: true, price: true, stockCount: true, isActive: true, avgRating: true, unlimitedStock: true },
+    select: { id: true, title: true, category: true, price: true, stockCount: true, isActive: true, avgRating: true, unlimitedStock: true, isFeatured: true },
   });
 
   return (
@@ -57,7 +58,8 @@ export default async function AdminProductsPage() {
                     <span className={p.isActive ? "badge-green" : "badge-red"}>{p.isActive ? "Active" : "Inactive"}</span>
                   </td>
                   <td className="px-5 py-3 text-right">
-                    <div className="flex items-center justify-end gap-3">
+                    <div className="flex items-center justify-end gap-2">
+                      <FeaturedToggle productId={p.id} isFeatured={p.isFeatured ?? false} />
                       <Link href={`/admin/products/${p.id}/edit`} className="text-xs text-purple-400 hover:text-purple-300 transition-colors">Edit</Link>
                       <Link href={`/admin/products/${p.id}/inventory`} className="text-xs text-gray-400 hover:text-white transition-colors">Inventory</Link>
                     </div>
