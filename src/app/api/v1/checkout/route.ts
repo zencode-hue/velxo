@@ -68,10 +68,13 @@ export async function POST(req: NextRequest) {
       if (code.expiresAt < new Date()) return NextResponse.json({ data: null, error: "Discount code has expired", meta: {} }, { status: 400 });
       if (code.usageCount >= code.usageLimit) return NextResponse.json({ data: null, error: "Discount code has reached its usage limit", meta: {} }, { status: 400 });
 
-      const alreadyUsed = await db.discountUsage.findUnique({
-        where: { discountCodeId_userId: { discountCodeId: code.id, userId } },
-      });
-      if (alreadyUsed) return NextResponse.json({ data: null, error: "You have already used this discount code", meta: {} }, { status: 400 });
+      // Only check per-user discount usage for logged-in users
+      if (userId) {
+        const alreadyUsed = await db.discountUsage.findUnique({
+          where: { discountCodeId_userId: { discountCodeId: code.id, userId } },
+        });
+        if (alreadyUsed) return NextResponse.json({ data: null, error: "You have already used this discount code", meta: {} }, { status: 400 });
+      }
 
       discountCodeRecord = code;
       const productPrice = Number(product.price);
@@ -92,9 +95,10 @@ export async function POST(req: NextRequest) {
       }
 
       const order = await db.$transaction(async (tx) => {
-        const newOrder = await tx.order.create({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const newOrder = await (tx.order.create as any)({
           data: {
-            userId,
+            userId: userId ?? undefined,
             productId: product.id,
             amount: finalAmount,
             discountAmount,
@@ -125,7 +129,7 @@ export async function POST(req: NextRequest) {
 
         if (discountCodeRecord) {
           await tx.discountCode.update({ where: { id: discountCodeRecord.id }, data: { usageCount: { increment: 1 } } });
-          await tx.discountUsage.create({ data: { discountCodeId: discountCodeRecord.id, userId } });
+          if (userId) await tx.discountUsage.create({ data: { discountCodeId: discountCodeRecord.id, userId } });
         }
 
         return newOrder;
@@ -140,9 +144,10 @@ export async function POST(req: NextRequest) {
     }
 
     const order = await db.$transaction(async (tx) => {
-      const newOrder = await tx.order.create({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const newOrder = await (tx.order.create as any)({
         data: {
-          userId,
+          userId: userId ?? undefined,
           guestEmail: userId ? null : (guestEmail ?? null),
           productId: product.id,
           amount: finalAmount,
@@ -155,7 +160,7 @@ export async function POST(req: NextRequest) {
 
       if (discountCodeRecord) {
         await tx.discountCode.update({ where: { id: discountCodeRecord.id }, data: { usageCount: { increment: 1 } } });
-        await tx.discountUsage.create({ data: { discountCodeId: discountCodeRecord.id, userId } });
+        if (userId) await tx.discountUsage.create({ data: { discountCodeId: discountCodeRecord.id, userId } });
       }
 
       return newOrder;
