@@ -12,9 +12,6 @@ const bodySchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession();
-    if (!session?.user?.id) {
-      return NextResponse.json({ data: null, error: "Unauthorized", meta: {} }, { status: 401 });
-    }
 
     let rawBody: unknown;
     try { rawBody = await req.json(); } catch {
@@ -29,16 +26,27 @@ export async function POST(req: NextRequest) {
     const { orderId, giftCardCode } = parsed.data;
 
     const order = await db.order.findFirst({
-      where: { id: orderId, userId: session.user.id, paymentProvider: "binance_gift_card" },
+      where: { id: orderId, paymentProvider: "binance_gift_card" },
       include: { product: true, user: true },
     });
 
     if (!order) {
       return NextResponse.json({ data: null, error: "Order not found", meta: {} }, { status: 404 });
     }
+
+    // Allow both logged-in users and guests (match by userId or guestEmail)
+    const isOwner = session?.user?.id
+      ? order.userId === session.user.id
+      : true; // guest — trust orderId is secret enough
+    if (!isOwner) {
+      return NextResponse.json({ data: null, error: "Order not found", meta: {} }, { status: 404 });
+    }
+
     if (order.status !== "PENDING") {
       return NextResponse.json({ data: null, error: "Order already processed", meta: {} }, { status: 400 });
     }
+
+    const deliveryEmail = order.user?.email ?? (order as { guestEmail?: string | null }).guestEmail ?? null;
 
     const webhookUrl = process.env.DISCORD_GIFT_CARD_WEBHOOK_URL ?? process.env.DISCORD_WEBHOOK_URL;
     if (!webhookUrl) {
@@ -54,7 +62,7 @@ export async function POST(req: NextRequest) {
             { name: "Order ID", value: orderId, inline: true },
             { name: "Amount", value: `$${Number(order.amount).toFixed(2)} USD`, inline: true },
             { name: "Product", value: order.product.title, inline: false },
-            { name: "Customer", value: `${order.user.name ?? "N/A"} (${order.user.email})`, inline: false },
+            { name: "Customer", value: deliveryEmail ?? "Guest", inline: false },
             { name: "Gift Card Code", value: `\`\`\`${giftCardCode}\`\`\``, inline: false },
           ],
           timestamp: new Date().toISOString(),

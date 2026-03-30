@@ -25,6 +25,8 @@ export async function deliverOrder(orderId: string): Promise<void> {
   if (!order) throw new Error(`Order not found: ${orderId}`);
 
   const { product, user } = order;
+  const deliveryEmail = user?.email ?? (order as { guestEmail?: string | null }).guestEmail ?? null;
+  if (!deliveryEmail) throw new Error(`No delivery email for order: ${orderId}`);
   const now = new Date();
 
   let assignedItem: { id: string; encryptedData: string; iv: string; authTag: string } | null = null;
@@ -37,11 +39,9 @@ export async function deliverOrder(orderId: string): Promise<void> {
     if (!item) {
       await tx.order.update({ where: { id: orderId }, data: { status: "PENDING_STOCK" } });
       await sendAdminPendingStockAlert(orderId, product.title);
-      await sendDeliveryEmail(user.email, {
-        orderId,
-        productTitle: product.title,
-        status: "pending_stock",
-        message: "Your order is awaiting stock replenishment",
+      await sendDeliveryEmail(deliveryEmail, {
+        orderId, productTitle: product.title,
+        status: "pending_stock", message: "Your order is awaiting stock replenishment",
       });
       return;
     }
@@ -49,7 +49,7 @@ export async function deliverOrder(orderId: string): Promise<void> {
     await tx.inventoryItem.update({ where: { id: item.id }, data: { status: "DELIVERED" } });
     await tx.product.update({ where: { id: product.id }, data: { stockCount: { decrement: 1 } } });
     await tx.deliveryLog.create({
-      data: { orderId, userId: user.id, productId: product.id, inventoryItemId: item.id, deliveredAt: now },
+      data: { orderId, userId: order.userId ?? null, productId: product.id, inventoryItemId: item.id, deliveredAt: now },
     });
 
     assignedItem = { id: item.id, encryptedData: item.encryptedData, iv: item.iv, authTag: item.authTag };
@@ -60,11 +60,9 @@ export async function deliverOrder(orderId: string): Promise<void> {
   const item = assignedItem as { id: string; encryptedData: string; iv: string; authTag: string };
   const decryptedCredentials = decrypt(item.encryptedData, item.iv, item.authTag);
 
-  await sendDeliveryEmail(user.email, {
-    orderId,
-    productTitle: product.title,
-    credentials: decryptedCredentials,
-    deliveredAt: now,
+  await sendDeliveryEmail(deliveryEmail, {
+    orderId, productTitle: product.title,
+    credentials: decryptedCredentials, deliveredAt: now,
   });
 
   await checkAndSendStockAlerts(product.id);

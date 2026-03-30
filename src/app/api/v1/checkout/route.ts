@@ -10,15 +10,12 @@ const bodySchema = z.object({
   productId: z.string().min(1),
   discountCode: z.string().optional(),
   paymentProvider: z.enum(["nowpayments", "discord", "balance", "binance_gift_card"]),
+  guestEmail: z.string().email().optional(),
 });
 
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession();
-    if (!session?.user?.id) {
-      return NextResponse.json({ data: null, error: "Unauthorized", meta: {} }, { status: 401 });
-    }
-    const userId = session.user.id;
 
     let rawBody: unknown;
     try { rawBody = await req.json(); } catch {
@@ -30,7 +27,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ data: null, error: parsed.error.errors[0].message, meta: {} }, { status: 400 });
     }
 
-    const { productId, discountCode, paymentProvider } = parsed.data;
+    const { productId, discountCode, paymentProvider, guestEmail } = parsed.data;
+
+    // Must have either a session or a guest email
+    const userId = session?.user?.id ?? null;
+    const deliveryEmail = userId
+      ? session!.user.email!
+      : guestEmail ?? null;
+
+    if (!userId && !guestEmail) {
+      return NextResponse.json({ data: null, error: "Please provide your email to continue as guest", meta: {} }, { status: 401 });
+    }
+
+    // Balance payment requires a logged-in user
+    if (paymentProvider === "balance" && !userId) {
+      return NextResponse.json({ data: null, error: "Sign in to pay with balance", meta: {} }, { status: 401 });
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const product = await (db.product.findFirst as any)({
@@ -131,6 +143,7 @@ export async function POST(req: NextRequest) {
       const newOrder = await tx.order.create({
         data: {
           userId,
+          guestEmail: userId ? null : (guestEmail ?? null),
           productId: product.id,
           amount: finalAmount,
           discountAmount,
@@ -165,7 +178,7 @@ export async function POST(req: NextRequest) {
           order_id: order.id,
           order_description: product.title,
           ipn_callback_url: `${appUrl}/api/webhooks/nowpayments`,
-          success_url: `${appUrl}/checkout/success?orderId=${order.id}`,
+          success_url: `${appUrl}/checkout/success?orderId=${order.id}${!userId ? `&email=${encodeURIComponent(deliveryEmail ?? "")}` : ""}`,
           cancel_url: `${appUrl}/checkout/cancel?orderId=${order.id}`,
         }),
       });

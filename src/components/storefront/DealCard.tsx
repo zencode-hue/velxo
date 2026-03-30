@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Zap, Package, ShoppingCart } from "lucide-react";
+import PriceDisplay from "./PriceDisplay";
 
 interface DealCardProps {
   id: string;
@@ -87,10 +88,14 @@ export default function DealCard({
 
         {/* Pricing */}
         <div className="flex items-end gap-2 mb-4">
-          <span className="text-2xl font-black text-white">${dealPrice.toFixed(2)}</span>
+          <span className="text-2xl font-black text-white">
+            <PriceDisplay usdAmount={dealPrice} />
+          </span>
           <div className="flex flex-col items-start">
-            <span className="text-sm text-gray-500 line-through leading-none">${originalPrice.toFixed(2)}</span>
-            <span className="text-xs text-green-400 font-medium">Save ${savings.toFixed(2)}</span>
+            <PriceDisplay usdAmount={originalPrice} strikethrough className="text-sm" />
+            <span className="text-xs text-green-400 font-medium">
+              Save <PriceDisplay usdAmount={savings} />
+            </span>
           </div>
         </div>
 

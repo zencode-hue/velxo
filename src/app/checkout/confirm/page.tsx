@@ -23,6 +23,8 @@ function ConfirmPageInner() {
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isGuest, setIsGuest] = useState(false);
+  const [guestEmail, setGuestEmail] = useState("");
   const [balance, setBalance] = useState<number | null>(null);
   const [discountCode, setDiscountCode] = useState("");
   const [discountInfo, setDiscountInfo] = useState<{ value: number; type: string; discountAmount: number } | null>(null);
@@ -38,7 +40,12 @@ function ConfirmPageInner() {
       fetch("/api/v1/balance").then((r) => r.json()).catch(() => null),
     ]).then(([pd, bd]) => {
       setProduct(pd.data?.product ?? null);
-      if (bd?.data?.balance !== undefined) setBalance(bd.data.balance);
+      if (bd?.data?.balance !== undefined) {
+        setBalance(bd.data.balance);
+        setIsGuest(false);
+      } else {
+        setIsGuest(true);
+      }
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [productId]);
@@ -64,11 +71,17 @@ function ConfirmPageInner() {
 
   async function handlePay(provider: "nowpayments" | "discord" | "balance" | "binance_gift_card") {
     if (!productId) return;
+    if (isGuest && !guestEmail.trim()) { setPayErr("Please enter your email to receive your order"); return; }
+    if (isGuest && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) { setPayErr("Please enter a valid email address"); return; }
     setPaying(true); setPayErr(null);
     const res = await fetch("/api/v1/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ productId, paymentProvider: provider, discountCode: discountCode || undefined }),
+      body: JSON.stringify({
+        productId, paymentProvider: provider,
+        discountCode: discountCode || undefined,
+        ...(isGuest ? { guestEmail: guestEmail.trim() } : {}),
+      }),
     });
     const data = await res.json();
     setPaying(false);
@@ -139,6 +152,28 @@ function ConfirmPageInner() {
               </div>
             </div>
 
+            {/* Guest email */}
+            {isGuest && (
+              <div className="rounded-2xl p-5" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(88,101,242,0.3)" }}>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-2 h-2 rounded-full bg-[#5865f2] animate-pulse" />
+                  <p className="text-sm font-semibold text-white">Guest Checkout</p>
+                  <Link href="/auth/login" className="ml-auto text-xs text-[#7289da] hover:text-[#00d4ff] transition-colors">
+                    Sign in instead
+                  </Link>
+                </div>
+                <p className="text-xs text-gray-500 mb-3">Enter your email — your credentials will be delivered here after payment.</p>
+                <input
+                  type="email"
+                  value={guestEmail}
+                  onChange={(e) => setGuestEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="input-field text-sm py-2.5 w-full"
+                  autoComplete="email"
+                />
+              </div>
+            )}
+
             {/* Discount code */}
             <div className="rounded-2xl p-5" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(255,255,255,0.08)" }}>
               <label className="block text-sm font-medium text-white mb-2 flex items-center gap-1.5">
@@ -186,7 +221,7 @@ function ConfirmPageInner() {
             <div className="rounded-2xl p-5 space-y-3" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(255,255,255,0.08)" }}>
               <p className="text-sm font-semibold text-white">Payment Method</p>
 
-              {balance !== null && (
+              {balance !== null && !isGuest && (
                 <button onClick={() => handlePay("balance")} disabled={paying || !canPayWithBalance}
                   className={`w-full flex items-center gap-3 p-3.5 rounded-xl border transition-all text-left ${canPayWithBalance ? "border-cyan-500/30 hover:border-cyan-500/50 hover:bg-cyan-500/5" : "border-white/5 opacity-40 cursor-not-allowed"}`}>
                   <div className="w-9 h-9 rounded-lg bg-cyan-500/15 flex items-center justify-center shrink-0">

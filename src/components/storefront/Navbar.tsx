@@ -10,8 +10,9 @@ import {
   Info, LayoutDashboard, LogIn, UserPlus, Zap,
 } from "lucide-react";
 import VelxoLogo from "@/components/VelxoLogo";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
-const CURRENCIES = ["USD", "EUR", "GBP", "CAD", "AUD", "NGN", "GHS"];
+const CURRENCIES = ["USD", "EUR", "GBP", "CAD", "AUD", "NGN", "GHS", "JPY", "INR", "BRL"];
 
 const categories = [
   { href: "/products?category=STREAMING", label: "Streaming", icon: Tv, color: "text-red-400" },
@@ -38,9 +39,9 @@ const mobileLinks = [
 export default function Navbar() {
   const { data: session } = useSession();
   const router = useRouter();
+  const { currency, setCurrency } = useCurrency();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
-  const [currency, setCurrency] = useState("USD");
   const [currOpen, setCurrOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQ, setSearchQ] = useState("");

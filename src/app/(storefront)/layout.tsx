@@ -6,6 +6,7 @@ import TawkChat from "@/components/TawkChat";
 import Link from "next/link";
 import { Twitter, MessageCircle, Mail } from "lucide-react";
 import VelxoLogo from "@/components/VelxoLogo";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
 function Footer() {
   return (
@@ -71,12 +72,14 @@ function Footer() {
 export default function StorefrontLayout({ children }: { children: React.ReactNode }) {
   return (
     <Providers>
-      <PageViewTracker />
-      <TawkChat />
-      <AnnouncementBar />
-      <Navbar />
-      <main className="min-h-screen">{children}</main>
-      <Footer />
+      <CurrencyProvider>
+        <PageViewTracker />
+        <TawkChat />
+        <AnnouncementBar />
+        <Navbar />
+        <main className="min-h-screen">{children}</main>
+        <Footer />
+      </CurrencyProvider>
     </Providers>
   );
 }
