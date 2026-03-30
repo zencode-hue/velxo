@@ -53,7 +53,6 @@ export default function ProductCard({ id, title, price, category, imageUrl, avgR
           )}
         </div>
       </Link>
-
       <div className="p-4 flex flex-col flex-1 gap-2">
         <span className={`self-start text-xs px-2 py-0.5 rounded-full border font-medium ${catColor}`}>
           {catLabel}
@@ -72,14 +71,7 @@ export default function ProductCard({ id, title, price, category, imageUrl, avgR
               </span>
             )}
           </div>
-          <Link
-            href={available ? `/checkout/confirm?productId=${id}` : `/products/${id}`}
-            className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90"
-            style={{
-              background: available ? "linear-gradient(135deg, #ea580c, #f97316)" : "rgba(255,255,255,0.05)",
-              boxShadow: available ? "0 2px 12px rgba(234,88,12,0.3)" : "none",
-              opacity: available ? 1 : 0.5,
-            }}>
+          <Link href={`/products/${id}`} className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90" style={{ background: available ? "linear-gradient(135deg, #ea580c, #f97316)" : "rgba(255,255,255,0.05)", boxShadow: available ? "0 2px 12px rgba(234,88,12,0.3)" : "none", opacity: available ? 1 : 0.5 }}>
             <ShoppingCart size={14} />
             {available ? "Buy Now" : "Out of Stock"}
           </Link>
