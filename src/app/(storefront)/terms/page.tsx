@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Terms of Service — Velxo" };
+export const metadata: Metadata = { title: "Terms of Service — Velxo Shop", description: "Read the terms of service for Velxo Shop digital marketplace." };
 
 export default function TermsPage() {
   return (

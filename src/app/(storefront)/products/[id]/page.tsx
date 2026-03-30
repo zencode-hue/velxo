@@ -78,15 +78,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     where: { id: params.id, isActive: true },
     select: { title: true, description: true, imageUrl: true },
   });
-  if (!product) return { title: "Product Not Found — Velxo" };
+  if (!product) return { title: "Product Not Found — Velxo Shop" };
   return {
-    title: `${product.title} — Velxo`,
+    title: `${product.title} — Velxo Shop`,
     description: product.description.slice(0, 160),
     openGraph: {
-      title: `${product.title} — Velxo`,
+      title: `${product.title} — Velxo Shop`,
       description: product.description.slice(0, 160),
       url: `${process.env.NEXT_PUBLIC_APP_URL}/products/${params.id}`,
-      siteName: "Velxo", type: "website",
+      siteName: "Velxo Shop", type: "website",
       ...(product.imageUrl ? { images: [{ url: product.imageUrl }] } : {}),
     },
   };

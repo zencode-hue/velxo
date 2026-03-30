@@ -6,7 +6,7 @@ import ProductCard from "@/components/storefront/ProductCard";
 import Link from "next/link";
 import { Search } from "lucide-react";
 
-export const metadata: Metadata = { title: "Search — Velxo" };
+export const metadata: Metadata = { title: "Search Products — Velxo Shop", description: "Search for digital products on Velxo Shop." };
 
 interface Props { searchParams: { q?: string; category?: string } }
 

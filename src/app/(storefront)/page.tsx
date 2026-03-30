@@ -11,13 +11,13 @@ import NewsletterSection from "@/components/storefront/NewsletterSection";
 import { ArrowRight, Zap, Lock, Gem } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Velxo — Premium Digital Marketplace",
-  description: "Buy streaming subscriptions, AI tools, software licenses, and gaming products with instant automated delivery.",
+  title: "Velxo Shop — Buy Digital Products Instantly",
+  description: "Buy Netflix, Spotify, ChatGPT Plus, gaming keys, AI tools and software licenses. Instant automated delivery. Secure crypto & card payments.",
   openGraph: {
-    title: "Velxo — Premium Digital Marketplace",
-    description: "Buy streaming subscriptions, AI tools, software licenses, and gaming products with instant automated delivery.",
+    title: "Velxo Shop — Buy Digital Products Instantly",
+    description: "Buy Netflix, Spotify, ChatGPT Plus, gaming keys, AI tools and software licenses. Instant automated delivery.",
     url: process.env.NEXT_PUBLIC_APP_URL,
-    siteName: "Velxo",
+    siteName: "Velxo Shop",
     type: "website",
   },
 };
@@ -113,7 +113,7 @@ export default async function HomePage() {
       {/* Why choose us */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5">
         <div className="text-center mb-12">
-          <h2 className="text-2xl font-bold text-white mb-2">Why Choose Velxo?</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">Why Choose Velxo Shop?</h2>
           <p className="text-gray-500">Everything you need, nothing you don&apos;t</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">

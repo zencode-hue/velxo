@@ -4,19 +4,18 @@ import PageViewTracker from "@/components/PageViewTracker";
 import AnnouncementBar from "@/components/storefront/AnnouncementBar";
 import TawkChat from "@/components/TawkChat";
 import Link from "next/link";
-import { Zap, Twitter, MessageCircle, Mail } from "lucide-react";
+import { Twitter, MessageCircle, Mail } from "lucide-react";
+import VelxoLogo from "@/components/VelxoLogo";
 
 function Footer() {
   return (
-    <footer className="border-t border-white/5 mt-20" style={{ background: "rgba(8,8,8,0.9)" }}>
+    <footer className="border-t border-white/5 mt-20" style={{ background: "rgba(14,15,20,0.95)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
           <div className="col-span-2 sm:col-span-1">
             <div className="flex items-center gap-2 font-bold text-xl mb-3">
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
-                <Zap size={14} className="text-white" />
-              </div>
-              <span style={{ background: "linear-gradient(135deg, #00d4ff, #5865f2)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Velxo</span>
+              <VelxoLogo size={28} />
+              <span style={{ background: "linear-gradient(135deg, #00d4ff, #5865f2)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Velxo Shop</span>
             </div>
             <p className="text-xs text-gray-600 leading-relaxed mb-4">Premium digital marketplace. Instant delivery, secure payments, 500+ products.</p>
             <div className="flex items-center gap-3">

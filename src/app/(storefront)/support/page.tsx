@@ -3,8 +3,8 @@ import Link from "next/link";
 import { MessageCircle, Mail, Clock, CheckCircle } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Support — Velxo",
-  description: "Get help with your Velxo orders, account, and products.",
+  title: "Support — Velxo Shop",
+  description: "Get help with your Velxo Shop orders, account, and products. Live chat, Discord, and email support available.",
 };
 
 const faqs = [

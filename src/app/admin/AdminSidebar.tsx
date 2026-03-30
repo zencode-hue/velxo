@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import VelxoLogo from "@/components/VelxoLogo";
 import {
   LayoutDashboard, Package, ShoppingCart, Users,
   Tag, UserCheck, Settings, Zap, Menu,
@@ -57,10 +58,8 @@ export default function AdminSidebar() {
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex w-60 shrink-0 border-r border-white/5 bg-[#13141a] flex-col fixed h-full z-30">
         <div className="h-16 flex items-center gap-2.5 px-5 border-b border-white/5 shrink-0">
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
-            <Zap size={14} className="text-white" />
-          </div>
-          <span className="font-bold text-white">Velxo Admin</span>
+          <VelxoLogo size={28} />
+          <span className="font-bold text-white">Velxo Shop</span>
           <TrendingUp size={14} className="text-accent ml-auto" />
         </div>
         <NavLinks pathname={pathname} />
@@ -80,7 +79,7 @@ export default function AdminSidebar() {
           <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
             <Zap size={12} className="text-white" />
           </div>
-          <span className="font-bold text-white text-sm">Velxo Admin</span>
+          <span className="font-bold text-white text-sm">Velxo Shop</span>
         </div>
         <span className="ml-auto text-xs text-gray-500">{currentLabel}</span>
       </div>

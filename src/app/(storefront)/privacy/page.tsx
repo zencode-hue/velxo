@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Privacy Policy — Velxo" };
+export const metadata: Metadata = { title: "Privacy Policy — Velxo Shop", description: "Read the privacy policy for Velxo Shop. We protect your data." };
 
 export default function PrivacyPage() {
   return (

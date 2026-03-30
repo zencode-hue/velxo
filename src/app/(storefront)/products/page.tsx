@@ -5,22 +5,19 @@ import ProductGrid from "@/components/storefront/ProductGrid";
 import type { CategoryOption } from "@/components/storefront/CategoryNav";
 
 export const metadata: Metadata = {
-  title: "Products — Velxo",
-  description:
-    "Browse all digital products on Velxo — streaming subscriptions, AI tools, software licenses, and gaming products with instant delivery.",
+  title: "All Products — Velxo Shop",
+  description: "Browse 500+ digital products on Velxo Shop — Netflix, Spotify, ChatGPT Plus, gaming keys, AI tools and software licenses. Instant delivery.",
   openGraph: {
-    title: "Products — Velxo",
-    description:
-      "Browse all digital products on Velxo — streaming subscriptions, AI tools, software licenses, and gaming products with instant delivery.",
+    title: "All Products — Velxo Shop",
+    description: "Browse 500+ digital products — streaming, AI tools, software, gaming. Instant delivery.",
     url: `${process.env.NEXT_PUBLIC_APP_URL}/products`,
-    siteName: "Velxo",
+    siteName: "Velxo Shop",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Products — Velxo",
-    description:
-      "Browse all digital products on Velxo — streaming subscriptions, AI tools, software licenses, and gaming products with instant delivery.",
+    title: "All Products — Velxo Shop",
+    description: "Browse 500+ digital products — streaming, AI tools, software, gaming. Instant delivery.",
   },
 };
 

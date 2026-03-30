@@ -5,10 +5,11 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import {
-  Menu, X, Zap, ChevronDown, Tv, Bot, Package, Gamepad2,
+  Menu, X, ChevronDown, Tv, Bot, Package, Gamepad2,
   Globe, Search, Heart, Flame, BookOpen, Users, HeadphonesIcon,
-  Info, LayoutDashboard, LogIn, UserPlus,
+  Info, LayoutDashboard, LogIn, UserPlus, Zap,
 } from "lucide-react";
+import VelxoLogo from "@/components/VelxoLogo";
 
 const CURRENCIES = ["USD", "EUR", "GBP", "CAD", "AUD", "NGN", "GHS"];
 
@@ -85,11 +86,9 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-xl shrink-0">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
-              <Zap size={16} className="text-white" />
-            </div>
+            <VelxoLogo size={34} />
             <span style={{ background: "linear-gradient(135deg, #00d4ff, #7289da)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-              Velxo
+              Velxo Shop
             </span>
           </Link>
 
