@@ -68,8 +68,10 @@ export async function deliverOrder(orderId: string): Promise<void> {
   await checkAndSendStockAlerts(product.id);
   await checkDuplicateDelivery(item.id, orderId);
 
-  // Credit affiliate commission if the buyer was referred
-  await creditAffiliateCommission(order.userId, Number(order.amount));
+  // Credit affiliate commission if the buyer was referred (logged-in users only)
+  if (order.userId) {
+    await creditAffiliateCommission(order.userId, Number(order.amount));
+  }
 
   const discordUrl = process.env.DISCORD_WEBHOOK_URL;
   if (discordUrl) {
