@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Flame, Zap, AlertTriangle } from "lucide-react";
+import { Tag, Clock, Zap, Lock } from "lucide-react";
 import DealCard from "@/components/storefront/DealCard";
 import DealCountdown from "@/components/storefront/DealCountdown";
 
@@ -32,50 +32,65 @@ export default async function DealsPage() {
   const { deals, resetAt } = await getDeals();
 
   return (
-    <div className="min-h-screen">
-      {/* Hero banner */}
-      <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg, rgba(234,88,12,0.15) 0%, rgba(220,38,38,0.1) 50%, rgba(14,15,20,0) 100%)" }}>
-        <div className="absolute inset-0" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+    <div className="min-h-screen" style={{ background: "#080c0a" }}>
+      {/* Neon green hero */}
+      <div className="relative overflow-hidden">
+        {/* Scanline effect */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,136,0.015) 2px, rgba(0,255,136,0.015) 4px)",
+        }} />
+        {/* Glow */}
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,255,136,0.12) 0%, transparent 60%)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 40% 40% at 0% 100%, rgba(0,255,136,0.06) 0%, transparent 50%)" }} />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
           <div className="text-center">
             {/* Live badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
-              style={{ background: "rgba(234,88,12,0.15)", border: "1px solid rgba(234,88,12,0.4)", color: "#fb923c" }}>
-              <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse" />
-              LIVE DEALS — Refreshes Daily
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold mb-6 font-mono"
+              style={{ background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.4)", color: "#00ff88" }}>
+              <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
+              VAULT OPEN — 24H ONLY
             </div>
 
-            <h1 className="text-5xl sm:text-6xl font-black text-white mb-4 flex items-center justify-center gap-3">
-              <Flame size={52} className="text-orange-400" />
-              Hot Deals
+            <h1 className="text-5xl sm:text-6xl font-black mb-4 font-mono tracking-tight">
+              <span style={{ color: "#00ff88", textShadow: "0 0 40px rgba(0,255,136,0.5), 0 0 80px rgba(0,255,136,0.2)" }}>
+                DEAL
+              </span>
+              <span className="text-white"> VAULT</span>
             </h1>
-            <p className="text-gray-400 text-lg mb-8 max-w-xl mx-auto">
-              {deals.length} products at <span className="text-orange-400 font-bold">20% off</span> today only.
-              New deals drop every 24 hours.
+
+            <p className="text-lg mb-2 max-w-xl mx-auto" style={{ color: "rgba(0,255,136,0.7)" }}>
+              {deals.length} products unlocked at{" "}
+              <span className="font-black text-[#00ff88]">20% OFF</span>
             </p>
+            <p className="text-sm text-gray-600 mb-8">Vault resets every 24 hours. Access expires at midnight.</p>
 
             {/* Countdown */}
-            <div className="inline-flex items-center gap-4 px-6 py-3 rounded-2xl"
-              style={{ background: "rgba(26,27,35,0.9)", border: "1px solid rgba(234,88,12,0.3)" }}>
-              <DealCountdown resetAt={resetAt} />
+            <div className="inline-flex items-center gap-4 px-6 py-3 rounded-xl font-mono"
+              style={{ background: "rgba(0,10,5,0.9)", border: "1px solid rgba(0,255,136,0.3)", boxShadow: "0 0 20px rgba(0,255,136,0.08)" }}>
+              <DealCountdown resetAt={resetAt} neon />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Urgency bar */}
-      <div className="border-y border-orange-500/20 py-3" style={{ background: "rgba(234,88,12,0.06)" }}>
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-center gap-6 text-sm flex-wrap">
-          <span className="flex items-center gap-1.5 text-orange-300">
-            <Zap size={14} /> Instant delivery after payment
+      {/* Status bar */}
+      <div className="border-y py-2.5" style={{ borderColor: "rgba(0,255,136,0.15)", background: "rgba(0,255,136,0.04)" }}>
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-center gap-6 text-xs flex-wrap font-mono">
+          <span className="flex items-center gap-1.5" style={{ color: "rgba(0,255,136,0.8)" }}>
+            <Zap size={12} /> INSTANT DELIVERY
           </span>
-          <span className="text-gray-600">|</span>
-          <span className="flex items-center gap-1.5 text-orange-300">
-            <AlertTriangle size={14} /> Limited time — prices reset at midnight
+          <span style={{ color: "rgba(0,255,136,0.2)" }}>///</span>
+          <span className="flex items-center gap-1.5" style={{ color: "rgba(0,255,136,0.8)" }}>
+            <Lock size={12} /> ENCRYPTED CREDENTIALS
           </span>
-          <span className="text-gray-600">|</span>
-          <span className="flex items-center gap-1.5 text-orange-300">
-            <Flame size={14} /> {deals.length} deals available today
+          <span style={{ color: "rgba(0,255,136,0.2)" }}>///</span>
+          <span className="flex items-center gap-1.5" style={{ color: "rgba(0,255,136,0.8)" }}>
+            <Clock size={12} /> RESETS AT MIDNIGHT UTC
+          </span>
+          <span style={{ color: "rgba(0,255,136,0.2)" }}>///</span>
+          <span className="flex items-center gap-1.5" style={{ color: "rgba(0,255,136,0.8)" }}>
+            <Tag size={12} /> {deals.length} DEALS ACTIVE
           </span>
         </div>
       </div>
@@ -83,28 +98,24 @@ export default async function DealsPage() {
       {/* Deals grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {deals.length === 0 ? (
-          <div className="text-center py-20 text-gray-500">
-            <Flame size={48} className="mx-auto mb-4 opacity-30" />
-            <p className="text-lg font-medium">No deals right now</p>
-            <p className="text-sm mt-1">Check back soon — new deals drop daily.</p>
+          <div className="text-center py-20" style={{ color: "rgba(0,255,136,0.4)" }}>
+            <Lock size={48} className="mx-auto mb-4 opacity-30" />
+            <p className="text-lg font-mono font-medium">VAULT EMPTY</p>
+            <p className="text-sm mt-1 font-mono">New deals unlock daily at midnight UTC.</p>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {deals.map((deal) => (
-                <DealCard key={deal.id} {...deal} />
+                <DealCard key={deal.id} {...deal} neon />
               ))}
             </div>
 
-            {/* Bottom urgency */}
             <div className="mt-12 text-center">
-              <div className="inline-flex items-center gap-3 px-6 py-4 rounded-2xl"
-                style={{ background: "rgba(234,88,12,0.08)", border: "1px solid rgba(234,88,12,0.2)" }}>
-                <AlertTriangle size={18} className="text-orange-400 shrink-0" />
-                <p className="text-sm text-gray-300">
-                  These deals expire at <span className="text-orange-400 font-bold">midnight UTC</span>.
-                  After that, prices return to normal.
-                </p>
+              <div className="inline-flex items-center gap-3 px-6 py-4 rounded-xl font-mono text-sm"
+                style={{ background: "rgba(0,10,5,0.9)", border: "1px solid rgba(0,255,136,0.2)", color: "rgba(0,255,136,0.7)" }}>
+                <Clock size={16} style={{ color: "#00ff88" }} />
+                Vault closes at midnight UTC. Prices revert to normal after reset.
               </div>
             </div>
           </>

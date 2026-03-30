@@ -16,6 +16,7 @@ interface DealCardProps {
   savings: number;
   inStock: boolean;
   avgRating?: number;
+  neon?: boolean;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -31,27 +32,42 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export default function DealCard({
   id, title, category, imageUrl, originalPrice, dealPrice,
-  discountPct, savings, inStock,
+  discountPct, savings, inStock, neon = false,
 }: DealCardProps) {
   const catColor = CATEGORY_COLORS[category] ?? "text-gray-400 bg-gray-500/10 border-gray-500/20";
   const catLabel = CATEGORY_LABELS[category] ?? category;
 
+  const borderDefault = neon ? "rgba(0,255,136,0.15)" : "rgba(46,48,68,0.7)";
+  const borderHover = neon ? "rgba(0,255,136,0.5)" : "rgba(234,88,12,0.5)";
+  const shadowHover = neon ? "0 0 30px rgba(0,255,136,0.15)" : "0 0 30px rgba(234,88,12,0.12)";
+  const badgeBg = neon
+    ? "linear-gradient(135deg, #00ff88, #00cc6a)"
+    : "linear-gradient(135deg, #ea580c, #dc2626)";
+  const badgeColor = neon ? "#000" : "#fff";
+  const ctaBg = neon
+    ? "linear-gradient(135deg, #00ff88, #00cc6a)"
+    : "linear-gradient(135deg, #ea580c, #dc2626)";
+  const ctaColor = neon ? "#000" : "#fff";
+  const ctaShadow = neon
+    ? "0 4px 15px rgba(0,255,136,0.3)"
+    : "0 4px 15px rgba(234,88,12,0.3)";
+
   return (
     <div className="relative group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
-      style={{ background: "rgba(26,27,35,0.9)", border: "1px solid rgba(46,48,68,0.7)" }}
+      style={{ background: neon ? "rgba(0,10,5,0.95)" : "rgba(26,27,35,0.9)", border: `1px solid ${borderDefault}` }}
       onMouseEnter={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(234,88,12,0.5)";
-        (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 30px rgba(234,88,12,0.12)";
+        (e.currentTarget as HTMLDivElement).style.borderColor = borderHover;
+        (e.currentTarget as HTMLDivElement).style.boxShadow = shadowHover;
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(46,48,68,0.7)";
+        (e.currentTarget as HTMLDivElement).style.borderColor = borderDefault;
         (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
       }}>
 
       {/* Discount badge */}
       <div className="absolute top-3 left-3 z-10">
-        <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black text-white"
-          style={{ background: "linear-gradient(135deg, #ea580c, #dc2626)" }}>
+        <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black"
+          style={{ background: badgeBg, color: badgeColor }}>
           -{discountPct.toFixed(0)}% OFF
         </span>
       </div>
@@ -59,23 +75,26 @@ export default function DealCard({
       {/* Stock badge */}
       {inStock && (
         <div className="absolute top-3 right-3 z-10">
-          <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/20">
+          <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full"
+            style={neon
+              ? { background: "rgba(0,255,136,0.1)", color: "#00ff88", border: "1px solid rgba(0,255,136,0.3)" }
+              : { background: "rgba(34,197,94,0.2)", color: "#4ade80", border: "1px solid rgba(34,197,94,0.3)" }}>
             <Zap size={9} /> In Stock
           </span>
         </div>
       )}
 
       {/* Image */}
-      <div className="relative w-full aspect-video bg-white/5 overflow-hidden">
+      <div className="relative w-full aspect-video overflow-hidden" style={{ background: neon ? "#000" : "rgba(255,255,255,0.03)" }}>
         {imageUrl ? (
           <Image src={imageUrl} alt={title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Package size={36} className="text-gray-700" />
+            <Package size={36} style={{ color: neon ? "rgba(0,255,136,0.2)" : "rgba(255,255,255,0.1)" }} />
           </div>
         )}
-        {/* Urgency overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+        {neon && <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 60%, rgba(0,10,5,0.8))" }} />}
       </div>
 
       {/* Content */}
@@ -88,12 +107,12 @@ export default function DealCard({
 
         {/* Pricing */}
         <div className="flex items-end gap-2 mb-4">
-          <span className="text-2xl font-black text-white">
+          <span className="text-2xl font-black" style={{ color: neon ? "#00ff88" : "#fff" }}>
             <PriceDisplay usdAmount={dealPrice} />
           </span>
           <div className="flex flex-col items-start">
             <PriceDisplay usdAmount={originalPrice} strikethrough className="text-sm" />
-            <span className="text-xs text-green-400 font-medium">
+            <span className="text-xs font-medium" style={{ color: neon ? "rgba(0,255,136,0.7)" : "#4ade80" }}>
               Save <PriceDisplay usdAmount={savings} />
             </span>
           </div>
@@ -101,9 +120,9 @@ export default function DealCard({
 
         {/* CTA */}
         <Link href={`/checkout/confirm?productId=${id}`}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold text-white transition-all"
-          style={{ background: "linear-gradient(135deg, #ea580c, #dc2626)", boxShadow: "0 4px 15px rgba(234,88,12,0.3)" }}>
-          <ShoppingCart size={14} /> Grab Deal
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all"
+          style={{ background: ctaBg, color: ctaColor, boxShadow: ctaShadow }}>
+          <ShoppingCart size={14} /> {neon ? "Unlock Deal" : "Grab Deal"}
         </Link>
       </div>
     </div>

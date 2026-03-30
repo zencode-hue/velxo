@@ -93,8 +93,8 @@ export default async function HomePage() {
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                   Today&apos;s Hot Deals
-                  <span className="text-xs font-normal px-2 py-0.5 rounded-full text-orange-300"
-                    style={{ background: "rgba(234,88,12,0.15)", border: "1px solid rgba(234,88,12,0.3)" }}>
+                  <span className="text-xs font-normal px-2 py-0.5 rounded-full"
+                    style={{ background: "rgba(234,88,12,0.15)", border: "1px solid rgba(234,88,12,0.3)", color: "#fb923c" }}>
                     20% OFF
                   </span>
                 </h2>

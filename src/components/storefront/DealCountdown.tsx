@@ -14,7 +14,7 @@ function getTimeLeft(resetAt: string) {
 
 function pad(n: number) { return String(n).padStart(2, "0"); }
 
-export default function DealCountdown({ resetAt }: { resetAt: string }) {
+export default function DealCountdown({ resetAt, neon = false }: { resetAt: string; neon?: boolean }) {
   const [time, setTime] = useState(getTimeLeft(resetAt));
 
   useEffect(() => {
@@ -22,10 +22,16 @@ export default function DealCountdown({ resetAt }: { resetAt: string }) {
     return () => clearInterval(id);
   }, [resetAt]);
 
+  const accentColor = neon ? "#00ff88" : "#fb923c";
+  const bgColor = neon ? "rgba(0,255,136,0.08)" : "rgba(234,88,12,0.15)";
+  const borderColor = neon ? "rgba(0,255,136,0.3)" : "rgba(234,88,12,0.3)";
+
   return (
     <div className="flex items-center gap-3">
-      <Clock size={16} className="text-orange-400 shrink-0" />
-      <span className="text-sm text-gray-400">Resets in</span>
+      <Clock size={16} style={{ color: accentColor }} className="shrink-0" />
+      <span className="text-sm text-gray-400" style={neon ? { fontFamily: "monospace" } : {}}>
+        {neon ? "VAULT CLOSES IN" : "Resets in"}
+      </span>
       <div className="flex items-center gap-1.5">
         {[
           { label: "h", value: time.h },
@@ -33,10 +39,10 @@ export default function DealCountdown({ resetAt }: { resetAt: string }) {
           { label: "s", value: time.s },
         ].map(({ label, value }, i) => (
           <span key={label} className="flex items-center gap-1">
-            {i > 0 && <span className="text-orange-400/60 font-bold">:</span>}
+            {i > 0 && <span className="font-bold" style={{ color: accentColor, opacity: 0.6 }}>:</span>}
             <span className="inline-flex flex-col items-center">
               <span className="font-mono font-bold text-white text-lg leading-none px-2 py-1 rounded-lg"
-                style={{ background: "rgba(234,88,12,0.15)", border: "1px solid rgba(234,88,12,0.3)" }}>
+                style={{ background: bgColor, border: `1px solid ${borderColor}`, color: neon ? accentColor : "#fff" }}>
                 {pad(value)}
               </span>
               <span className="text-[9px] text-gray-600 mt-0.5 uppercase tracking-wider">{label}</span>
