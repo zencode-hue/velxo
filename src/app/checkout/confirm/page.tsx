@@ -20,6 +20,8 @@ function ConfirmPageInner() {
   const router = useRouter();
   const productId = searchParams.get("productId");
   const qty = parseInt(searchParams.get("qty") ?? "1", 10);
+  const dealPriceParam = searchParams.get("dealPrice");
+  const dealPrice = dealPriceParam ? parseFloat(dealPriceParam) : null;
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -50,9 +52,10 @@ function ConfirmPageInner() {
     }).catch(() => setLoading(false));
   }, [productId]);
 
-  const basePrice = product ? product.price * qty : 0;
+  const basePrice = product ? (dealPrice ?? product.price) * qty : 0;
   const discount = discountInfo?.discountAmount ?? 0;
   const finalPrice = Math.max(0, basePrice - discount);
+  const isDealPrice = dealPrice !== null && product && dealPrice < product.price;
   const canPayWithBalance = balance !== null && balance >= finalPrice;
 
   async function applyDiscount() {
@@ -129,7 +132,15 @@ function ConfirmPageInner() {
                 <p className="text-xs text-gray-600 mt-1 line-clamp-2">{product.description}</p>
                 <div className="flex items-center gap-3 mt-2">
                   <span className="text-xs text-gray-500">Qty: {qty}</span>
-                  <span className="text-sm font-bold text-white">${(product.price * qty).toFixed(2)}</span>
+                  {isDealPrice && (
+                    <span className="text-xs line-through text-gray-600">${(product!.price * qty).toFixed(2)}</span>
+                  )}
+                  <span className="text-sm font-bold text-white">${basePrice.toFixed(2)}</span>
+                  {isDealPrice && (
+                    <span className="text-xs px-1.5 py-0.5 rounded font-bold" style={{ background: "rgba(0,255,136,0.15)", color: "#00ff88" }}>
+                      DEAL -20%
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

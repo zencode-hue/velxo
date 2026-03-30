@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Flame, Zap, Shield, Star, Users, Package } from "lucide-react";
 import { useEffect, useRef } from "react";
+import AnimatedSubtitle from "./AnimatedSubtitle";
 
 function FireParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -101,11 +102,7 @@ export default function HeroSection() {
           </span>
         </motion.h1>
 
-        <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg sm:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-          Streaming subscriptions, AI tools, software licenses, and gaming products.
-          Automated delivery to your inbox. No waiting, no hassle.
-        </motion.p>
+        <AnimatedSubtitle />
 
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-4 justify-center mb-16">

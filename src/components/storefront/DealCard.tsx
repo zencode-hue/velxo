@@ -119,7 +119,7 @@ export default function DealCard({
         </div>
 
         {/* CTA */}
-        <Link href={`/checkout/confirm?productId=${id}`}
+        <Link href={`/checkout/confirm?productId=${id}&dealPrice=${dealPrice}`}
           className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all"
           style={{ background: ctaBg, color: ctaColor, boxShadow: ctaShadow }}>
           <ShoppingCart size={14} /> {neon ? "Unlock Deal" : "Grab Deal"}
