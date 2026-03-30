@@ -37,11 +37,13 @@ function SetupClient() {
     setDiscordSending(true);
     setDiscordResult(null);
     try {
-      const secret = prompt("Enter CRON_SECRET:");
-      if (!secret) return;
-      const res = await fetch(`/api/cron/deals-notify?secret=${encodeURIComponent(secret)}`);
+      const res = await fetch("/api/admin/discord-push", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "deals" }),
+      });
       const data = await res.json();
-      setDiscordResult(data.ok ? `Sent! ${data.dealsNotified} deals notified.` : `Error: ${data.error ?? data.message}`);
+      setDiscordResult(data.ok ? `Sent! ${data.dealsNotified ?? ""} deals notified.` : `Error: ${data.error ?? data.message}`);
     } catch (e) {
       setDiscordResult("Error: " + String(e));
     } finally {
