@@ -8,7 +8,9 @@ import ProductCard from "@/components/storefront/ProductCard";
 import FeaturedCategories from "@/components/storefront/FeaturedCategories";
 import TrustBadges from "@/components/storefront/TrustBadges";
 import NewsletterSection from "@/components/storefront/NewsletterSection";
-import { ArrowRight, Zap, Lock, Gem } from "lucide-react";
+import { ArrowRight, Zap, Lock, Gem, Flame } from "lucide-react";
+import DealCard from "@/components/storefront/DealCard";
+import DealCountdown from "@/components/storefront/DealCountdown";
 
 export const metadata: Metadata = {
   title: "Velxo Shop — Buy Digital Products Instantly",
@@ -53,25 +55,64 @@ async function getFeatured() {
 }
 
 export default async function HomePage() {
-  const [featured, streaming, aiTools, gaming, software] = await Promise.all([
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const [featured, streaming, aiTools, gaming, software, dealsRes] = await Promise.all([
     getFeatured(),
     getProductsByCategory("STREAMING", 4),
     getProductsByCategory("AI_TOOLS", 4),
     getProductsByCategory("GAMING", 4),
     getProductsByCategory("SOFTWARE", 4),
+    fetch(`${appUrl}/api/v1/deals`, { cache: "no-store" }).then((r) => r.json()).catch(() => ({ data: null })),
   ]);
 
+  const hotDeals = (dealsRes?.data?.deals ?? []).slice(0, 4) as Array<{
+    id: string; title: string; category: string; imageUrl: string | null;
+    originalPrice: number; dealPrice: number; discountPct: number;
+    savings: number; inStock: boolean; avgRating: number;
+  }>;
+  const dealsResetAt: string = dealsRes?.data?.resetAt ?? new Date().toISOString();
+
   const categorySections = [
-    { id: "STREAMING", label: "Streaming", emoji: "📺", products: streaming },
-    { id: "AI_TOOLS", label: "AI Tools", emoji: "🤖", products: aiTools },
-    { id: "GAMING", label: "Gaming", emoji: "🎮", products: gaming },
-    { id: "SOFTWARE", label: "Software", emoji: "💻", products: software },
+    { id: "STREAMING", label: "Streaming", products: streaming },
+    { id: "AI_TOOLS", label: "AI Tools", products: aiTools },
+    { id: "GAMING", label: "Gaming", products: gaming },
+    { id: "SOFTWARE", label: "Software", products: software },
   ].filter((s) => s.products.length > 0);
 
   return (
     <>
       <HeroSection />
       <TrustBadges />
+
+      {/* Hot Deals strip */}
+      {hotDeals.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <Flame size={28} className="text-orange-400" />
+              <div>
+                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                  Today&apos;s Hot Deals
+                  <span className="text-xs font-normal px-2 py-0.5 rounded-full text-orange-300"
+                    style={{ background: "rgba(234,88,12,0.15)", border: "1px solid rgba(234,88,12,0.3)" }}>
+                    20% OFF
+                  </span>
+                </h2>
+                <p className="text-gray-500 text-sm mt-0.5">Refreshes daily at midnight</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <DealCountdown resetAt={dealsResetAt} />
+              <Link href="/deals" className="flex items-center gap-1.5 text-sm text-orange-400 hover:text-orange-300 transition-colors font-medium">
+                See all deals <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {hotDeals.map((deal) => <DealCard key={deal.id} {...deal} />)}
+          </div>
+        </section>
+      )}
 
       {/* Featured */}
       {featured.length > 0 && (
@@ -95,9 +136,7 @@ export default async function HomePage() {
       {categorySections.map((section) => (
         <section key={section.id} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-white/5">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <span>{section.emoji}</span> {section.label}
-            </h2>
+            <h2 className="text-xl font-bold text-white">{section.label}</h2>
             <Link href={`/products?category=${section.id}`} className="flex items-center gap-1.5 text-sm text-purple-400 hover:text-purple-300 transition-colors">
               See all <ArrowRight size={14} />
             </Link>
