@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { type, message } = await req.json();
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    const webhookUrl = process.env.DISCORD_DEALS_WEBHOOK_URL ?? process.env.DISCORD_WEBHOOK_URL;
     if (!webhookUrl) return NextResponse.json({ error: "Discord webhook not configured" }, { status: 503 });
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
