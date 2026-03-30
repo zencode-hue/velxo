@@ -1,6 +1,7 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Image from "next/image";
-import { Star, Zap, Package } from "lucide-react";
+import { Star, Zap, Package, ShoppingCart } from "lucide-react";
+import PriceDisplay from "./PriceDisplay";
 
 export interface ProductCardProps {
   id: string;
@@ -15,17 +16,14 @@ export interface ProductCardProps {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  STREAMING: "text-purple-400 bg-purple-500/10 border-purple-500/20",
+  STREAMING: "text-red-400 bg-red-500/10 border-red-500/20",
   AI_TOOLS: "text-blue-400 bg-blue-500/10 border-blue-500/20",
   SOFTWARE: "text-green-400 bg-green-500/10 border-green-500/20",
-  GAMING: "text-orange-400 bg-orange-500/10 border-orange-500/20",
+  GAMING: "text-amber-400 bg-amber-500/10 border-amber-500/20",
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
-  STREAMING: "Streaming",
-  AI_TOOLS: "AI Tools",
-  SOFTWARE: "Software",
-  GAMING: "Gaming",
+  STREAMING: "Streaming", AI_TOOLS: "AI Tools", SOFTWARE: "Software", GAMING: "Gaming",
 };
 
 export default function ProductCard({ id, title, price, category, imageUrl, avgRating, inStock, unlimitedStock }: ProductCardProps) {
@@ -34,8 +32,8 @@ export default function ProductCard({ id, title, price, category, imageUrl, avgR
   const catLabel = CATEGORY_LABELS[category] ?? category;
 
   return (
-    <Link href={`/products/${id}`} className="glass-card group flex flex-col overflow-hidden hover:border-purple-500/30 transition-all duration-200">
-      <div className="relative w-full aspect-video bg-white/5 overflow-hidden">
+    <div className="glass-card group flex flex-col overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:border-orange-500/40">
+      <Link href={`/products/${id}`} className="relative w-full aspect-video bg-white/5 overflow-hidden block">
         {imageUrl ? (
           <Image src={imageUrl} alt={title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
         ) : (
@@ -54,21 +52,39 @@ export default function ProductCard({ id, title, price, category, imageUrl, avgR
             </span>
           )}
         </div>
-      </div>
+      </Link>
+
       <div className="p-4 flex flex-col flex-1 gap-2">
         <span className={`self-start text-xs px-2 py-0.5 rounded-full border font-medium ${catColor}`}>
           {catLabel}
         </span>
-        <p className="text-sm font-semibold text-white line-clamp-2 leading-snug">{title}</p>
-        <div className="mt-auto flex items-center justify-between pt-2">
-          <span className="text-lg font-bold text-white">${price.toFixed(2)}</span>
-          {avgRating !== undefined && avgRating > 0 && (
-            <span className="flex items-center gap-1 text-xs text-yellow-400">
-              <Star size={12} fill="currentColor" /> {avgRating.toFixed(1)}
+        <Link href={`/products/${id}`} className="text-sm font-semibold text-white line-clamp-2 leading-snug hover:text-orange-300 transition-colors">
+          {title}
+        </Link>
+        <div className="mt-auto pt-2 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-bold text-white">
+              <PriceDisplay usdAmount={price} />
             </span>
-          )}
+            {avgRating !== undefined && avgRating > 0 && (
+              <span className="flex items-center gap-1 text-xs text-yellow-400">
+                <Star size={12} fill="currentColor" /> {avgRating.toFixed(1)}
+              </span>
+            )}
+          </div>
+          <Link
+            href={available ? `/checkout/confirm?productId=${id}` : `/products/${id}`}
+            className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90"
+            style={{
+              background: available ? "linear-gradient(135deg, #ea580c, #f97316)" : "rgba(255,255,255,0.05)",
+              boxShadow: available ? "0 2px 12px rgba(234,88,12,0.3)" : "none",
+              opacity: available ? 1 : 0.5,
+            }}>
+            <ShoppingCart size={14} />
+            {available ? "Buy Now" : "Out of Stock"}
+          </Link>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

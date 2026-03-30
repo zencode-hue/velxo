@@ -84,32 +84,39 @@ export default async function HomePage() {
       <HeroSection />
       <TrustBadges />
 
-      {/* Hot Deals strip */}
+      {/* Hot Deals strip — neon green vault theme */}
       {hotDeals.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              <Flame size={28} className="text-orange-400" />
-              <div>
-                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                  Today&apos;s Hot Deals
-                  <span className="text-xs font-normal px-2 py-0.5 rounded-full"
-                    style={{ background: "rgba(234,88,12,0.15)", border: "1px solid rgba(234,88,12,0.3)", color: "#fb923c" }}>
-                    20% OFF
-                  </span>
-                </h2>
-                <p className="text-gray-500 text-sm mt-0.5">Refreshes daily at midnight</p>
+        <section className="py-16" style={{ background: "rgba(0,10,5,0.6)", borderTop: "1px solid rgba(0,255,136,0.1)", borderBottom: "1px solid rgba(0,255,136,0.1)" }}>
+          {/* Scanline overlay */}
+          <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,136,0.008) 2px, rgba(0,255,136,0.008) 4px)" }} />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
+                <div>
+                  <h2 className="text-2xl font-black font-mono flex items-center gap-2" style={{ color: "#00ff88" }}>
+                    DEAL VAULT
+                    <span className="text-xs font-normal px-2 py-0.5 rounded-full font-mono"
+                      style={{ background: "rgba(0,255,136,0.1)", border: "1px solid rgba(0,255,136,0.35)", color: "#00ff88" }}>
+                      20% OFF
+                    </span>
+                  </h2>
+                  <p className="text-xs font-mono mt-0.5" style={{ color: "rgba(0,255,136,0.5)" }}>Vault refreshes daily at midnight UTC</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <DealCountdown resetAt={dealsResetAt} neon />
+                <Link href="/deals" className="flex items-center gap-1.5 text-sm font-mono font-bold transition-colors"
+                  style={{ color: "#00ff88" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4dffb0")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#00ff88")}>
+                  View Vault <ArrowRight size={14} />
+                </Link>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <DealCountdown resetAt={dealsResetAt} />
-              <Link href="/deals" className="flex items-center gap-1.5 text-sm text-orange-400 hover:text-orange-300 transition-colors font-medium">
-                See all deals <ArrowRight size={14} />
-              </Link>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {hotDeals.map((deal) => <DealCard key={deal.id} {...deal} neon />)}
             </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {hotDeals.map((deal) => <DealCard key={deal.id} {...deal} />)}
           </div>
         </section>
       )}
