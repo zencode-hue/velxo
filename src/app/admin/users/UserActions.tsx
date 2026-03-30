@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Edit2, Trash2, DollarSign, X, Check, Ban, ShieldCheck } from "lucide-react";
@@ -116,7 +116,7 @@ export default function UserActions({ userId, email, name, role, balance, isBann
           <div className="flex gap-2">
             <button onClick={() => setMode("idle")} className="btn-secondary flex-1 text-sm py-2">Cancel</button>
             <button onClick={confirmBan} disabled={loading} className="flex-1 text-sm py-2 rounded-lg bg-orange-600 hover:bg-orange-500 text-white transition-colors">
-              {loading ? "Banning…" : "Ban User"}
+              {loading ? "Banningâ€¦" : "Ban User"}
             </button>
           </div>
         </div>
@@ -150,7 +150,7 @@ export default function UserActions({ userId, email, name, role, balance, isBann
           {err && <p className="text-red-400 text-xs">{err}</p>}
           <div className="flex gap-2">
             <button onClick={() => setMode("idle")} className="btn-secondary flex-1 text-sm py-2">Cancel</button>
-            <button onClick={handleEdit} disabled={loading} className="btn-primary flex-1 text-sm py-2">{loading ? "Saving…" : "Save"}</button>
+            <button onClick={handleEdit} disabled={loading} className="btn-primary flex-1 text-sm py-2">{loading ? "Savingâ€¦" : "Save"}</button>
           </div>
         </div>
       </div>
@@ -184,7 +184,7 @@ export default function UserActions({ userId, email, name, role, balance, isBann
           {err && <p className="text-red-400 text-xs">{err}</p>}
           <div className="flex gap-2">
             <button onClick={() => setMode("idle")} className="btn-secondary flex-1 text-sm py-2">Cancel</button>
-            <button onClick={handleBalance} disabled={loading} className="btn-primary flex-1 text-sm py-2">{loading ? "Saving…" : "Apply"}</button>
+            <button onClick={handleBalance} disabled={loading} className="btn-primary flex-1 text-sm py-2">{loading ? "Savingâ€¦" : "Apply"}</button>
           </div>
         </div>
       </div>
@@ -201,174 +201,7 @@ export default function UserActions({ userId, email, name, role, balance, isBann
           <div className="flex gap-2">
             <button onClick={() => setMode("idle")} className="btn-secondary flex-1 text-sm py-2">Cancel</button>
             <button onClick={handleDelete} disabled={loading} className="flex-1 text-sm py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white transition-colors flex items-center justify-center gap-1">
-              <Check size={13} /> {loading ? "Deleting…" : "Delete"}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return null;
-}
-
-interface Props {
-  userId: string;
-  email: string;
-  name: string;
-  role: string;
-  balance: number;
-}
-
-export default function UserActions({ userId, email, name, role, balance }: Props) {
-  const [mode, setMode] = useState<"idle" | "edit" | "balance" | "delete">("idle");
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-
-  // Edit form
-  const [editName, setEditName] = useState(name);
-  const [editEmail, setEditEmail] = useState(email);
-  const [editRole, setEditRole] = useState(role);
-
-  // Balance form
-  const [balanceAmount, setBalanceAmount] = useState("");
-  const [balanceType, setBalanceType] = useState<"ADMIN_CREDIT" | "ADMIN_DEBIT">("ADMIN_CREDIT");
-  const [balanceDesc, setBalanceDesc] = useState("");
-
-  async function handleEdit() {
-    setLoading(true); setErr(null);
-    const res = await fetch(`/api/admin/users/${userId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: editName, email: editEmail, role: editRole }),
-    });
-    setLoading(false);
-    if (!res.ok) { const d = await res.json(); setErr(d.error); return; }
-    setMode("idle");
-    window.location.reload();
-  }
-
-  async function handleBalance() {
-    const amt = parseFloat(balanceAmount);
-    if (!amt || amt <= 0) { setErr("Enter a valid amount"); return; }
-    setLoading(true); setErr(null);
-    const res = await fetch(`/api/admin/users/${userId}/balance`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: amt, type: balanceType, description: balanceDesc || undefined }),
-    });
-    setLoading(false);
-    if (!res.ok) { const d = await res.json(); setErr(d.error); return; }
-    setMode("idle");
-    window.location.reload();
-  }
-
-  async function handleDelete() {
-    setLoading(true); setErr(null);
-    const res = await fetch(`/api/admin/users/${userId}`, { method: "DELETE" });
-    setLoading(false);
-    if (!res.ok) { const d = await res.json(); setErr(d.error); return; }
-    window.location.reload();
-  }
-
-  if (mode === "idle") {
-    return (
-      <div className="flex items-center justify-end gap-2">
-        <button onClick={() => setMode("edit")} className="text-xs text-purple-400 hover:text-purple-300 transition-colors p-1" title="Edit">
-          <Edit2 size={13} />
-        </button>
-        <button onClick={() => setMode("balance")} className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors p-1" title="Adjust balance">
-          <DollarSign size={13} />
-        </button>
-        <button onClick={() => setMode("delete")} className="text-xs text-red-400 hover:text-red-300 transition-colors p-1" title="Delete">
-          <Trash2 size={13} />
-        </button>
-      </div>
-    );
-  }
-
-  if (mode === "edit") {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setMode("idle")}>
-        <div className="glass-card p-6 w-full max-w-sm space-y-4" onClick={(e) => e.stopPropagation()}>
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-white">Edit User</h3>
-            <button onClick={() => setMode("idle")}><X size={16} className="text-gray-400" /></button>
-          </div>
-          <div>
-            <label className="block text-xs text-gray-500 mb-1">Name</label>
-            <input value={editName} onChange={(e) => setEditName(e.target.value)} className="input-field text-sm py-2" />
-          </div>
-          <div>
-            <label className="block text-xs text-gray-500 mb-1">Email</label>
-            <input value={editEmail} onChange={(e) => setEditEmail(e.target.value)} className="input-field text-sm py-2" />
-          </div>
-          <div>
-            <label className="block text-xs text-gray-500 mb-1">Role</label>
-            <select value={editRole} onChange={(e) => setEditRole(e.target.value)} className="input-field text-sm py-2">
-              <option value="CUSTOMER">CUSTOMER</option>
-              <option value="ADMIN">ADMIN</option>
-            </select>
-          </div>
-          {err && <p className="text-red-400 text-xs">{err}</p>}
-          <div className="flex gap-2">
-            <button onClick={() => setMode("idle")} className="btn-secondary flex-1 text-sm py-2">Cancel</button>
-            <button onClick={handleEdit} disabled={loading} className="btn-primary flex-1 text-sm py-2">
-              {loading ? "Saving…" : "Save"}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (mode === "balance") {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setMode("idle")}>
-        <div className="glass-card p-6 w-full max-w-sm space-y-4" onClick={(e) => e.stopPropagation()}>
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-white">Adjust Balance</h3>
-            <button onClick={() => setMode("idle")}><X size={16} className="text-gray-400" /></button>
-          </div>
-          <p className="text-xs text-gray-500">Current balance: <span className="text-cyan-400 font-medium">${balance.toFixed(2)}</span></p>
-          <div>
-            <label className="block text-xs text-gray-500 mb-1">Type</label>
-            <select value={balanceType} onChange={(e) => setBalanceType(e.target.value as "ADMIN_CREDIT" | "ADMIN_DEBIT")} className="input-field text-sm py-2">
-              <option value="ADMIN_CREDIT">Credit (Add)</option>
-              <option value="ADMIN_DEBIT">Debit (Remove)</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs text-gray-500 mb-1">Amount ($)</label>
-            <input type="number" min="0.01" step="0.01" value={balanceAmount} onChange={(e) => setBalanceAmount(e.target.value)} className="input-field text-sm py-2" placeholder="10.00" />
-          </div>
-          <div>
-            <label className="block text-xs text-gray-500 mb-1">Note (optional)</label>
-            <input value={balanceDesc} onChange={(e) => setBalanceDesc(e.target.value)} className="input-field text-sm py-2" placeholder="Reason..." />
-          </div>
-          {err && <p className="text-red-400 text-xs">{err}</p>}
-          <div className="flex gap-2">
-            <button onClick={() => setMode("idle")} className="btn-secondary flex-1 text-sm py-2">Cancel</button>
-            <button onClick={handleBalance} disabled={loading} className="btn-primary flex-1 text-sm py-2">
-              {loading ? "Saving…" : "Apply"}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (mode === "delete") {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setMode("idle")}>
-        <div className="glass-card p-6 w-full max-w-sm space-y-4" onClick={(e) => e.stopPropagation()}>
-          <h3 className="font-semibold text-white">Delete User?</h3>
-          <p className="text-sm text-gray-400">This will permanently delete <span className="text-white">{email}</span> and all their data. This cannot be undone.</p>
-          {err && <p className="text-red-400 text-xs">{err}</p>}
-          <div className="flex gap-2">
-            <button onClick={() => setMode("idle")} className="btn-secondary flex-1 text-sm py-2">Cancel</button>
-            <button onClick={handleDelete} disabled={loading} className="flex-1 text-sm py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white transition-colors flex items-center justify-center gap-1">
-              <Check size={13} /> {loading ? "Deleting…" : "Delete"}
+              <Check size={13} /> {loading ? "Deletingâ€¦" : "Delete"}
             </button>
           </div>
         </div>
