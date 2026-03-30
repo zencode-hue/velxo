@@ -44,7 +44,7 @@ export default async function BlogPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {posts.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`}
-              className="group rounded-xl border border-white/8 bg-[#1a1b23] p-6 hover:border-purple-600/40 hover:shadow-lg hover:shadow-purple-600/10 transition-all duration-300">
+              className="group rounded-xl border border-white/8 bg-[#1a1208] p-6 hover:border-purple-600/40 hover:shadow-lg hover:shadow-purple-600/10 transition-all duration-300">
               <div className="flex items-start justify-between mb-4">
                 <span className="text-3xl">{post.emoji}</span>
                 <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${CATEGORY_COLORS[post.category] ?? "text-gray-400 bg-gray-500/10"}`}>

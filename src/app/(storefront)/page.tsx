@@ -159,9 +159,9 @@ export default async function HomePage() {
           {[
             { icon: Zap, color: "text-yellow-400", title: "Instant Delivery", desc: "Credentials delivered automatically to your email the moment payment confirms. No waiting." },
             { icon: Lock, color: "text-green-400", title: "Secure & Encrypted", desc: "All inventory encrypted with AES-256-GCM. Payments processed through trusted providers." },
-            { icon: Gem, color: "text-[#00d4ff]", title: "Premium Quality", desc: "Every product verified before listing. We stand behind everything in our catalog." },
+            { icon: Gem, color: "text-[#fbbf24]", title: "Premium Quality", desc: "Every product verified before listing. We stand behind everything in our catalog." },
           ].map((item) => (
-            <div key={item.title} className="rounded-xl border border-white/8 bg-[#1a1b23] p-6 text-center hover:border-[#5865f2]/30 transition-colors">
+            <div key={item.title} className="rounded-xl border border-white/8 bg-[#1a1208] p-6 text-center hover:border-[#ea580c]/30 transition-colors">
               <div className="flex justify-center mb-4">
                 <item.icon size={36} className={item.color} />
               </div>
@@ -184,7 +184,7 @@ export default async function HomePage() {
             { q: "What if I have an issue?", a: "Join our Discord and open a support ticket. We resolve issues promptly." },
             { q: "Are the products legitimate?", a: "Yes. All products are sourced and verified before listing." },
           ].map((item) => (
-            <details key={item.q} className="group rounded-xl border border-white/8 bg-[#1a1b23] hover:border-purple-600/20 transition-all">
+            <details key={item.q} className="group rounded-xl border border-white/8 bg-[#1a1208] hover:border-purple-600/20 transition-all">
               <summary className="p-5 cursor-pointer font-semibold text-white text-sm flex items-center justify-between list-none">
                 {item.q}
                 <span className="text-gray-500 group-open:rotate-180 transition-transform">▾</span>

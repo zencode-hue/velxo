@@ -2,23 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── CSS Variables — Discord Dark + Neon Blue theme ────────────────────────── */
+/* ─── CSS Variables — Dark Orange / Amber Fire theme ────────────────────────── */
 :root {
-  --background: #0e0f14;
-  --surface: #1a1b23;
-  --surface-2: #23252f;
-  --surface-3: #2b2d3a;
-  --border: #2e3044;
-  --accent: #5865f2;
-  --accent-light: #7289da;
-  --accent-hover: #4752c4;
-  --neon: #00d4ff;
-  --neon-dim: rgba(0, 212, 255, 0.15);
-  --purple: #7289da;
-  --purple-dim: rgba(139, 92, 246, 0.15);
-  --text-primary: #f2f3f5;
-  --text-secondary: #b9bbbe;
-  --text-muted: #72767d;
+  --background: #0d0a07;
+  --surface: #1a1208;
+  --surface-2: #231808;
+  --surface-3: #2e2010;
+  --border: #3d2a10;
+  --accent: #ea580c;
+  --accent-light: #f97316;
+  --accent-hover: #c2410c;
+  --neon: #fbbf24;
+  --neon-dim: rgba(251,191,36,0.15);
+  --amber: #f59e0b;
+  --text-primary: #fef3e2;
+  --text-secondary: #d4a574;
+  --text-muted: #8a6040;
 }
 
 /* ─── Base ───────────────────────────────────────────────────────────────────── */
@@ -35,8 +34,8 @@
   }
 
   ::selection {
-    background-color: rgba(88, 101, 242, 0.35);
-    color: #f2f3f5;
+    background-color: rgba(234,88,12,0.35);
+    color: #fef3e2;
   }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -48,12 +47,11 @@
 /* ─── Components ─────────────────────────────────────────────────────────────── */
 @layer components {
 
-  /* Glassmorphism card — Discord sidebar feel */
   .glass-card {
-    background: rgba(26, 27, 35, 0.9);
+    background: rgba(26,18,8,0.9);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(46, 48, 68, 0.7);
+    border: 1px solid rgba(61,42,16,0.7);
     border-radius: 12px;
   }
 
@@ -62,21 +60,21 @@
   }
 
   .glass-card-hover:hover {
-    border-color: rgba(88, 101, 242, 0.5);
-    box-shadow: 0 0 24px rgba(88, 101, 242, 0.12), 0 0 8px rgba(0, 212, 255, 0.06);
+    border-color: rgba(234,88,12,0.5);
+    box-shadow: 0 0 24px rgba(234,88,12,0.12), 0 0 8px rgba(251,191,36,0.06);
     transform: translateY(-2px);
   }
 
-  /* Primary button — Discord blurple */
+  /* Primary button — orange fire */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200;
-    background: linear-gradient(135deg, #5865f2, #7289da);
-    box-shadow: 0 4px 15px rgba(88, 101, 242, 0.35);
+    background: linear-gradient(135deg, #ea580c, #f97316);
+    box-shadow: 0 4px 15px rgba(234,88,12,0.35);
   }
 
   .btn-primary:hover {
-    background: linear-gradient(135deg, #4752c4, #5865f2);
-    box-shadow: 0 4px 24px rgba(88, 101, 242, 0.55);
+    background: linear-gradient(135deg, #c2410c, #ea580c);
+    box-shadow: 0 4px 24px rgba(234,88,12,0.55);
     transform: translateY(-1px);
   }
 
@@ -92,35 +90,33 @@
   /* Secondary button */
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200;
-    background: rgba(46, 48, 68, 0.8);
-    border: 1px solid rgba(46, 48, 68, 0.9);
+    background: rgba(61,42,16,0.8);
+    border: 1px solid rgba(61,42,16,0.9);
   }
 
   .btn-secondary:hover {
-    background: rgba(46, 48, 68, 1);
-    border-color: rgba(88, 101, 242, 0.5);
+    background: rgba(61,42,16,1);
+    border-color: rgba(234,88,12,0.5);
   }
 
   /* Input field */
   .input-field {
-    @apply w-full px-4 py-3 rounded-lg text-white placeholder-gray-500 transition-all duration-200 outline-none;
+    @apply w-full px-4 py-3 rounded-lg transition-all duration-200 outline-none;
     background: var(--surface-2);
     border: 1px solid var(--border);
+    color: var(--text-primary);
   }
+
+  .input-field::placeholder { color: var(--text-muted); }
 
   .input-field:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.18);
+    box-shadow: 0 0 0 3px rgba(234,88,12,0.18);
   }
 
-  /* Neon glow text */
-  .text-glow {
-    text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
-  }
-
-  /* Gradient text — neon blue to purple */
+  /* Gradient text */
   .gradient-text {
-    background: linear-gradient(135deg, #00d4ff, #7289da, #7289da);
+    background: linear-gradient(135deg, #fbbf24, #f97316, #ea580c);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -133,59 +129,37 @@
 
   .badge-purple {
     @apply badge;
-    background: rgba(88, 101, 242, 0.2);
-    color: #7289da;
-    border: 1px solid rgba(88, 101, 242, 0.35);
+    background: rgba(234,88,12,0.2);
+    color: #fb923c;
+    border: 1px solid rgba(234,88,12,0.35);
   }
 
   .badge-green {
     @apply badge;
-    background: rgba(59, 165, 93, 0.15);
-    color: #57f287;
-    border: 1px solid rgba(59, 165, 93, 0.3);
+    background: rgba(34,197,94,0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34,197,94,0.3);
   }
 
   .badge-red {
     @apply badge;
-    background: rgba(237, 66, 69, 0.15);
+    background: rgba(239,68,68,0.15);
     color: #f87171;
-    border: 1px solid rgba(237, 66, 69, 0.3);
+    border: 1px solid rgba(239,68,68,0.3);
   }
 
   .badge-yellow {
     @apply badge;
-    background: rgba(254, 231, 92, 0.12);
-    color: #fee75c;
-    border: 1px solid rgba(254, 231, 92, 0.25);
+    background: rgba(251,191,36,0.12);
+    color: #fbbf24;
+    border: 1px solid rgba(251,191,36,0.25);
   }
 
   .badge-blue {
     @apply badge;
-    background: rgba(0, 212, 255, 0.12);
-    color: #00d4ff;
-    border: 1px solid rgba(0, 212, 255, 0.25);
-  }
-
-  /* Neon border glow */
-  .neon-border {
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    box-shadow: 0 0 12px rgba(0, 212, 255, 0.1), inset 0 0 12px rgba(0, 212, 255, 0.03);
-  }
-
-  /* Discord-style channel item */
-  .channel-item {
-    @apply flex items-center gap-2 px-3 py-1.5 rounded-md text-sm transition-colors cursor-pointer;
-    color: var(--text-muted);
-  }
-
-  .channel-item:hover {
-    background: rgba(46, 48, 68, 0.6);
-    color: var(--text-secondary);
-  }
-
-  .channel-item.active {
-    background: rgba(88, 101, 242, 0.2);
-    color: var(--text-primary);
+    background: rgba(251,191,36,0.12);
+    color: #fbbf24;
+    border: 1px solid rgba(251,191,36,0.25);
   }
 }
 
@@ -193,13 +167,8 @@
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-  .bg-discord { background-color: #0e0f14; }
-  .bg-discord-surface { background-color: #1a1b23; }
-  .bg-discord-surface-2 { background-color: #23252f; }
-  .text-discord-muted { color: #72767d; }
-  .text-neon { color: #00d4ff; }
-  .border-discord { border-color: #2e3044; }
+  .text-neon { color: #fbbf24; }
+  .text-accent { color: #ea580c; }
 }
 
 /* ─── Animations ─────────────────────────────────────────────────────────────── */
@@ -214,13 +183,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(88, 101, 242, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(88, 101, 242, 0.6), 0 0 60px rgba(0, 212, 255, 0.2); }
-}
-
-@keyframes neon-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(0, 212, 255, 0.4); }
-  50% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.3); }
+  0%, 100% { box-shadow: 0 0 20px rgba(234,88,12,0.3); }
+  50% { box-shadow: 0 0 40px rgba(234,88,12,0.6), 0 0 60px rgba(251,191,36,0.2); }
 }
 
 @keyframes gradient-shift {
@@ -228,4 +192,3 @@
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
-

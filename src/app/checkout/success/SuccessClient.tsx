@@ -30,7 +30,7 @@ export default function SuccessClient() {
           {orderId && (
             <Link href={`/orders/${orderId}`}
               className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm"
-              style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
+              style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
               <Package size={16} /> View Invoice
             </Link>
           )}

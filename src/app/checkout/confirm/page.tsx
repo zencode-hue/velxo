@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -154,11 +154,11 @@ function ConfirmPageInner() {
 
             {/* Guest email */}
             {isGuest && (
-              <div className="rounded-2xl p-5" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(88,101,242,0.3)" }}>
+              <div className="rounded-2xl p-5" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(234,88,12,0.3)" }}>
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-[#5865f2] animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-[#ea580c] animate-pulse" />
                   <p className="text-sm font-semibold text-white">Guest Checkout</p>
-                  <Link href="/auth/login" className="ml-auto text-xs text-[#7289da] hover:text-[#00d4ff] transition-colors">
+                  <Link href="/auth/login" className="ml-auto text-xs text-[#f97316] hover:text-[#fbbf24] transition-colors">
                     Sign in instead
                   </Link>
                 </div>

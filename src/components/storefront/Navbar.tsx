@@ -72,7 +72,7 @@ export default function Navbar() {
               <input ref={searchRef} value={searchQ} onChange={(e) => setSearchQ(e.target.value)}
                 placeholder="Search products, categories..."
                 className="w-full pl-12 pr-4 py-4 text-lg rounded-2xl text-white outline-none"
-                style={{ background: "rgba(26,27,35,0.98)", border: "1px solid rgba(88,101,242,0.4)" }} />
+                style={{ background: "rgba(26,27,35,0.98)", border: "1px solid rgba(234,88,12,0.4)" }} />
               <button type="button" onClick={() => setSearchOpen(false)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white">
                 <X size={18} />
               </button>
@@ -88,7 +88,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-xl shrink-0">
             <VelxoLogo size={34} />
-            <span style={{ background: "linear-gradient(135deg, #00d4ff, #7289da)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+            <span style={{ background: "linear-gradient(135deg, #fbbf24, #f97316)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               Velxo Shop
             </span>
           </Link>
@@ -104,7 +104,7 @@ export default function Navbar() {
               {catOpen && (
                 <div className="absolute top-full left-0 mt-1 w-52 rounded-xl p-2 shadow-2xl z-50" style={{ background: "rgba(19,20,26,0.99)", border: "1px solid rgba(46,48,68,0.8)" }}>
                   <Link href="/products" className="flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">
-                    <Package size={14} className="text-[#7289da]" /> All Products
+                    <Package size={14} className="text-[#f97316]" /> All Products
                   </Link>
                   <div className="my-1 border-t border-white/5" />
                   {categories.map((cat) => (
@@ -142,7 +142,7 @@ export default function Navbar() {
                 <div className="absolute top-full right-0 mt-1 w-28 rounded-xl p-1.5 shadow-xl z-50" style={{ background: "rgba(19,20,26,0.99)", border: "1px solid rgba(46,48,68,0.8)" }}>
                   {CURRENCIES.map((c) => (
                     <button key={c} onClick={() => { setCurrency(c); setCurrOpen(false); }}
-                      className={`w-full text-left px-3 py-1.5 text-xs rounded-lg transition-all ${currency === c ? "text-[#7289da] bg-[#5865f2]/10" : "text-gray-400 hover:text-white hover:bg-white/5"}`}>
+                      className={`w-full text-left px-3 py-1.5 text-xs rounded-lg transition-all ${currency === c ? "text-[#f97316] bg-[#ea580c]/10" : "text-gray-400 hover:text-white hover:bg-white/5"}`}>
                       {c}
                     </button>
                   ))}
@@ -152,7 +152,7 @@ export default function Navbar() {
 
             {session ? (
               <Link href="/dashboard" className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white rounded-lg transition-all hover:-translate-y-0.5"
-                style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
+                style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
                 <LayoutDashboard size={14} /> Dashboard
               </Link>
             ) : (
@@ -161,7 +161,7 @@ export default function Navbar() {
                   <LogIn size={14} /> Sign In
                 </Link>
                 <Link href="/auth/register" className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white rounded-lg transition-all hover:-translate-y-0.5"
-                  style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
+                  style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
                   <UserPlus size={14} /> Get Started
                 </Link>
               </>
@@ -185,7 +185,7 @@ export default function Navbar() {
             {mobileLinks.map(({ href, label, icon: Icon }) => (
               <Link key={href} href={href} onClick={() => setMobileOpen(false)}
                 className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all">
-                <Icon size={15} className="text-[#7289da] shrink-0" />
+                <Icon size={15} className="text-[#f97316] shrink-0" />
                 {label}
               </Link>
             ))}
@@ -193,7 +193,7 @@ export default function Navbar() {
               {session ? (
                 <Link href="/dashboard" onClick={() => setMobileOpen(false)}
                   className="flex items-center justify-center gap-2 text-sm font-semibold text-white py-3 rounded-xl"
-                  style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
+                  style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
                   <LayoutDashboard size={15} /> Dashboard
                 </Link>
               ) : (
@@ -204,7 +204,7 @@ export default function Navbar() {
                   </Link>
                   <Link href="/auth/register" onClick={() => setMobileOpen(false)}
                     className="flex items-center justify-center gap-2 text-sm font-semibold text-white py-3 rounded-xl"
-                    style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
+                    style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
                     <UserPlus size={15} /> Get Started
                   </Link>
                 </>

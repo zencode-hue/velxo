@@ -10,13 +10,13 @@ import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
 function Footer() {
   return (
-    <footer className="border-t border-white/5 mt-20" style={{ background: "rgba(14,15,20,0.95)" }}>
+    <footer className="border-t border-white/5 mt-20" style={{ background: "rgba(13,10,7,0.95)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
           <div className="col-span-2 sm:col-span-1">
             <div className="flex items-center gap-2 font-bold text-xl mb-3">
               <VelxoLogo size={28} />
-              <span style={{ background: "linear-gradient(135deg, #00d4ff, #5865f2)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Velxo Shop</span>
+              <span style={{ background: "linear-gradient(135deg, #fbbf24, #ea580c)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Velxo Shop</span>
             </div>
             <p className="text-xs text-gray-600 leading-relaxed mb-4">Premium digital marketplace. Instant delivery, secure payments, 500+ products.</p>
             <div className="flex items-center gap-3">

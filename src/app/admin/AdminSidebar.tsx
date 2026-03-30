@@ -32,12 +32,12 @@ function NavLinks({ pathname, onClick }: { pathname: string; onClick?: () => voi
           <Link key={href} href={href} onClick={onClick}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
               active
-                ? "text-white bg-[#5865f2]/20 border border-[#5865f2]/30"
+                ? "text-white bg-[#ea580c]/20 border border-[#ea580c]/30"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}>
-            <Icon size={16} className={active ? "text-[#7289da]" : ""} />
+            <Icon size={16} className={active ? "text-[#f97316]" : ""} />
             {label}
-            {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00d4ff]" />}
+            {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#fbbf24]" />}
           </Link>
         );
       })}
@@ -56,7 +56,7 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex w-60 shrink-0 border-r border-white/5 bg-[#13141a] flex-col fixed h-full z-30">
+      <aside className="hidden lg:flex w-60 shrink-0 border-r border-white/5 bg-[#110d06] flex-col fixed h-full z-30">
         <div className="h-16 flex items-center gap-2.5 px-5 border-b border-white/5 shrink-0">
           <VelxoLogo size={28} />
           <span className="font-bold text-white">Velxo Shop</span>
@@ -71,12 +71,12 @@ export default function AdminSidebar() {
       </aside>
 
       {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center gap-3 px-4 h-14 border-b border-white/5 bg-[#13141a]">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center gap-3 px-4 h-14 border-b border-white/5 bg-[#110d06]">
         <button onClick={() => setOpen(true)} className="text-gray-400 hover:text-white transition-colors">
           <Menu size={20} />
         </button>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
+          <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #ea580c, #fbbf24)" }}>
             <Zap size={12} className="text-white" />
           </div>
           <span className="font-bold text-white text-sm">Velxo Shop</span>
@@ -93,7 +93,7 @@ export default function AdminSidebar() {
           <div className="fixed inset-0 bg-black/70" onClick={() => setOpen(false)} />
           <aside className="relative w-64 bg-[#0d0d0d] border-r border-white/5 flex flex-col z-50 h-full">
             <div className="h-14 flex items-center gap-2.5 px-5 border-b border-white/5 shrink-0">
-              <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
+              <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: "linear-gradient(135deg, #ea580c, #fbbf24)" }}>
                 <Zap size={12} className="text-white" />
               </div>
               <span className="font-bold text-white text-sm">Velxo Admin</span>
