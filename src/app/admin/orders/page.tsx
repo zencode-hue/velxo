@@ -20,7 +20,10 @@ export default async function AdminOrdersPage() {
       product: { select: { title: true } },
       deliveryLog: { select: { id: true } },
     },
-  });
+  }) as Array<{
+    id: string; amount: unknown; status: string; createdAt: Date; adminNote?: string | null; guestEmail?: string | null;
+    user: { email: string } | null; product: { title: string }; deliveryLog: { id: string } | null;
+  }>;
 
   return (
     <div>
@@ -53,7 +56,7 @@ export default async function AdminOrdersPage() {
                     </p>
                   )}
                 </td>
-                <td className="px-4 py-3 text-gray-300 truncate max-w-[160px]">{o.user.email}</td>
+                <td className="px-4 py-3 text-gray-300 truncate max-w-[160px]">{o.user?.email ?? o.guestEmail ?? "Guest"}</td>
                 <td className="px-4 py-3 text-white truncate max-w-[160px]">{o.product.title}</td>
                 <td className="px-4 py-3 text-right text-white">${Number(o.amount).toFixed(2)}</td>
                 <td className="px-4 py-3 text-center">
