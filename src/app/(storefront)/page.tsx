@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
@@ -122,7 +122,7 @@ export default async function HomePage() {
             { icon: "🔒", title: "Secure & Encrypted", desc: "All inventory encrypted with AES-256-GCM. Payments processed through trusted providers." },
             { icon: "💎", title: "Premium Quality", desc: "Every product verified before listing. We stand behind everything in our catalog." },
           ].map((item) => (
-            <div key={item.title} className="rounded-xl border border-white/8 bg-[#111111] p-6 text-center hover:border-purple-600/30 transition-colors">
+            <div key={item.title} className="rounded-xl border border-white/8 bg-[#1a1b23] p-6 text-center hover:border-purple-600/30 transition-colors">
               <div className="text-4xl mb-4">{item.icon}</div>
               <h3 className="font-semibold text-white mb-2">{item.title}</h3>
               <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
@@ -143,7 +143,7 @@ export default async function HomePage() {
             { q: "What if I have an issue?", a: "Join our Discord and open a support ticket. We resolve issues promptly." },
             { q: "Are the products legitimate?", a: "Yes. All products are sourced and verified before listing." },
           ].map((item) => (
-            <details key={item.q} className="group rounded-xl border border-white/8 bg-[#111111] hover:border-purple-600/20 transition-all">
+            <details key={item.q} className="group rounded-xl border border-white/8 bg-[#1a1b23] hover:border-purple-600/20 transition-all">
               <summary className="p-5 cursor-pointer font-semibold text-white text-sm flex items-center justify-between list-none">
                 {item.q}
                 <span className="text-gray-500 group-open:rotate-180 transition-transform">▾</span>
@@ -156,3 +156,4 @@ export default async function HomePage() {
     </>
   );
 }
+

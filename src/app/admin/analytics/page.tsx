@@ -25,7 +25,8 @@ export default async function AdminAnalyticsPage() {
     pv.count({ where: { createdAt: { gte: last24h } } }),
     pv.count({ where: { createdAt: { gte: last7 } } }),
     pv.count({ where: { createdAt: { gte: last30 } } }),
-    pv.groupBy({ by: ["sessionId"], where: { createdAt: { gte: last30 }, sessionId: { not: null } }, _count: true }).then((r: unknown[]) => r.length),
+    // Unique visitors = distinct IPs in last 30d
+    pv.groupBy({ by: ["ip"], where: { createdAt: { gte: last30 }, ip: { not: null } }, _count: true }).then((r: unknown[]) => r.length),
     pv.groupBy({ by: ["path"], where: { createdAt: { gte: last30 } }, _count: { id: true }, orderBy: { _count: { id: "desc" } }, take: 10 }),
     pv.groupBy({ by: ["country"], where: { createdAt: { gte: last30 }, country: { not: null } }, _count: { id: true }, orderBy: { _count: { id: "desc" } }, take: 10 }),
     pv.groupBy({ by: ["referrer"], where: { createdAt: { gte: last30 }, referrer: { not: null } }, _count: { id: true }, orderBy: { _count: { id: "desc" } }, take: 10 }),
@@ -39,7 +40,7 @@ export default async function AdminAnalyticsPage() {
     { label: "Last 24h", value: views24h, icon: Eye, color: "text-neon" },
     { label: "Last 7 days", value: views7d, icon: TrendingUp, color: "text-accent" },
     { label: "Last 30 days", value: views30d, icon: BarChart2, color: "text-purple-400" },
-    { label: "Unique Sessions (30d)", value: uniqueSessions30d, icon: Users, color: "text-discord-green" },
+    { label: "Unique Visitors (30d)", value: uniqueSessions30d, icon: Users, color: "text-discord-green" },
   ];
 
   type GroupRow = { _count: { id: number } };

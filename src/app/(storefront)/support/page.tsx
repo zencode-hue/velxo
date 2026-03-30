@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { MessageCircle, Mail, Clock, CheckCircle } from "lucide-react";
 
@@ -36,13 +36,13 @@ export default function SupportPage() {
           <p className="text-xs text-gray-500">Fastest response. Join our server and open a ticket.</p>
           <span className="inline-block mt-3 text-xs text-indigo-400 group-hover:text-indigo-300">Open Discord →</span>
         </a>
-        <div className="rounded-xl border border-white/8 bg-[#111111] p-6 text-center">
+        <div className="rounded-xl border border-white/8 bg-[#1a1b23] p-6 text-center">
           <Mail size={28} className="text-purple-400 mx-auto mb-3" />
           <h3 className="font-bold text-white mb-1">Email</h3>
           <p className="text-xs text-gray-500">support@velxo.shop</p>
           <span className="inline-block mt-3 text-xs text-gray-600">Response within 24h</span>
         </div>
-        <div className="rounded-xl border border-white/8 bg-[#111111] p-6 text-center">
+        <div className="rounded-xl border border-white/8 bg-[#1a1b23] p-6 text-center">
           <Clock size={28} className="text-green-400 mx-auto mb-3" />
           <h3 className="font-bold text-white mb-1">Hours</h3>
           <p className="text-xs text-gray-500">24/7 automated delivery</p>
@@ -53,7 +53,7 @@ export default function SupportPage() {
       <h2 className="text-2xl font-bold text-white mb-6">Frequently Asked Questions</h2>
       <div className="space-y-3 mb-12">
         {faqs.map((item) => (
-          <details key={item.q} className="group rounded-xl border border-white/8 bg-[#111111] hover:border-purple-600/20 transition-all">
+          <details key={item.q} className="group rounded-xl border border-white/8 bg-[#1a1b23] hover:border-purple-600/20 transition-all">
             <summary className="p-5 cursor-pointer font-semibold text-white text-sm flex items-center justify-between list-none">
               <span className="flex items-center gap-2"><CheckCircle size={14} className="text-purple-400 shrink-0" />{item.q}</span>
               <span className="text-gray-500 group-open:rotate-180 transition-transform shrink-0 ml-2">▾</span>
@@ -75,3 +75,4 @@ export default function SupportPage() {
     </div>
   );
 }
+

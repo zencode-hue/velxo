@@ -37,6 +37,21 @@ export async function POST(req: NextRequest) {
     const country = req.headers.get("cf-ipcountry") ?? req.headers.get("x-vercel-ip-country") ?? null;
     const city = req.headers.get("cf-ipcity") ?? req.headers.get("x-vercel-ip-city") ?? null;
 
+    // Deduplicate: same IP + same path within the same day = skip
+    if (ip) {
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const existing = await (db.pageView as any).findFirst({
+        where: {
+          ip,
+          path: String(path ?? "/").slice(0, 500),
+          createdAt: { gte: todayStart },
+        },
+      });
+      if (existing) return NextResponse.json({ ok: true, deduplicated: true });
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (db.pageView as any).create({
       data: {

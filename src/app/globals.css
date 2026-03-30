@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -14,7 +14,7 @@
   --accent-hover: #4752c4;
   --neon: #00d4ff;
   --neon-dim: rgba(0, 212, 255, 0.15);
-  --purple: #8b5cf6;
+  --purple: #7289da;
   --purple-dim: rgba(139, 92, 246, 0.15);
   --text-primary: #f2f3f5;
   --text-secondary: #b9bbbe;
@@ -120,7 +120,7 @@
 
   /* Gradient text — neon blue to purple */
   .gradient-text {
-    background: linear-gradient(135deg, #00d4ff, #7289da, #8b5cf6);
+    background: linear-gradient(135deg, #00d4ff, #7289da, #7289da);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -228,3 +228,4 @@
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+

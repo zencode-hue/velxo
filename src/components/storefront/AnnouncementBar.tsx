@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -25,7 +25,7 @@ export default function AnnouncementBar() {
 
   return (
     <div className="relative flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white"
-      style={{ background: "linear-gradient(90deg, #7c3aed, #8b5cf6, #7c3aed)", backgroundSize: "200% 100%", animation: "shimmer 3s linear infinite" }}>
+      style={{ background: "linear-gradient(90deg, #5865f2, #7289da, #5865f2)", backgroundSize: "200% 100%", animation: "shimmer 3s linear infinite" }}>
       <Zap size={14} className="text-yellow-300 shrink-0" />
       <Link href={link} className="hover:text-purple-200 transition-colors">{text}</Link>
       <button onClick={() => setVisible(false)} className="absolute right-3 text-white/60 hover:text-white transition-colors">
@@ -34,3 +34,4 @@ export default function AnnouncementBar() {
     </div>
   );
 }
+

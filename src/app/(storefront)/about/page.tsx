@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { Zap, Shield, Users, Star, ArrowRight } from "lucide-react";
 
@@ -11,7 +11,7 @@ export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-16">
-        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}>
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
           <Zap size={28} className="text-white" />
         </div>
         <h1 className="text-4xl font-bold text-white mb-4">About Velxo</h1>
@@ -55,7 +55,7 @@ export default function AboutPage() {
           { value: "4.8★", label: "Avg Rating" },
         ].map((stat) => (
           <div key={stat.label} className="rounded-xl p-5 text-center" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(255,255,255,0.08)" }}>
-            <div className="text-2xl font-black mb-1" style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+            <div className="text-2xl font-black mb-1" style={{ background: "linear-gradient(135deg, #00d4ff, #5865f2)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               {stat.value}
             </div>
             <div className="text-xs text-gray-500">{stat.label}</div>
@@ -65,10 +65,11 @@ export default function AboutPage() {
 
       <div className="text-center">
         <Link href="/products" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white"
-          style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)" }}>
+          style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
           <Star size={16} /> Browse Products <ArrowRight size={16} />
         </Link>
       </div>
     </div>
   );
 }
+

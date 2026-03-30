@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -30,7 +30,7 @@ export default function SuccessClient() {
           {orderId && (
             <Link href={`/orders/${orderId}`}
               className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)" }}>
+              style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
               <Package size={16} /> View Invoice
             </Link>
           )}
@@ -47,3 +47,4 @@ export default function SuccessClient() {
     </div>
   );
 }
+

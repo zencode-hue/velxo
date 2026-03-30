@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Email service — Resend (primary) with Nodemailer SMTP fallback.
  * Falls back to console.log in dev if neither is configured.
  */
@@ -14,15 +14,15 @@ function html(title: string, body: string): string {
   return `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><title>${title}</title></head>
-<body style="margin:0;padding:0;background:#0a0a0a;font-family:system-ui,sans-serif;color:#f9fafb;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0a;padding:40px 0;">
+<body style="margin:0;padding:0;background:#0e0f14;font-family:system-ui,sans-serif;color:#f9fafb;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0e0f14;padding:40px 0;">
     <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="background:#111;border:1px solid #2a2a2a;border-radius:12px;overflow:hidden;">
-        <tr><td style="background:linear-gradient(135deg,#7c3aed,#8b5cf6);padding:24px 32px;">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#111;border:1px solid #2e3044;border-radius:12px;overflow:hidden;">
+        <tr><td style="background:linear-gradient(135deg,#5865f2,#7289da);padding:24px 32px;">
           <span style="font-size:22px;font-weight:700;color:#fff;">${APP_NAME}</span>
         </td></tr>
         <tr><td style="padding:32px;">${body}</td></tr>
-        <tr><td style="padding:16px 32px;border-top:1px solid #2a2a2a;font-size:12px;color:#6b7280;text-align:center;">
+        <tr><td style="padding:16px 32px;border-top:1px solid #2e3044;font-size:12px;color:#6b7280;text-align:center;">
           © ${new Date().getFullYear()} ${APP_NAME}. All rights reserved.
         </td></tr>
       </table>
@@ -33,7 +33,7 @@ function html(title: string, body: string): string {
 }
 
 function btn(href: string, label: string): string {
-  return `<a href="${href}" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:14px;">${label}</a>`;
+  return `<a href="${href}" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#5865f2,#7289da);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:14px;">${label}</a>`;
 }
 
 function p(text: string): string {
@@ -84,7 +84,7 @@ export async function sendVerificationEmail(email: string, token: string): Promi
       `${h2("Verify your email address")}
        ${p("Thanks for signing up! Click the button below to verify your email address.")}
        <div style="margin:24px 0;">${btn(link, "Verify Email")}</div>
-       ${p(`Or copy this link: <a href="${link}" style="color:#8b5cf6;">${link}</a>`)}
+       ${p(`Or copy this link: <a href="${link}" style="color:#7289da;">${link}</a>`)}
        ${p("This link expires in 24 hours. If you didn't create an account, you can ignore this email.")}`
     )
   );
@@ -124,7 +124,7 @@ export async function sendDeliveryEmail(email: string, orderDetails: object): Pr
   const d = orderDetails as Record<string, unknown>;
   const credentials = d.credentials as string | undefined;
   const credBlock = credentials
-    ? `<div style="margin:20px 0;padding:16px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;font-family:monospace;font-size:14px;color:#a78bfa;word-break:break-all;">${credentials}</div>`
+    ? `<div style="margin:20px 0;padding:16px;background:#23252f;border:1px solid #2e3044;border-radius:8px;font-family:monospace;font-size:14px;color:#00d4ff;word-break:break-all;">${credentials}</div>`
     : "";
 
   await send(
@@ -182,3 +182,4 @@ export async function sendAdminPendingStockAlert(orderId: string, productTitle: 
     )
   );
 }
+

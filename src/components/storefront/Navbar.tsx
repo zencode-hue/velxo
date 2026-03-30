@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
@@ -12,7 +12,7 @@ const categories = [
   { href: "/products?category=STREAMING", label: "Streaming", icon: Tv, color: "text-red-400" },
   { href: "/products?category=AI_TOOLS", label: "AI Tools", icon: Bot, color: "text-blue-400" },
   { href: "/products?category=SOFTWARE", label: "Software", icon: Package, color: "text-green-400" },
-  { href: "/products?category=GAMING", label: "Gaming", icon: Gamepad2, color: "text-purple-400" },
+  { href: "/products?category=GAMING", label: "Gaming", icon: Gamepad2, color: "text-[#7289da]" },
 ];
 
 export default function Navbar() {
@@ -56,18 +56,18 @@ export default function Navbar() {
                 <X size={18} />
               </button>
             </div>
-            <p className="text-xs text-gray-600 mt-2 text-center">Press Enter to search · Esc to close</p>
+            <p className="text-xs text-gray-600 mt-2 text-center">Press Enter to search Â· Esc to close</p>
           </form>
         </div>
       )}
 
-      <header className="sticky top-0 z-50" style={{ background: "rgba(10,10,10,0.9)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <header className="sticky top-0 z-50" style={{ background: "rgba(14,15,20,0.92)", backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl shrink-0">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
               <Zap size={16} className="text-white" />
             </div>
-            <span style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+            <span style={{ background: "linear-gradient(135deg, #00d4ff, #5865f2)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               Velxo
             </span>
           </Link>
@@ -80,9 +80,9 @@ export default function Navbar() {
                 Products <ChevronDown size={14} className={`transition-transform ${catOpen ? "rotate-180" : ""}`} />
               </button>
               {catOpen && (
-                <div className="absolute top-full left-0 mt-1 w-52 rounded-xl p-2 shadow-2xl z-50" style={{ background: "rgba(13,13,13,0.99)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                <div className="absolute top-full left-0 mt-1 w-52 rounded-xl p-2 shadow-2xl z-50" style={{ background: "rgba(19,20,26,0.99)", border: "1px solid rgba(255,255,255,0.08)" }}>
                   <Link href="/products" className="flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all">
-                    <Package size={14} className="text-purple-400" /> All Products
+                    <Package size={14} className="text-[#7289da]" /> All Products
                   </Link>
                   <div className="my-1 border-t border-white/5" />
                   {categories.map((cat) => (
@@ -94,7 +94,7 @@ export default function Navbar() {
               )}
             </div>
 
-            <Link href="/deals" className="px-3 py-2 text-sm text-orange-400 hover:text-orange-300 rounded-lg hover:bg-orange-500/5 transition-all font-medium">🔥 Deals</Link>
+            <Link href="/deals" className="px-3 py-2 text-sm text-orange-400 hover:text-orange-300 rounded-lg hover:bg-orange-500/5 transition-all font-medium">ðŸ”¥ Deals</Link>
             <Link href="/blog" className="px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">Blog</Link>
             <Link href="/affiliate" className="px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">Affiliates</Link>
             <Link href="/support" className="px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">Support</Link>
@@ -115,10 +115,10 @@ export default function Navbar() {
                 <Globe size={12} /> {currency} <ChevronDown size={11} />
               </button>
               {currOpen && (
-                <div className="absolute top-full right-0 mt-1 w-28 rounded-xl p-1.5 shadow-xl z-50" style={{ background: "rgba(13,13,13,0.99)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                <div className="absolute top-full right-0 mt-1 w-28 rounded-xl p-1.5 shadow-xl z-50" style={{ background: "rgba(19,20,26,0.99)", border: "1px solid rgba(255,255,255,0.08)" }}>
                   {CURRENCIES.map((c) => (
                     <button key={c} onClick={() => { setCurrency(c); setCurrOpen(false); }}
-                      className={`w-full text-left px-3 py-1.5 text-xs rounded-lg transition-all ${currency === c ? "text-purple-400 bg-purple-600/10" : "text-gray-400 hover:text-white hover:bg-white/5"}`}>
+                      className={`w-full text-left px-3 py-1.5 text-xs rounded-lg transition-all ${currency === c ? "text-[#7289da] bg-purple-600/10" : "text-gray-400 hover:text-white hover:bg-white/5"}`}>
                       {c}
                     </button>
                   ))}
@@ -128,14 +128,14 @@ export default function Navbar() {
 
             {session ? (
               <Link href="/dashboard" className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-all hover:-translate-y-0.5"
-                style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)" }}>
+                style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
                 Dashboard
               </Link>
             ) : (
               <>
                 <Link href="/auth/login" className="px-4 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">Sign In</Link>
                 <Link href="/auth/register" className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-all hover:-translate-y-0.5"
-                  style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)" }}>
+                  style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
                   Get Started
                 </Link>
               </>
@@ -153,20 +153,20 @@ export default function Navbar() {
         </nav>
 
         {mobileOpen && (
-          <div className="lg:hidden border-t border-white/5 px-4 py-4 space-y-1" style={{ background: "rgba(10,10,10,0.99)" }}>
+          <div className="lg:hidden border-t border-white/5 px-4 py-4 space-y-1" style={{ background: "rgba(14,15,20,0.99)" }}>
             {[
               { href: "/", label: "Home" },
               { href: "/products", label: "All Products" },
-              { href: "/products?category=STREAMING", label: "📺 Streaming" },
-              { href: "/products?category=AI_TOOLS", label: "🤖 AI Tools" },
-              { href: "/products?category=SOFTWARE", label: "💻 Software" },
-              { href: "/products?category=GAMING", label: "🎮 Gaming" },
-              { href: "/deals", label: "🔥 Hot Deals" },
-              { href: "/blog", label: "📝 Blog" },
-              { href: "/affiliate", label: "💰 Affiliates" },
-              { href: "/support", label: "💬 Support" },
-              { href: "/about", label: "ℹ️ About" },
-              { href: "/wishlist", label: "❤️ Wishlist" },
+              { href: "/products?category=STREAMING", label: "ðŸ“º Streaming" },
+              { href: "/products?category=AI_TOOLS", label: "ðŸ¤– AI Tools" },
+              { href: "/products?category=SOFTWARE", label: "ðŸ’» Software" },
+              { href: "/products?category=GAMING", label: "ðŸŽ® Gaming" },
+              { href: "/deals", label: "ðŸ”¥ Hot Deals" },
+              { href: "/blog", label: "ðŸ“ Blog" },
+              { href: "/affiliate", label: "ðŸ’° Affiliates" },
+              { href: "/support", label: "ðŸ’¬ Support" },
+              { href: "/about", label: "â„¹ï¸ About" },
+              { href: "/wishlist", label: "â¤ï¸ Wishlist" },
             ].map((link) => (
               <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)}
                 className="block px-3 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all">
@@ -177,7 +177,7 @@ export default function Navbar() {
               {session ? (
                 <Link href="/dashboard" onClick={() => setMobileOpen(false)}
                   className="text-sm font-semibold text-white text-center py-3 rounded-xl"
-                  style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)" }}>
+                  style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
                   Dashboard
                 </Link>
               ) : (
@@ -188,7 +188,7 @@ export default function Navbar() {
                   </Link>
                   <Link href="/auth/register" onClick={() => setMobileOpen(false)}
                     className="text-sm font-semibold text-white text-center py-3 rounded-xl"
-                    style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)" }}>
+                    style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
                     Get Started
                   </Link>
                 </>
@@ -200,3 +200,5 @@ export default function Navbar() {
     </>
   );
 }
+
+

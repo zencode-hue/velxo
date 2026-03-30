@@ -1,4 +1,4 @@
-import Navbar from "@/components/storefront/Navbar";
+﻿import Navbar from "@/components/storefront/Navbar";
 import Providers from "@/components/storefront/Providers";
 import PageViewTracker from "@/components/PageViewTracker";
 import AnnouncementBar from "@/components/storefront/AnnouncementBar";
@@ -13,10 +13,10 @@ function Footer() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
           <div className="col-span-2 sm:col-span-1">
             <div className="flex items-center gap-2 font-bold text-xl mb-3">
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}>
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #5865f2, #00d4ff)" }}>
                 <Zap size={14} className="text-white" />
               </div>
-              <span style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Velxo</span>
+              <span style={{ background: "linear-gradient(135deg, #00d4ff, #5865f2)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Velxo</span>
             </div>
             <p className="text-xs text-gray-600 leading-relaxed mb-4">Premium digital marketplace. Instant delivery, secure payments, 500+ products.</p>
             <div className="flex items-center gap-3">
@@ -81,3 +81,4 @@ export default function StorefrontLayout({ children }: { children: React.ReactNo
     </Providers>
   );
 }
+

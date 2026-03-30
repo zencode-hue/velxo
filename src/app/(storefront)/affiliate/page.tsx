@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, DollarSign, Users, Zap, Share2 } from "lucide-react";
 
@@ -17,7 +17,7 @@ export default function AffiliatePage() {
         </span>
         <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
           Earn Money by Sharing{" "}
-          <span style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+          <span style={{ background: "linear-gradient(135deg, #00d4ff, #5865f2)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             Velxo
           </span>
         </h1>
@@ -26,7 +26,7 @@ export default function AffiliatePage() {
         </p>
         <Link href="/auth/register"
           className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white text-base transition-all hover:-translate-y-0.5"
-          style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)", boxShadow: "0 4px 20px rgba(124,58,237,0.4)" }}>
+          style={{ background: "linear-gradient(135deg, #5865f2, #7289da)", boxShadow: "0 4px 20px rgba(124,58,237,0.4)" }}>
           Join Now — It&apos;s Free <ArrowRight size={18} />
         </Link>
       </div>
@@ -39,9 +39,9 @@ export default function AffiliatePage() {
             { step: "2", icon: Share2, title: "Share Your Link", desc: "Get your unique velxo.shop referral link and share it on social media, YouTube, or your website." },
             { step: "3", icon: DollarSign, title: "Earn Commission", desc: "Earn 10% on every purchase made through your link. Commissions are tracked in real-time." },
           ].map((item) => (
-            <div key={item.step} className="rounded-xl border border-white/8 bg-[#111111] p-6 text-center">
+            <div key={item.step} className="rounded-xl border border-white/8 bg-[#1a1b23] p-6 text-center">
               <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold text-white"
-                style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)" }}>
+                style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
                 {item.step}
               </div>
               <h3 className="font-bold text-white mb-2">{item.title}</h3>
@@ -58,9 +58,9 @@ export default function AffiliatePage() {
           { value: "No Limit", label: "Earnings Cap" },
           { value: "Free", label: "To Join" },
         ].map((stat) => (
-          <div key={stat.label} className="rounded-xl border border-white/8 bg-[#111111] p-5 text-center">
+          <div key={stat.label} className="rounded-xl border border-white/8 bg-[#1a1b23] p-5 text-center">
             <div className="text-2xl font-bold mb-1"
-              style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+              style={{ background: "linear-gradient(135deg, #00d4ff, #5865f2)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               {stat.value}
             </div>
             <div className="text-xs text-gray-500">{stat.label}</div>
@@ -68,7 +68,7 @@ export default function AffiliatePage() {
         ))}
       </div>
 
-      <div className="rounded-xl border border-white/8 bg-[#111111] p-8 mb-12">
+      <div className="rounded-xl border border-white/8 bg-[#1a1b23] p-8 mb-12">
         <h2 className="text-xl font-bold text-white mb-6">Why Affiliate with Velxo?</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
@@ -88,7 +88,7 @@ export default function AffiliatePage() {
       <div className="text-center">
         <Link href="/auth/register"
           className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white"
-          style={{ background: "linear-gradient(135deg, #7c3aed, #8b5cf6)" }}>
+          style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
           Start Earning Today <ArrowRight size={18} />
         </Link>
         <p className="text-xs text-gray-600 mt-3">
@@ -99,3 +99,4 @@ export default function AffiliatePage() {
     </div>
   );
 }
+
