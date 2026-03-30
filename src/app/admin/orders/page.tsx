@@ -46,11 +46,10 @@ export default async function AdminOrdersPage() {
               <tr key={o.id} className="border-b border-white/5 hover:bg-white/2 transition-colors">
                 <td className="px-4 py-3 font-mono text-xs text-purple-400 hover:text-purple-300">
                   <a href={`/orders/${o.id}`} target="_blank" rel="noopener noreferrer">{o.id.slice(0, 8)}…</a>
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {(o as any).adminNote && (
                     <p className="text-yellow-400/70 text-xs mt-0.5 truncate max-w-[120px]">
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      📝 {(o as any).adminNote}
+                      Note: {(o as any).adminNote}
                     </p>
                   )}
                 </td>

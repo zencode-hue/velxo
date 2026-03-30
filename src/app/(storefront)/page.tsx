@@ -8,7 +8,7 @@ import ProductCard from "@/components/storefront/ProductCard";
 import FeaturedCategories from "@/components/storefront/FeaturedCategories";
 import TrustBadges from "@/components/storefront/TrustBadges";
 import NewsletterSection from "@/components/storefront/NewsletterSection";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Zap, Lock, Gem } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Velxo — Premium Digital Marketplace",
@@ -118,12 +118,14 @@ export default async function HomePage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {[
-            { icon: "⚡", title: "Instant Delivery", desc: "Credentials delivered automatically to your email the moment payment confirms. No waiting." },
-            { icon: "🔒", title: "Secure & Encrypted", desc: "All inventory encrypted with AES-256-GCM. Payments processed through trusted providers." },
-            { icon: "💎", title: "Premium Quality", desc: "Every product verified before listing. We stand behind everything in our catalog." },
+            { icon: Zap, color: "text-yellow-400", title: "Instant Delivery", desc: "Credentials delivered automatically to your email the moment payment confirms. No waiting." },
+            { icon: Lock, color: "text-green-400", title: "Secure & Encrypted", desc: "All inventory encrypted with AES-256-GCM. Payments processed through trusted providers." },
+            { icon: Gem, color: "text-[#00d4ff]", title: "Premium Quality", desc: "Every product verified before listing. We stand behind everything in our catalog." },
           ].map((item) => (
-            <div key={item.title} className="rounded-xl border border-white/8 bg-[#1a1b23] p-6 text-center hover:border-purple-600/30 transition-colors">
-              <div className="text-4xl mb-4">{item.icon}</div>
+            <div key={item.title} className="rounded-xl border border-white/8 bg-[#1a1b23] p-6 text-center hover:border-[#5865f2]/30 transition-colors">
+              <div className="flex justify-center mb-4">
+                <item.icon size={36} className={item.color} />
+              </div>
               <h3 className="font-semibold text-white mb-2">{item.title}</h3>
               <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
             </div>

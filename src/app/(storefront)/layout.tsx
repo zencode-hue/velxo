@@ -34,7 +34,7 @@ function Footer() {
           <div>
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Products</p>
             <div className="space-y-2">
-              {[["All Products", "/products"], ["Streaming", "/products?category=STREAMING"], ["AI Tools", "/products?category=AI_TOOLS"], ["Software", "/products?category=SOFTWARE"], ["Gaming", "/products?category=GAMING"], ["🔥 Hot Deals", "/deals"]].map(([label, href]) => (
+              {[["All Products", "/products"], ["Streaming", "/products?category=STREAMING"], ["AI Tools", "/products?category=AI_TOOLS"], ["Software", "/products?category=SOFTWARE"], ["Gaming", "/products?category=GAMING"], ["Hot Deals", "/deals"]].map(([label, href]) => (
                 <Link key={href} href={href} className="block text-sm text-gray-600 hover:text-gray-300 transition-colors">{label}</Link>
               ))}
             </div>

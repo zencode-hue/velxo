@@ -17,12 +17,9 @@ function ParticleCanvas() {
     const particles: { x: number; y: number; vx: number; vy: number; size: number; opacity: number }[] = [];
     for (let i = 0; i < 60; i++) {
       particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        size: Math.random() * 2 + 0.5,
-        opacity: Math.random() * 0.4 + 0.1,
+        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+        size: Math.random() * 2 + 0.5, opacity: Math.random() * 0.4 + 0.1,
       });
     }
     let animId: number;
@@ -53,15 +50,12 @@ function ParticleCanvas() {
 export default function HeroSection() {
   return (
     <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden">
-      {/* Layered backgrounds */}
       <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 100% 70% at 50% -5%, rgba(88,101,242,0.2) 0%, transparent 55%)" }} />
       <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 60% 50% at 80% 90%, rgba(0,212,255,0.06) 0%, transparent 50%)" }} />
       <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 40% 40% at 10% 60%, rgba(88,101,242,0.06) 0%, transparent 50%)" }} />
-      {/* Grid */}
       <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)", backgroundSize: "50px 50px" }} />
       <ParticleCanvas />
 
-      {/* Floating badges */}
       {[
         { icon: Zap, text: "Instant Delivery", color: "text-yellow-300", delay: 0, pos: "top-28 left-8 lg:left-16", y: [-6, 6] },
         { icon: Shield, text: "Secure & Encrypted", color: "text-green-400", delay: 0.5, pos: "top-40 right-8 lg:right-20", y: [6, -6] },
@@ -72,18 +66,17 @@ export default function HeroSection() {
           animate={{ y: badge.y }}
           transition={{ duration: 4 + badge.delay, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: badge.delay }}
           className={`absolute ${badge.pos} hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium text-white`}
-          style={{ background: "rgba(17,17,17,0.85)", border: "1px solid rgba(88,101,242,0.2)", backdropFilter: "blur(12px)" }}>
+          style={{ background: "rgba(26,27,35,0.9)", border: "1px solid rgba(88,101,242,0.25)", backdropFilter: "blur(12px)" }}>
           <badge.icon size={13} className={badge.color} />
           {badge.text}
         </motion.div>
       ))}
 
-      {/* Main content */}
       <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium text-purple-300 mb-8"
-            style={{ background: "rgba(88,101,242,0.15)", border: "1px solid rgba(88,101,242,0.35)" }}>
-            <Sparkles size={13} className="text-purple-400" />
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8"
+            style={{ background: "rgba(88,101,242,0.15)", border: "1px solid rgba(88,101,242,0.35)", color: "#7289da" }}>
+            <Sparkles size={13} />
             #1 Premium Digital Marketplace
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
           </span>
@@ -105,7 +98,7 @@ export default function HeroSection() {
         <motion.p initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg sm:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
           Streaming subscriptions, AI tools, software licenses, and gaming products.
-          Automated delivery to your inbox â€” no waiting, no hassle.
+          Automated delivery to your inbox. No waiting, no hassle.
         </motion.p>
 
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
@@ -118,33 +111,30 @@ export default function HeroSection() {
           <Link href="/deals"
             className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-white text-base transition-all duration-200 hover:-translate-y-1"
             style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", backdropFilter: "blur(8px)" }}>
-            ðŸ”¥ Hot Deals
+            Hot Deals
           </Link>
         </motion.div>
 
-        {/* Stats */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}
           className="flex flex-wrap justify-center gap-8 sm:gap-12">
           {[
-            { value: "500+", label: "Products", icon: "ðŸ“¦" },
-            { value: "10k+", label: "Customers", icon: "ðŸ‘¥" },
-            { value: "100%", label: "Instant", icon: "âš¡" },
-            { value: "24/7", label: "Support", icon: "ðŸ’¬" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-2xl sm:text-3xl font-black mb-1"
+            { value: "500+", label: "Products", icon: Package },
+            { value: "10k+", label: "Customers", icon: Users },
+            { value: "100%", label: "Instant", icon: Zap },
+            { value: "24/7", label: "Support", icon: Shield },
+          ].map(({ value, label, icon: Icon }) => (
+            <div key={label} className="text-center">
+              <div className="text-2xl sm:text-3xl font-black mb-1 flex items-center justify-center gap-1.5"
                 style={{ background: "linear-gradient(135deg, #7289da, #5865f2)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-                {stat.icon} {stat.value}
+                <Icon size={22} /> {value}
               </div>
-              <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">{stat.label}</div>
+              <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">{label}</div>
             </div>
           ))}
         </motion.div>
       </div>
 
-      {/* Bottom fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" style={{ background: "linear-gradient(to bottom, transparent, #0e0f14)" }} />
     </section>
   );
 }
-

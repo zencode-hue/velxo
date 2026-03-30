@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { ExternalLink, Loader2, CheckCircle, Copy, ChevronRight } from "lucide-react";
+import { ExternalLink, Loader2, CheckCircle, Copy, ChevronRight, CreditCard } from "lucide-react";
 
 function GiftCardPageInner() {
   const searchParams = useSearchParams();
@@ -60,7 +60,7 @@ function GiftCardPageInner() {
         {/* Header */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center">
-            <span className="text-xl">💳</span>
+            <CreditCard size={20} className="text-yellow-400" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-white">Card Payment (Key)</h1>

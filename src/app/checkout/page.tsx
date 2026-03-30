@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Bitcoin, MessageCircle, Tag, ArrowRight, Loader2, Wallet, ExternalLink } from "lucide-react";
+import { Bitcoin, MessageCircle, Tag, ArrowRight, Loader2, Wallet, ExternalLink, CreditCard } from "lucide-react";
 
 interface Product {
   id: string;
@@ -153,7 +153,7 @@ function CheckoutPageInner() {
           <button onClick={() => handlePay("binance_gift_card")} disabled={paying}
             className="w-full flex items-center gap-4 p-4 rounded-xl border border-white/5 hover:border-yellow-500/40 hover:bg-yellow-500/5 transition-all text-left group">
             <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center shrink-0">
-              <span className="text-lg">💳</span>
+              <CreditCard size={20} className="text-yellow-400" />
             </div>
             <div className="flex-1">
               <p className="font-medium text-white text-sm">Card Payment (Key)</p>
@@ -188,7 +188,7 @@ function CheckoutPageInner() {
 
           <div className="w-full flex items-center gap-4 p-4 rounded-xl border border-white/5 opacity-40 cursor-not-allowed">
             <div className="w-10 h-10 rounded-xl bg-gray-500/10 flex items-center justify-center shrink-0">
-              <span className="text-lg">💳</span>
+              <CreditCard size={20} className="text-gray-500" />
             </div>
             <div className="flex-1">
               <p className="font-medium text-white text-sm">Card / Apple Pay / Google Pay</p>

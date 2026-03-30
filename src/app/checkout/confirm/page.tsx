@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Bitcoin, MessageCircle, Tag, ArrowRight, Loader2, Wallet, Shield, Zap, CheckCircle, Package, ExternalLink } from "lucide-react";
+import { Bitcoin, MessageCircle, Tag, ArrowRight, Loader2, Wallet, Shield, Zap, CheckCircle, Package, ExternalLink, CreditCard } from "lucide-react";
 
 interface Product {
   id: string; title: string; price: number; category: string;
@@ -204,7 +204,7 @@ function ConfirmPageInner() {
               <button onClick={() => handlePay("binance_gift_card")} disabled={paying}
                 className="w-full flex items-center gap-3 p-3.5 rounded-xl border border-white/5 hover:border-yellow-500/40 hover:bg-yellow-500/5 transition-all text-left group">
                 <div className="w-9 h-9 rounded-lg bg-yellow-500/15 flex items-center justify-center shrink-0">
-                  <span className="text-base">💳</span>
+                  <CreditCard size={16} className="text-yellow-400" />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-white">Card Payment (Key)</p>
@@ -239,7 +239,7 @@ function ConfirmPageInner() {
 
               <div className="flex items-center gap-3 p-3.5 rounded-xl border border-white/5 opacity-30 cursor-not-allowed">
                 <div className="w-9 h-9 rounded-lg bg-gray-500/10 flex items-center justify-center shrink-0">
-                  <span className="text-base">💳</span>
+                  <CreditCard size={16} className="text-gray-500" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-white">Card / Apple Pay</p>
