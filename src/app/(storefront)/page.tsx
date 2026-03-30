@@ -106,10 +106,8 @@ export default async function HomePage() {
               </div>
               <div className="flex items-center gap-4">
                 <DealCountdown resetAt={dealsResetAt} neon />
-                <Link href="/deals" className="flex items-center gap-1.5 text-sm font-mono font-bold transition-colors"
-                  style={{ color: "#00ff88" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4dffb0")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#00ff88")}>
+                <Link href="/deals" className="flex items-center gap-1.5 text-sm font-mono font-bold transition-colors hover:opacity-70"
+                  style={{ color: "#00ff88" }}>
                   View Vault <ArrowRight size={14} />
                 </Link>
               </div>
