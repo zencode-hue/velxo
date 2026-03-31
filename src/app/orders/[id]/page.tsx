@@ -135,10 +135,22 @@ export default async function OrderPage({ params }: { params: { id: string } }) 
 
           {order.status === "PENDING_STOCK" && (
             <div className="px-6 py-5 border-b border-white/5">
-              <div className="flex items-center gap-2 text-orange-400 text-sm">
-                <Clock size={14} />
-                <span>Your order is queued. You&apos;ll receive credentials via email once stock is available.</span>
+              <div className="flex items-start gap-3 text-orange-400 text-sm mb-4">
+                <Clock size={16} className="mt-0.5 shrink-0" />
+                <span>Your payment was received but this product is temporarily out of stock. Use your Order ID below to claim your product on Discord.</span>
               </div>
+              <div className="rounded-xl p-4 mb-3" style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.2)" }}>
+                <p className="text-xs text-gray-500 mb-2">Copy this Order ID and paste it in Discord</p>
+                <div className="flex items-center gap-2 justify-between">
+                  <code className="font-mono text-sm text-orange-300 break-all">{order.id}</code>
+                  <CopyInvoiceButton text={order.id} />
+                </div>
+              </div>
+              <a href="https://discord.gg/2b8AkfW6EP" target="_blank" rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-white transition-all"
+                style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
+                <ExternalLink size={14} /> Join Discord to Claim Your Product
+              </a>
             </div>
           )}
 

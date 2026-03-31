@@ -102,6 +102,14 @@ async function processNowPaymentsEvent(
     return;
   }
 
+  // Handle balance top-up payments (order_id starts with "TOPUP-")
+  if (orderId.startsWith("TOPUP-")) {
+    if (paymentStatus === "finished") {
+      await processTopupPayment(orderId, paymentId);
+    }
+    return;
+  }
+
   // Find order by paymentRef or id
   const order = await db.order.findFirst({
     where: {
@@ -124,4 +132,90 @@ async function processNowPaymentsEvent(
   } else if (paymentStatus === "failed" || paymentStatus === "expired") {
     await db.order.update({ where: { id: order.id }, data: { status: "FAILED" } });
   }
+}
+
+/**
+ * Credits a user's balance after a successful NOWPayments top-up.
+ * topupRef format: TOPUP-{userId}-{timestamp}
+ */
+async function processTopupPayment(topupRef: string, paymentId: string | undefined): Promise<void> {
+  // Parse userId and amount from the ref — ref is TOPUP-{userId}-{timestamp}
+  // Amount is stored in the NOWPayments payload as price_amount, but we need to
+  // look it up from the webhook log or re-derive it. Instead we store a pending
+  // topup record. Since we don't have a TopupRequest table, we use the
+  // WebhookLog to detect duplicates and fetch the amount from NOWPayments API.
+  const parts = topupRef.split("-");
+  // TOPUP-{cuid}-{timestamp} — cuid can contain hyphens, so userId is everything between first and last segment
+  const userId = parts.slice(1, -1).join("-");
+  if (!userId) {
+    console.warn(`[NOWPayments Webhook] Could not parse userId from topupRef: ${topupRef}`);
+    return;
+  }
+
+  // Idempotency: check if this topupRef was already processed
+  const alreadyProcessed = await db.webhookLog.findFirst({
+    where: { provider: "nowpayments", eventType: "topup_credited", payload: { path: ["ref"], equals: topupRef } },
+  });
+  if (alreadyProcessed) {
+    console.log(`[NOWPayments Webhook] Topup already processed: ${topupRef}`);
+    return;
+  }
+
+  // Fetch payment details from NOWPayments to get the actual amount
+  const apiKey = process.env.NOWPAYMENTS_API_KEY;
+  let amount = 0;
+
+  if (apiKey && paymentId) {
+    try {
+      const res = await fetch(`https://api.nowpayments.io/v1/payment/${paymentId}`, {
+        headers: { "x-api-key": apiKey },
+      });
+      if (res.ok) {
+        const data = await res.json() as { price_amount?: number };
+        amount = Number(data.price_amount ?? 0);
+      }
+    } catch (err) {
+      console.error("[NOWPayments Webhook] Failed to fetch payment details:", err);
+    }
+  }
+
+  if (amount <= 0) {
+    console.warn(`[NOWPayments Webhook] Could not determine topup amount for ref: ${topupRef}`);
+    return;
+  }
+
+  const user = await db.user.findUnique({ where: { id: userId }, select: { id: true } });
+  if (!user) {
+    console.warn(`[NOWPayments Webhook] User not found for topup: ${userId}`);
+    return;
+  }
+
+  await db.$transaction(async (tx) => {
+    await tx.user.update({
+      where: { id: userId },
+      data: { balance: { increment: amount } },
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (tx as any).balanceTransaction.create({
+      data: {
+        userId,
+        type: "TOPUP",
+        amount,
+        description: `Balance top-up via NOWPayments (ref: ${topupRef})`,
+      },
+    });
+  });
+
+  // Log as processed for idempotency
+  await db.webhookLog.create({
+    data: {
+      provider: "nowpayments",
+      eventType: "topup_credited",
+      payload: { ref: topupRef, userId, amount } as import("@prisma/client").Prisma.InputJsonValue,
+      status: "processed",
+    },
+  });
+
+  console.log(`[NOWPayments Webhook] Topup credited: ${amount} USD to user ${userId}`);
 }

@@ -41,8 +41,27 @@ export async function deliverOrder(orderId: string): Promise<void> {
       await sendAdminPendingStockAlert(orderId, product.title);
       await sendDeliveryEmail(deliveryEmail, {
         orderId, productTitle: product.title,
-        status: "pending_stock", message: "Your order is awaiting stock replenishment",
+        status: "pending_stock",
+        message: `Your order is awaiting stock. Join our Discord and use your Order ID to claim your product: ${orderId}`,
       });
+      // Notify Discord with the pending stock order so admin can fulfill manually
+      const discordUrl = process.env.DISCORD_WEBHOOK_URL;
+      if (discordUrl) {
+        await sendDiscordNotification(discordUrl, {
+          embeds: [{
+            title: "⚠️ Order Pending Stock — Manual Fulfillment Required",
+            color: 0xf97316,
+            fields: [
+              { name: "Order ID", value: `\`${orderId}\``, inline: true },
+              { name: "Product", value: product.title, inline: true },
+              { name: "Customer Email", value: deliveryEmail, inline: false },
+            ],
+            description: `Customer has paid but no inventory is available. They have been directed to Discord to claim their product using Order ID \`${orderId}\`.`,
+            timestamp: new Date().toISOString(),
+            footer: { text: "Add inventory and redeliver, or fulfill manually on Discord" },
+          }],
+        });
+      }
       return;
     }
 
