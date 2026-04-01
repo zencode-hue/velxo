@@ -13,10 +13,10 @@ import DealCard from "@/components/storefront/DealCard";
 import DealCountdown from "@/components/storefront/DealCountdown";
 
 export const metadata: Metadata = {
-  title: "Velxo Shop — Buy Digital Products Instantly",
+  title: "Velxo Shop - Buy Digital Products Instantly",
   description: "Buy Netflix, Spotify, ChatGPT Plus, gaming keys, AI tools and software licenses. Instant automated delivery. Secure crypto & card payments.",
   openGraph: {
-    title: "Velxo Shop — Buy Digital Products Instantly",
+    title: "Velxo Shop - Buy Digital Products Instantly",
     description: "Buy Netflix, Spotify, ChatGPT Plus, gaming keys, AI tools and software licenses. Instant automated delivery.",
     url: process.env.NEXT_PUBLIC_APP_URL,
     siteName: "Velxo Shop",
@@ -178,6 +178,17 @@ export default async function HomePage() {
       </section>
 
       <NewsletterSection />
+
+      {/* SEO content block */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 border-t border-white/5 text-center">
+        <p className="text-sm text-gray-500 leading-relaxed">
+          Velxo Shop is your trusted digital products shop for streaming subscriptions, AI tools, software licenses, and gaming keys.
+          Our shop offers instant automated delivery — the moment your payment confirms, your credentials land in your inbox.
+          Whether you&apos;re looking to buy a Netflix account, Spotify Premium, ChatGPT Plus, or any other digital product,
+          Velxo Shop has you covered with competitive prices, daily deals, and a secure checkout.
+          Browse our shop today and get your digital products delivered in seconds.
+        </p>
+      </section>
 
       {/* FAQ */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-white/5">

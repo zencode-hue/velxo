@@ -15,7 +15,7 @@ const APP_DESCRIPTION = "Buy Netflix, ChatGPT, Spotify, gaming keys, AI tools an
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "Velxo Shop — Buy Digital Products Instantly",
+    default: "Velxo Shop - Buy Digital Products Instantly",
     template: "%s | Velxo Shop",
   },
   description: APP_DESCRIPTION,
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: APP_URL,
     siteName: APP_NAME,
-    title: "Velxo Shop — Buy Digital Products Instantly",
+    title: "Velxo Shop - Buy Digital Products Instantly",
     description: APP_DESCRIPTION,
     images: [
       {
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@velxoshop",
     creator: "@velxoshop",
-    title: "Velxo Shop — Buy Digital Products Instantly",
+    title: "Velxo Shop - Buy Digital Products Instantly",
     description: APP_DESCRIPTION,
     images: [`${APP_URL}/og-image.png`],
   },
