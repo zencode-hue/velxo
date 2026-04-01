@@ -188,11 +188,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
           {/* Description */}
           <p className="text-gray-400 text-sm leading-relaxed">{product.description}</p>
 
-          {/* SEO keyword content */}
-          <div className="rounded-xl p-4 text-sm text-gray-500 leading-relaxed" style={{ background: "rgba(17,17,17,0.6)", border: "1px solid rgba(255,255,255,0.05)" }}>
-            <p className="font-semibold text-gray-400 mb-1">About this product</p>
+          {/* SEO keyword content — hidden visually, readable by Google */}
+          <div className="sr-only" aria-hidden="false">
             <p>
-              Get access to <strong className="text-gray-300">{product.title}</strong> at a lower cost with our affordable subscription plans on Velxo Shop.
+              Get access to {product.title} at a lower cost with our affordable subscription plans on Velxo Shop.
               Enjoy premium {CATEGORY_LABELS[product.category] ?? "digital"} access without paying full price.
               Our service is fast, reliable, and easy to use — credentials are delivered instantly after payment with no waiting.
               This is one of the best cheap {CATEGORY_LABELS[product.category]?.toLowerCase() ?? "digital"} deals available online.

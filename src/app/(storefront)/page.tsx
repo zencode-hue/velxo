@@ -85,12 +85,10 @@ export default async function HomePage() {
       <HeroSection />
       <TrustBadges />
 
-      {/* ── Section 1: Intro / value prop ── */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center border-b border-white/5">
-        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-          Affordable Premium Subscriptions in One Place
-        </h2>
-        <p className="text-gray-400 leading-relaxed text-base max-w-2xl mx-auto">
+      {/* ── Section 1: Intro / value prop — visually hidden, SEO only ── */}
+      <section className="sr-only" aria-hidden="false">
+        <h2>Affordable Premium Subscriptions in One Place</h2>
+        <p>
           Velxo Shop is your trusted platform to buy cheap Netflix, Spotify, IPTV, and gaming subscriptions at the best prices.
           We provide instant delivery, secure payments, and reliable access to your favorite digital services worldwide.
           Whether you need a cheap Netflix subscription, affordable Spotify Premium, or discounted AI tools — we have it all.
@@ -192,45 +190,26 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Section 3: Main Keywords Section ── */}
-      <section className="border-t border-white/5 py-16" style={{ background: "rgba(234,88,12,0.03)" }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">
-            Cheap Netflix, Spotify &amp; IPTV Subscriptions
-          </h2>
-          <p className="text-gray-400 leading-relaxed text-base mb-6">
-            Looking for cheap Netflix subscriptions or affordable Spotify Premium accounts? Velxo Shop offers some of the best deals online.
-            Whether you want IPTV for unlimited channels or discounted streaming services, we provide high-quality access at unbeatable prices.
-            Our shop specializes in cheap digital subscriptions — from Netflix and Spotify to ChatGPT Plus, gaming keys, and AI tools.
-            All products come with instant automated delivery and a replacement guarantee, making us the most reliable place to buy affordable streaming services.
-          </p>
-          <Link href="/products" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm"
-            style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
-            Browse All Products <ArrowRight size={14} />
-          </Link>
-        </div>
+      {/* ── Section 3: Main Keywords — visually hidden, SEO only ── */}
+      <section className="sr-only" aria-hidden="false">
+        <h2>Cheap Netflix, Spotify &amp; IPTV Subscriptions</h2>
+        <p>
+          Looking for cheap Netflix subscriptions or affordable Spotify Premium accounts? Velxo Shop offers some of the best deals online.
+          Whether you want IPTV for unlimited channels or discounted streaming services, we provide high-quality access at unbeatable prices.
+          Our shop specializes in cheap digital subscriptions — from Netflix and Spotify to ChatGPT Plus, gaming keys, and AI tools.
+          All products come with instant automated delivery and a replacement guarantee, making us the most reliable place to buy affordable streaming services.
+        </p>
       </section>
 
-      {/* ── Section 4: How It Works ── */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-white/5">
-        <h2 className="text-2xl font-bold text-white mb-10 text-center">How It Works</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
-          {[
-            { step: "1", title: "Choose Your Subscription", desc: "Browse our shop and pick the cheap streaming or digital product you need." },
-            { step: "2", title: "Make Secure Payment", desc: "Pay with crypto (BTC, ETH, USDT) or Binance gift card. Fast and secure." },
-            { step: "3", title: "Receive Instantly", desc: "Your account credentials are delivered automatically to your email." },
-            { step: "4", title: "Start Streaming", desc: "Log in and enjoy your Netflix, Spotify, IPTV or other service immediately." },
-          ].map((item) => (
-            <div key={item.step} className="text-center">
-              <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-black text-white"
-                style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
-                {item.step}
-              </div>
-              <h3 className="font-semibold text-white mb-2 text-sm">{item.title}</h3>
-              <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
-        </div>
+      {/* ── Section 4: How It Works — visually hidden, SEO only ── */}
+      <section className="sr-only" aria-hidden="false">
+        <h2>How It Works</h2>
+        <ol>
+          <li>Choose your subscription from our shop</li>
+          <li>Make a secure payment with crypto or gift card</li>
+          <li>Receive your account credentials instantly by email</li>
+          <li>Start streaming immediately</li>
+        </ol>
       </section>
 
       <NewsletterSection />

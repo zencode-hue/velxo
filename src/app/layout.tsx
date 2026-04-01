@@ -10,7 +10,7 @@ const inter = Inter({
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
 const APP_NAME = "Velxo Shop";
-const APP_DESCRIPTION = "Buy Netflix, ChatGPT, Spotify, gaming keys, AI tools and software licenses with instant automated delivery. Secure crypto & card payments. 10,000+ happy customers.";
+const APP_DESCRIPTION = "Buy cheap Netflix, Spotify, IPTV, ChatGPT Plus, gaming keys and software licenses. Instant automated delivery. Secure crypto payments. Best prices guaranteed.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
@@ -47,15 +47,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: APP_URL,
-    siteName: APP_NAME,
-    title: "Velxo Shop - Buy Digital Products Instantly",
+    siteName: "Velxo Shop",
+    title: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
     description: APP_DESCRIPTION,
     images: [
       {
         url: `${APP_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: "Velxo Shop — Premium Digital Marketplace",
+        alt: "Velxo Shop - Buy Cheap Digital Subscriptions",
       },
     ],
   },
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@velxoshop",
     creator: "@velxoshop",
-    title: "Velxo Shop - Buy Digital Products Instantly",
+    title: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
     description: APP_DESCRIPTION,
     images: [`${APP_URL}/og-image.png`],
   },
@@ -81,46 +81,69 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/icon-16.png", sizes: "16x16", type: "image/png" },
-      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180" }],
-    shortcut: "/favicon.ico",
+    icon: "/icon",
+    shortcut: "/icon",
+    apple: "/icon",
   },
-  manifest: "/manifest.json",
   alternates: {
     canonical: APP_URL,
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Store",
-  name: "Velxo Shop",
-  url: APP_URL,
-  logo: `${APP_URL}/logo.png`,
-  description: APP_DESCRIPTION,
-  priceRange: "$1 - $500",
-  currenciesAccepted: "USD",
-  paymentAccepted: "Cryptocurrency, Gift Card",
-  hasOfferCatalog: {
-    "@type": "OfferCatalog",
-    name: "Digital Products",
-    itemListElement: [
-      { "@type": "Offer", itemOffered: { "@type": "Product", name: "Streaming Subscriptions" } },
-      { "@type": "Offer", itemOffered: { "@type": "Product", name: "AI Tools" } },
-      { "@type": "Offer", itemOffered: { "@type": "Product", name: "Software Licenses" } },
-      { "@type": "Offer", itemOffered: { "@type": "Product", name: "Gaming Keys" } },
-    ],
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Velxo Shop",
+    alternateName: "Velxo",
+    url: APP_URL,
+    description: APP_DESCRIPTION,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: { "@type": "EntryPoint", urlTemplate: `${APP_URL}/search?q={search_term_string}` },
+      "query-input": "required name=search_term_string",
+    },
   },
-  potentialAction: {
-    "@type": "SearchAction",
-    target: { "@type": "EntryPoint", urlTemplate: `${APP_URL}/search?q={search_term_string}` },
-    "query-input": "required name=search_term_string",
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Velxo Shop",
+    url: APP_URL,
+    logo: {
+      "@type": "ImageObject",
+      url: `${APP_URL}/icon`,
+      width: 32,
+      height: 32,
+    },
+    sameAs: [],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      url: `${APP_URL}/support`,
+    },
   },
-};
+  {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    name: "Velxo Shop",
+    url: APP_URL,
+    description: APP_DESCRIPTION,
+    priceRange: "$1 - $500",
+    currenciesAccepted: "USD",
+    paymentAccepted: "Cryptocurrency, Gift Card",
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Digital Products",
+      itemListElement: [
+        { "@type": "Offer", itemOffered: { "@type": "Product", name: "Cheap Netflix Subscription" } },
+        { "@type": "Offer", itemOffered: { "@type": "Product", name: "Cheap Spotify Premium" } },
+        { "@type": "Offer", itemOffered: { "@type": "Product", name: "Affordable IPTV" } },
+        { "@type": "Offer", itemOffered: { "@type": "Product", name: "AI Tools" } },
+        { "@type": "Offer", itemOffered: { "@type": "Product", name: "Gaming Keys" } },
+      ],
+    },
+  },
+];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
