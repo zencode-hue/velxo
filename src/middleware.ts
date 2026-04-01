@@ -2,7 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { rateLimit } from "@/lib/rate-limit";
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
+  const host = request.headers.get("host") ?? "";
+
+  // ── www → non-www canonical redirect ────────────────────────────────────
+  if (host.startsWith("www.")) {
+    const nonWwwHost = host.replace(/^www\./, "");
+    const url = `https://${nonWwwHost}${pathname}${search}`;
+    return NextResponse.redirect(url, { status: 301 });
+  }
 
   // ── Rate limiting for /api/v1/* ──────────────────────────────────────────
   if (pathname.startsWith("/api/v1/")) {
@@ -50,5 +58,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/v1/:path*", "/admin/:path*"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|icon|apple-icon|.*\\.png$|.*\\.ico$).*)",
+  ],
 };

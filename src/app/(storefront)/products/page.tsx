@@ -7,6 +7,9 @@ import type { CategoryOption } from "@/components/storefront/CategoryNav";
 export const metadata: Metadata = {
   title: "All Products — Velxo Shop",
   description: "Browse 500+ digital products on Velxo Shop — Netflix, Spotify, ChatGPT Plus, gaming keys, AI tools and software licenses. Instant delivery.",
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop"}/products`,
+  },
   openGraph: {
     title: "All Products — Velxo Shop",
     description: "Browse 500+ digital products — streaming, AI tools, software, gaming. Instant delivery.",

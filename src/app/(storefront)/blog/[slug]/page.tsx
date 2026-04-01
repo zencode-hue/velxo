@@ -13,7 +13,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     select: { title: true, excerpt: true },
   }) as { title: string; excerpt: string } | null;
   if (!post) return { title: "Post Not Found — Velxo" };
-  return { title: `${post.title} — Velxo Blog`, description: post.excerpt };
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  return {
+    title: `${post.title} - Velxo Blog`,
+    description: post.excerpt,
+    alternates: { canonical: `${appUrl}/blog/${params.slug}` },
+    openGraph: {
+      title: `${post.title} - Velxo Blog`,
+      description: post.excerpt,
+      url: `${appUrl}/blog/${params.slug}`,
+      siteName: "Velxo Shop",
+      type: "article",
+    },
+  };
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {

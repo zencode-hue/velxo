@@ -1,16 +1,40 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-
   return {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/products", "/products/"],
-        disallow: ["/admin", "/admin/", "/api/", "/dashboard", "/checkout"],
+        allow: [
+          "/",
+          "/products",
+          "/products/",
+          "/deals",
+          "/blog",
+          "/blog/",
+          "/about",
+          "/support",
+          "/affiliate",
+          "/privacy",
+          "/terms",
+        ],
+        disallow: [
+          "/admin",
+          "/admin/",
+          "/api/",
+          "/dashboard",
+          "/dashboard/",
+          "/checkout",
+          "/checkout/",
+          "/orders",
+          "/orders/",
+          "/wishlist",
+          "/auth/",
+          "/search",
+          "/*?*",          // block all query string URLs (dealPrice, category filters, etc.)
+        ],
       },
     ],
-    sitemap: `${appUrl}/sitemap.xml`,
+    sitemap: "https://velxo.shop/sitemap.xml",
   };
 }
