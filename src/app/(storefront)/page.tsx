@@ -13,11 +13,12 @@ import DealCard from "@/components/storefront/DealCard";
 import DealCountdown from "@/components/storefront/DealCountdown";
 
 export const metadata: Metadata = {
-  title: "Velxo Shop - Buy Digital Products Instantly",
-  description: "Buy Netflix, Spotify, ChatGPT Plus, gaming keys, AI tools and software licenses. Instant automated delivery. Secure crypto & card payments.",
+  title: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
+  description: "Buy cheap Netflix, Spotify Premium, IPTV, ChatGPT Plus, gaming keys and software licenses at the best prices. Instant automated delivery. Secure payments worldwide.",
+  keywords: ["cheap netflix subscription", "buy spotify premium cheap", "affordable IPTV", "cheap streaming services", "buy digital products", "instant delivery subscriptions"],
   openGraph: {
-    title: "Velxo Shop - Buy Digital Products Instantly",
-    description: "Buy Netflix, Spotify, ChatGPT Plus, gaming keys, AI tools and software licenses. Instant automated delivery.",
+    title: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
+    description: "Buy cheap Netflix, Spotify Premium, IPTV, ChatGPT Plus, gaming keys and software licenses. Instant delivery, secure payments.",
     url: process.env.NEXT_PUBLIC_APP_URL,
     siteName: "Velxo Shop",
     type: "website",
@@ -84,10 +85,21 @@ export default async function HomePage() {
       <HeroSection />
       <TrustBadges />
 
+      {/* ── Section 1: Intro / value prop ── */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center border-b border-white/5">
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          Affordable Premium Subscriptions in One Place
+        </h2>
+        <p className="text-gray-400 leading-relaxed text-base max-w-2xl mx-auto">
+          Velxo Shop is your trusted platform to buy cheap Netflix, Spotify, IPTV, and gaming subscriptions at the best prices.
+          We provide instant delivery, secure payments, and reliable access to your favorite digital services worldwide.
+          Whether you need a cheap Netflix subscription, affordable Spotify Premium, or discounted AI tools — we have it all.
+        </p>
+      </section>
+
       {/* Hot Deals strip — neon green vault theme */}
       {hotDeals.length > 0 && (
         <section className="py-16" style={{ background: "rgba(0,10,5,0.6)", borderTop: "1px solid rgba(0,255,136,0.1)", borderBottom: "1px solid rgba(0,255,136,0.1)" }}>
-          {/* Scanline overlay */}
           <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,136,0.008) 2px, rgba(0,255,136,0.008) 4px)" }} />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
@@ -154,17 +166,20 @@ export default async function HomePage() {
 
       <FeaturedCategories />
 
-      {/* Why choose us */}
+      {/* ── Section 2: Why Choose Us ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5">
         <div className="text-center mb-12">
           <h2 className="text-2xl font-bold text-white mb-2">Why Choose Velxo Shop?</h2>
           <p className="text-gray-500">Everything you need, nothing you don&apos;t</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            { icon: Zap, color: "text-yellow-400", title: "Instant Delivery", desc: "Credentials delivered automatically to your email the moment payment confirms. No waiting." },
-            { icon: Lock, color: "text-green-400", title: "Secure & Encrypted", desc: "All inventory encrypted with AES-256-GCM. Payments processed through trusted providers." },
-            { icon: Gem, color: "text-[#fbbf24]", title: "Premium Quality", desc: "Every product verified before listing. We stand behind everything in our catalog." },
+            { icon: Zap, color: "text-yellow-400", title: "Instant Delivery", desc: "Credentials delivered automatically to your email the moment payment confirms. No waiting, no manual steps." },
+            { icon: Lock, color: "text-green-400", title: "Secure & Safe Transactions", desc: "All inventory encrypted with AES-256-GCM. Payments processed through trusted crypto providers." },
+            { icon: Gem, color: "text-[#fbbf24]", title: "Affordable Prices", desc: "Get cheap Netflix, Spotify, IPTV and more at prices far below official plans. Best value guaranteed." },
+            { icon: Flame, color: "text-orange-400", title: "24/7 Customer Support", desc: "Our team is available on Discord around the clock. Open a ticket and get help within minutes." },
+            { icon: Zap, color: "text-blue-400", title: "Trusted by Thousands", desc: "Over 10,000 orders delivered to happy customers across 50+ countries worldwide." },
+            { icon: Lock, color: "text-purple-400", title: "Premium Quality Products", desc: "Every product is verified before listing. We stand behind everything in our catalog with a replacement guarantee." },
           ].map((item) => (
             <div key={item.title} className="rounded-xl border border-white/8 bg-[#1a1208] p-6 text-center hover:border-[#ea580c]/30 transition-colors">
               <div className="flex justify-center mb-4">
@@ -177,28 +192,60 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <NewsletterSection />
-
-      {/* SEO content block */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 border-t border-white/5 text-center">
-        <p className="text-sm text-gray-500 leading-relaxed">
-          Velxo Shop is your trusted digital products shop for streaming subscriptions, AI tools, software licenses, and gaming keys.
-          Our shop offers instant automated delivery — the moment your payment confirms, your credentials land in your inbox.
-          Whether you&apos;re looking to buy a Netflix account, Spotify Premium, ChatGPT Plus, or any other digital product,
-          Velxo Shop has you covered with competitive prices, daily deals, and a secure checkout.
-          Browse our shop today and get your digital products delivered in seconds.
-        </p>
+      {/* ── Section 3: Main Keywords Section ── */}
+      <section className="border-t border-white/5 py-16" style={{ background: "rgba(234,88,12,0.03)" }}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl font-bold text-white mb-4">
+            Cheap Netflix, Spotify &amp; IPTV Subscriptions
+          </h2>
+          <p className="text-gray-400 leading-relaxed text-base mb-6">
+            Looking for cheap Netflix subscriptions or affordable Spotify Premium accounts? Velxo Shop offers some of the best deals online.
+            Whether you want IPTV for unlimited channels or discounted streaming services, we provide high-quality access at unbeatable prices.
+            Our shop specializes in cheap digital subscriptions — from Netflix and Spotify to ChatGPT Plus, gaming keys, and AI tools.
+            All products come with instant automated delivery and a replacement guarantee, making us the most reliable place to buy affordable streaming services.
+          </p>
+          <Link href="/products" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm"
+            style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
+            Browse All Products <ArrowRight size={14} />
+          </Link>
+        </div>
       </section>
 
-      {/* FAQ */}
+      {/* ── Section 4: How It Works ── */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-white/5">
+        <h2 className="text-2xl font-bold text-white mb-10 text-center">How It Works</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+          {[
+            { step: "1", title: "Choose Your Subscription", desc: "Browse our shop and pick the cheap streaming or digital product you need." },
+            { step: "2", title: "Make Secure Payment", desc: "Pay with crypto (BTC, ETH, USDT) or Binance gift card. Fast and secure." },
+            { step: "3", title: "Receive Instantly", desc: "Your account credentials are delivered automatically to your email." },
+            { step: "4", title: "Start Streaming", desc: "Log in and enjoy your Netflix, Spotify, IPTV or other service immediately." },
+          ].map((item) => (
+            <div key={item.step} className="text-center">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-black text-white"
+                style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
+                {item.step}
+              </div>
+              <h3 className="font-semibold text-white mb-2 text-sm">{item.title}</h3>
+              <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <NewsletterSection />
+
+      {/* ── Section 5: FAQ ── */}
       <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-white/5">
         <h2 className="text-2xl font-bold text-white mb-8 text-center">Frequently Asked Questions</h2>
         <div className="space-y-3">
           {[
-            { q: "How does delivery work?", a: "After payment confirms, your digital product is automatically sent to your registered email. Instant, no manual steps." },
-            { q: "What payment methods do you accept?", a: "Crypto via NOWPayments (BTC, ETH, USDT, 100+ coins), Discord manual payment, and wallet balance." },
-            { q: "What if I have an issue?", a: "Join our Discord and open a support ticket. We resolve issues promptly." },
-            { q: "Are the products legitimate?", a: "Yes. All products are sourced and verified before listing." },
+            { q: "Are your subscriptions safe?", a: "Yes, we provide secure and tested accounts for all services. Every product is verified before listing and comes with a replacement guarantee if anything goes wrong." },
+            { q: "How fast is delivery?", a: "Most orders are delivered instantly after payment confirms. Our automated system sends credentials to your email within seconds — no waiting, no manual processing." },
+            { q: "Do you offer refunds?", a: "Yes. In case of issues with your order, we provide support and a replacement or refund. Contact us on Discord within 24 hours of purchase." },
+            { q: "How does delivery work?", a: "After payment confirms, your digital product credentials are automatically sent to your registered email. Instant, no manual steps required." },
+            { q: "What payment methods do you accept?", a: "We accept crypto via NOWPayments (BTC, ETH, USDT, 100+ coins), Binance gift cards, Discord manual payment, and wallet balance." },
+            { q: "Why are your prices cheaper than official plans?", a: "We source subscriptions in bulk and pass the savings on to you. All products are legitimate and fully functional." },
           ].map((item) => (
             <details key={item.q} className="group rounded-xl border border-white/8 bg-[#1a1208] hover:border-purple-600/20 transition-all">
               <summary className="p-5 cursor-pointer font-semibold text-white text-sm flex items-center justify-between list-none">
