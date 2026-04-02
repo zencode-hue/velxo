@@ -76,16 +76,18 @@ async function getProduct(id: string) {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const product = await db.product.findFirst({
     where: { id: params.id, isActive: true },
-    select: { title: true, description: true, imageUrl: true },
+    select: { title: true, description: true, imageUrl: true, price: true, avgRating: true },
   });
-  if (!product) return { title: "Product Not Found — Velxo Shop" };
+  if (!product) return { title: "Product Not Found - Velxo Shop" };
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
   return {
-    title: `${product.title} — Velxo Shop`,
+    title: `${product.title} - Velxo Shop`,
     description: product.description.slice(0, 160),
+    alternates: { canonical: `${appUrl}/products/${params.id}` },
     openGraph: {
-      title: `${product.title} — Velxo Shop`,
+      title: `${product.title} - Velxo Shop`,
       description: product.description.slice(0, 160),
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/products/${params.id}`,
+      url: `${appUrl}/products/${params.id}`,
       siteName: "Velxo Shop", type: "website",
       ...(product.imageUrl ? { images: [{ url: product.imageUrl }] } : {}),
     },
@@ -100,9 +102,40 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const catColor = CATEGORY_COLORS[product.category] ?? "text-gray-400 bg-gray-500/10 border-gray-500/20";
   const reviewCount = product.reviews.length;
   const avgRating = product.avgRating;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    description: product.description,
+    image: product.imageUrl ?? undefined,
+    url: `${appUrl}/products/${product.id}`,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "USD",
+      price: product.price.toFixed(2),
+      availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      url: `${appUrl}/products/${product.id}`,
+      seller: { "@type": "Organization", name: "Velxo Shop" },
+    },
+    ...(avgRating > 0 ? {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: avgRating.toFixed(1),
+        reviewCount: reviewCount > 0 ? reviewCount : 1,
+        bestRating: "5",
+        worstRating: "1",
+      },
+    } : {}),
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs text-gray-600 mb-6">
         <a href="/" className="hover:text-gray-400 transition-colors">Home</a>
