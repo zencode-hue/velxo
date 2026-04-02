@@ -15,8 +15,8 @@ const APP_DESCRIPTION = "Buy cheap Netflix, Spotify, IPTV, ChatGPT Plus, gaming 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "Velxo Shop - Buy Digital Products Instantly",
-    template: "%s | Velxo Shop",
+    default: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
+    template: "%s - Velxo Shop",
   },
   description: APP_DESCRIPTION,
   keywords: [
