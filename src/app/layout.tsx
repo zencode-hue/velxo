@@ -131,17 +131,6 @@ const jsonLd = [
     priceRange: "$1 - $500",
     currenciesAccepted: "USD",
     paymentAccepted: "Cryptocurrency, Gift Card",
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Digital Products",
-      itemListElement: [
-        { "@type": "Offer", itemOffered: { "@type": "Product", name: "Cheap Netflix Subscription", offers: { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: "1.00", highPrice: "500.00", availability: "https://schema.org/InStock" } } },
-        { "@type": "Offer", itemOffered: { "@type": "Product", name: "Cheap Spotify Premium", offers: { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: "1.00", highPrice: "500.00", availability: "https://schema.org/InStock" } } },
-        { "@type": "Offer", itemOffered: { "@type": "Product", name: "Affordable IPTV", offers: { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: "1.00", highPrice: "500.00", availability: "https://schema.org/InStock" } } },
-        { "@type": "Offer", itemOffered: { "@type": "Product", name: "AI Tools", offers: { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: "1.00", highPrice: "500.00", availability: "https://schema.org/InStock" } } },
-        { "@type": "Offer", itemOffered: { "@type": "Product", name: "Gaming Keys", offers: { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: "1.00", highPrice: "500.00", availability: "https://schema.org/InStock" } } },
-      ],
-    },
   },
 ];
 
