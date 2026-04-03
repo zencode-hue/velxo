@@ -3,6 +3,8 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { getServerSession } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 async function requireAdmin() {
   const session = await getServerSession();
   if (!session?.user?.id || session.user.role !== "ADMIN") return null;

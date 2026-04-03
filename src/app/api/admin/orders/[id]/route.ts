@@ -3,6 +3,8 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/admin-auth";
 
+export const dynamic = "force-dynamic";
+
 const bodySchema = z.object({
   status: z.enum(["PENDING", "PAID", "FAILED", "PENDING_STOCK", "REFUNDED"]).optional(),
   adminNote: z.string().max(500).optional(),

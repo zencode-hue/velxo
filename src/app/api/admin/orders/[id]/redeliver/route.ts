@@ -3,6 +3,8 @@ import { getServerSession } from "@/lib/auth";
 import { retryDelivery } from "@/lib/delivery";
 import { auditLog } from "@/lib/admin-auth";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(_req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession();
   if (!session?.user?.id) {

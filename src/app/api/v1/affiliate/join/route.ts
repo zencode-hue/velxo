@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 import { db } from "@/lib/db";
 import { getServerSession } from "@/lib/auth";
 import { randomBytes } from "crypto";

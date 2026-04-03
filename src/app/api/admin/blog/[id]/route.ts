@@ -3,6 +3,8 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { getServerSession } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 const schema = z.object({
   title: z.string().min(1).max(200).optional(),
   excerpt: z.string().min(1).max(500).optional(),

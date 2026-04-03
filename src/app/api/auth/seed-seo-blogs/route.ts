@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 const posts = [
   {
     slug: "how-to-get-netflix-subscription-cheaper-2026",

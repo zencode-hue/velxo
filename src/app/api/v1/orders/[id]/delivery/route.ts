@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { decrypt } from "@/lib/crypto";
 import { getBearerSession } from "@/lib/bearer-auth";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const token = await getBearerSession(req);
   if (!token?.id) {

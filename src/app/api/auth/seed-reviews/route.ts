@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 const REVIEW_POOL = [
   { name: "James K.", rating: 5, comment: "Works perfectly, got my credentials within seconds. 1 year subscription is exactly what I needed. Highly recommend!" },
   { name: "Sofia M.", rating: 5, comment: "Bought this for the whole year and it's been flawless. Delivery was instant, no issues at all." },

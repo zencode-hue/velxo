@@ -3,7 +3,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { getServerSession } from "@/lib/auth";
 
-const updateSchema = z.object({
+export const dynamic = "force-dynamic";const updateSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().optional(),
   price: z.number().min(0).optional(),

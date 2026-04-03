@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 import { sendDiscordNotification } from "@/lib/discord";
 
 const DISCOUNT_PCT = 20;

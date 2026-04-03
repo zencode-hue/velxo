@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 import { getServerSession } from "@/lib/auth";
 import { sendDiscordNotification } from "@/lib/discord";
 

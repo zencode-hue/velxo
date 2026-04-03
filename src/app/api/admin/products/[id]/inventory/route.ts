@@ -3,6 +3,8 @@ import { getServerSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { encrypt } from "@/lib/crypto";
 
+export const dynamic = "force-dynamic";
+
 async function checkAdmin() {
   const session = await getServerSession();
   if (!session || session.user.role !== "ADMIN") return null;
