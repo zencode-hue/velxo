@@ -6,7 +6,7 @@ import RevenueChart from "./RevenueChart";
 export default async function AdminDashboard() {
   await requireAdmin();
 
-  const [totalUsers, revenue, totalOrders, pendingOrders, lowStockProducts] = await Promise.all([
+  const [totalUsers, revenue, totalOrders, pendingOrders, lowStockProducts, revenueToday, revenueWeek] = await Promise.all([
     db.user.count(),
     db.order.aggregate({ where: { status: "PAID" }, _sum: { amount: true } }),
     db.order.count(),
@@ -18,19 +18,23 @@ export default async function AdminDashboard() {
       orderBy: { stockCount: "asc" },
       take: 5,
     }) as Promise<{ id: string; title: string; stockCount: number }[]>,
+    db.order.aggregate({ where: { status: "PAID", createdAt: { gte: new Date(new Date().setHours(0,0,0,0)) } }, _sum: { amount: true } }),
+    db.order.aggregate({ where: { status: "PAID", createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } }, _sum: { amount: true } }),
   ]);
 
   const stats = [
     { label: "Total Revenue", value: `$${Number(revenue._sum.amount ?? 0).toFixed(2)}`, icon: DollarSign, color: "text-green-400" },
+    { label: "Today's Revenue", value: `$${Number(revenueToday._sum.amount ?? 0).toFixed(2)}`, icon: DollarSign, color: "text-emerald-400" },
+    { label: "This Week", value: `$${Number(revenueWeek._sum.amount ?? 0).toFixed(2)}`, icon: DollarSign, color: "text-blue-400" },
     { label: "Total Orders", value: totalOrders, icon: ShoppingCart, color: "text-purple-400" },
-    { label: "Total Users", value: totalUsers, icon: Users, color: "text-blue-400" },
+    { label: "Total Users", value: totalUsers, icon: Users, color: "text-cyan-400" },
     { label: "Pending Stock", value: pendingOrders, icon: Package, color: "text-orange-400" },
   ];
 
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {stats.map(({ label, value, icon: Icon, color }) => (
           <div key={label} className="glass-card p-5">
             <div className="flex items-center gap-2 text-gray-500 text-sm mb-2">

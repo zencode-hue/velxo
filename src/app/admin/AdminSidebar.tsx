@@ -8,6 +8,7 @@ import {
   LayoutDashboard, Package, ShoppingCart, Users,
   Tag, UserCheck, Settings, Zap, Menu,
   TrendingUp, ExternalLink, FileText, BarChart2,
+  AlertTriangle, Webhook, ClipboardList, Mail,
 } from "lucide-react";
 
 const navItems = [
@@ -15,10 +16,14 @@ const navItems = [
   { href: "/admin/analytics", label: "Analytics", icon: BarChart2 },
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { href: "/admin/pending-stock", label: "Pending Stock", icon: AlertTriangle },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/discounts", label: "Discounts", icon: Tag },
   { href: "/admin/affiliates", label: "Affiliates", icon: UserCheck },
   { href: "/admin/blog", label: "Blog", icon: FileText },
+  { href: "/admin/email", label: "Email Center", icon: Mail },
+  { href: "/admin/webhook-logs", label: "Webhook Logs", icon: Webhook },
+  { href: "/admin/audit-log", label: "Audit Log", icon: ClipboardList },
   { href: "/admin/setup", label: "Setup", icon: Settings },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];

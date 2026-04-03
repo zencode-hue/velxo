@@ -95,7 +95,19 @@ export async function deliverOrder(orderId: string): Promise<void> {
   const discordUrl = process.env.DISCORD_WEBHOOK_URL;
   if (discordUrl) {
     await sendDiscordNotification(discordUrl, {
-      content: `✅ New sale: ${product.title} — Order #${orderId}`,
+      embeds: [{
+        title: "✅ New Sale",
+        color: 0x22c55e,
+        fields: [
+          { name: "Product", value: product.title, inline: true },
+          { name: "Amount", value: `$${Number(order.amount).toFixed(2)}`, inline: true },
+          { name: "Customer", value: deliveryEmail, inline: false },
+          { name: "Order ID", value: `\`${orderId}\``, inline: false },
+          { name: "Payment", value: order.paymentProvider, inline: true },
+        ],
+        timestamp: new Date().toISOString(),
+        footer: { text: "Velxo Shop" },
+      }],
     });
   }
 }
