@@ -90,6 +90,7 @@ function SetupClient() {
     { name: "Seed Blog Posts", url: "/api/auth/seed-blog", desc: "Add 6 blog posts to the database" },
     { name: "Seed SEO Blog Posts", url: "/api/auth/seed-seo-blogs", desc: "Add 5 SEO-optimised blog posts (Netflix, Spotify, IPTV...)", method: "GET" },
     { name: "Seed Product Reviews", url: "/api/auth/seed-reviews", desc: "Add realistic customer reviews to all products", method: "GET" },
+    { name: "Cleanup Seed Users", url: "/api/auth/cleanup-seed-users", desc: "Remove fake seed users/orders but keep reviews on site", method: "GET" },
     { name: "Set Product Ratings", url: "/api/auth/seed-ratings", desc: "Give all products 4.2-5.0 star ratings" },
     { name: "Setup Admin", url: "/api/auth/setup-admin", desc: "Create the admin account" },
   ];
