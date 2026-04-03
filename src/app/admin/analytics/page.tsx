@@ -53,7 +53,7 @@ export default async function AdminAnalyticsPage() {
     pv.groupBy({ by: ["device"], where: { createdAt: { gte: last30 }, device: { not: null } }, _count: { id: true }, orderBy: { _count: { id: "desc" } } }),
     pv.groupBy({ by: ["browser"], where: { createdAt: { gte: last30 }, browser: { not: null } }, _count: { id: true }, orderBy: { _count: { id: "desc" } }, take: 6 }),
     pv.groupBy({ by: ["os"], where: { createdAt: { gte: last30 }, os: { not: null } }, _count: { id: true }, orderBy: { _count: { id: "desc" } }, take: 6 }),
-    pv.findMany({ orderBy: { createdAt: "desc" }, take: 20, select: { path: true, country: true, device: true, browser: true, referrer: true, ip: true, createdAt: true } }),
+    pv.findMany({ orderBy: { createdAt: "desc" }, take: 50, select: { path: true, country: true, device: true, browser: true, os: true, referrer: true, ip: true, sessionId: true, createdAt: true } }),
     db.order.aggregate({ where: { status: "PAID", createdAt: { gte: todayStart } }, _sum: { amount: true }, _count: true }),
     db.order.aggregate({ where: { status: "PAID", createdAt: { gte: weekStart } }, _sum: { amount: true }, _count: true }),
     db.order.aggregate({ where: { status: "PAID", createdAt: { gte: monthStart } }, _sum: { amount: true }, _count: true }),
@@ -245,39 +245,94 @@ export default async function AdminAnalyticsPage() {
         </div>
       </div>
 
-      {/* Recent visits */}
+      {/* Recent visits — grouped by session */}
       <div className="glass-card overflow-x-auto">
-        <div className="px-5 py-4 border-b border-white/5">
+        <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-white flex items-center gap-2">
             <MapPin size={14} className="text-accent" /> Recent Visits
           </h2>
+          <span className="text-xs text-gray-600">Last 50 page views, grouped by session</span>
         </div>
-        <table className="w-full text-xs min-w-[700px]">
+        <table className="w-full text-xs min-w-[800px]">
           <thead>
             <tr className="border-b border-white/5 text-gray-500 uppercase">
+              <th className="text-left px-5 py-3">Session</th>
               <th className="text-left px-5 py-3">Path</th>
               <th className="text-left px-5 py-3">Country</th>
-              <th className="text-left px-5 py-3">Device</th>
-              <th className="text-left px-5 py-3">Browser</th>
-              <th className="text-left px-5 py-3">Referrer</th>
+              <th className="text-left px-5 py-3">Device / Browser</th>
+              <th className="text-left px-5 py-3">OS</th>
+              <th className="text-left px-5 py-3">Source</th>
               <th className="text-left px-5 py-3">IP</th>
-              <th className="text-left px-5 py-3">Time</th>
+              <th className="text-left px-5 py-3">When</th>
             </tr>
           </thead>
           <tbody>
-            {(recentViews as { path: string; country: string | null; device: string | null; browser: string | null; referrer: string | null; ip: string | null; createdAt: Date }[]).map((v, i) => (
-              <tr key={i} className="border-b border-white/5 hover:bg-white/2">
-                <td className="px-5 py-2.5 font-mono text-accent">{v.path}</td>
-                <td className="px-5 py-2.5 text-gray-300">{v.country ?? "—"}</td>
-                <td className="px-5 py-2.5 text-gray-400">{v.device ?? "—"}</td>
-                <td className="px-5 py-2.5 text-gray-400">{v.browser ?? "—"}</td>
-                <td className="px-5 py-2.5 text-gray-500 truncate max-w-[120px]">{v.referrer ? (() => { try { return new URL(v.referrer).hostname; } catch { return v.referrer; } })() : "direct"}</td>
-                <td className="px-5 py-2.5 font-mono text-gray-600">{v.ip ?? "—"}</td>
-                <td className="px-5 py-2.5 text-gray-600">{new Date(v.createdAt).toLocaleTimeString()}</td>
-              </tr>
-            ))}
+            {(() => {
+              type RawView = { path: string; country: string | null; device: string | null; browser: string | null; os: string | null; referrer: string | null; ip: string | null; sessionId: string | null; createdAt: Date };
+              const views = recentViews as RawView[];
+
+              // Group consecutive rows by sessionId, deduplicate same path in same session
+              const seen = new Set<string>();
+              const deduped = views.filter((v) => {
+                const key = `${v.sessionId ?? v.ip}-${v.path}`;
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+              });
+
+              // Track which sessions we've shown to add a subtle separator
+              const shownSessions = new Set<string>();
+
+              return deduped.slice(0, 30).map((v, i) => {
+                const sessionKey = v.sessionId ?? v.ip ?? String(i);
+                const isNewSession = !shownSessions.has(sessionKey);
+                shownSessions.add(sessionKey);
+
+                const referrerHost = v.referrer
+                  ? (() => { try { return new URL(v.referrer).hostname.replace("www.", ""); } catch { return v.referrer.slice(0, 30); } })()
+                  : "direct";
+
+                const now = new Date();
+                const visitDate = new Date(v.createdAt);
+                const diffMs = now.getTime() - visitDate.getTime();
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                const timeAgo = diffMins < 1 ? "just now"
+                  : diffMins < 60 ? `${diffMins}m ago`
+                  : diffHours < 24 ? `${diffHours}h ago`
+                  : diffDays < 7 ? `${diffDays}d ago`
+                  : visitDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+                return (
+                  <tr key={i} className={`border-b border-white/5 hover:bg-white/2 ${isNewSession && i > 0 ? "border-t border-white/8" : ""}`}>
+                    <td className="px-5 py-2.5">
+                      <span className="font-mono text-gray-700 text-xs">
+                        {(v.sessionId ?? v.ip ?? "?").slice(0, 8)}
+                      </span>
+                      {isNewSession && i > 0 && <span className="ml-1 text-purple-500 text-xs">●</span>}
+                    </td>
+                    <td className="px-5 py-2.5 font-mono text-accent max-w-[180px] truncate">{v.path}</td>
+                    <td className="px-5 py-2.5 text-gray-300">{v.country ?? "—"}</td>
+                    <td className="px-5 py-2.5 text-gray-400">
+                      <span>{v.device ?? "—"}</span>
+                      {v.browser && <span className="text-gray-600 ml-1">/ {v.browser}</span>}
+                    </td>
+                    <td className="px-5 py-2.5 text-gray-500">{v.os ?? "—"}</td>
+                    <td className="px-5 py-2.5">
+                      <span className={referrerHost === "direct" ? "text-gray-600" : "text-blue-400"}>{referrerHost}</span>
+                    </td>
+                    <td className="px-5 py-2.5 font-mono text-gray-600">{v.ip ?? "—"}</td>
+                    <td className="px-5 py-2.5 text-gray-500" title={visitDate.toLocaleString()}>{timeAgo}</td>
+                  </tr>
+                );
+              });
+            })()}
           </tbody>
         </table>
+        {(recentViews as unknown[]).length === 0 && (
+          <p className="text-center text-gray-600 py-10">No visits recorded yet.</p>
+        )}
       </div>
     </div>
   );
