@@ -33,6 +33,19 @@ function SetupClient() {
     }
   }
 
+  async function runGet(name: string, url: string) {
+    setLoading((l) => ({ ...l, [name]: true }));
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      setResults((r) => ({ ...r, [name]: data.ok ? `Done! Created: ${data.created ?? ""}, Skipped: ${data.skipped ?? ""}` : (data.error ?? JSON.stringify(data)) }));
+    } catch (e) {
+      setResults((r) => ({ ...r, [name]: "Error: " + String(e) }));
+    } finally {
+      setLoading((l) => ({ ...l, [name]: false }));
+    }
+  }
+
   async function pushDealsNotification() {
     setDiscordSending(true);
     setDiscordResult(null);
@@ -71,11 +84,13 @@ function SetupClient() {
     }
   }
 
-  const tasks = [
+  const tasks: Array<{ name: string; url: string; desc: string; method?: "GET" | "POST" }> = [
     { name: "Seed Products", url: "/api/auth/seed-products", desc: "Add 37 products to the database" },
     { name: "Fix Products (Unlimited Stock)", url: "/api/auth/fix-products", desc: "Set all products to unlimited stock + 100-999 count" },
     { name: "Seed Blog Posts", url: "/api/auth/seed-blog", desc: "Add 6 blog posts to the database" },
-    { name: "Set Product Ratings", url: "/api/auth/seed-ratings", desc: "Give all products 4.2â€“5.0 star ratings" },
+    { name: "Seed SEO Blog Posts", url: "/api/auth/seed-seo-blogs", desc: "Add 5 SEO-optimised blog posts (Netflix, Spotify, IPTV...)", method: "GET" },
+    { name: "Seed Product Reviews", url: "/api/auth/seed-reviews", desc: "Add realistic customer reviews to all products", method: "GET" },
+    { name: "Set Product Ratings", url: "/api/auth/seed-ratings", desc: "Give all products 4.2-5.0 star ratings" },
     { name: "Setup Admin", url: "/api/auth/setup-admin", desc: "Create the admin account" },
   ];
 
@@ -96,8 +111,12 @@ function SetupClient() {
                   </p>
                 )}
               </div>
-              <button onClick={() => run(task.name, task.url)} disabled={loading[task.name]} className="btn-primary text-sm px-5 py-2 shrink-0">
-                {loading[task.name] ? "Runningâ€¦" : "Run"}
+              <button
+                onClick={() => task.method === "GET" ? runGet(task.name, task.url) : run(task.name, task.url)}
+                disabled={loading[task.name]}
+                className="btn-primary text-sm px-5 py-2 shrink-0"
+              >
+                {loading[task.name] ? "Running..." : "Run"}
               </button>
             </div>
           ))}
@@ -112,7 +131,6 @@ function SetupClient() {
         <p className="text-gray-500 text-sm mb-5">Push messages to your Discord server manually.</p>
 
         <div className="space-y-4">
-          {/* Push today's deals */}
           <div className="glass-card p-5 flex items-center justify-between gap-4">
             <div>
               <p className="font-semibold text-white text-sm">Push Today&apos;s Hot Deals</p>
@@ -124,14 +142,13 @@ function SetupClient() {
             </button>
           </div>
 
-          {/* Custom message */}
           <div className="glass-card p-5 space-y-3">
             <p className="font-semibold text-white text-sm">Custom Discord Message</p>
             <p className="text-xs text-gray-500">Send any custom announcement to your Discord webhook</p>
             <textarea
               value={discordMsg}
               onChange={(e) => setDiscordMsg(e.target.value)}
-              placeholder="Type your announcement here... e.g. New products just added! Check them out at velxo.shop/products"
+              placeholder="Type your announcement here..."
               rows={4}
               className="input-field text-sm resize-none w-full"
             />
