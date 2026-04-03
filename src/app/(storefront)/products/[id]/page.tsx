@@ -19,6 +19,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 // Generate feature bullets from description
 function getFeatures(description: string, category: string): string[] {
   const base = [
+    "1 year subscription — valid for 12 full months",
     "Instant automated delivery to your email",
     "AES-256 encrypted credentials",
     "Replacement guarantee if invalid",
@@ -27,10 +28,10 @@ function getFeatures(description: string, category: string): string[] {
   const catFeatures: Record<string, string[]> = {
     STREAMING: ["HD/4K streaming quality", "Multi-device access", "Offline downloads available", "Ad-free experience"],
     AI_TOOLS: ["Unlimited message access", "Latest AI model included", "API access available", "Priority processing"],
-    SOFTWARE: ["Full license key included", "Lifetime or subscription access", "All features unlocked", "Regular updates included"],
+    SOFTWARE: ["Full license key included", "All features unlocked", "Regular updates included", "Works on all platforms"],
     GAMING: ["Instant account/key delivery", "All DLC included", "Multi-platform support", "No region restrictions"],
   };
-  return [...(catFeatures[category] ?? []), ...base].slice(0, 6);
+  return ["1 year subscription — valid for 12 full months", ...(catFeatures[category] ?? []), ...base.slice(1)].slice(0, 7);
 }
 
 interface PageProps { params: { id: string } }
