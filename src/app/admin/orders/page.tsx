@@ -66,6 +66,7 @@ export default async function AdminOrdersPage() {
             {orders.map((o) => {
               const customerEmail = o.user?.email ?? o.guestEmail ?? "Guest";
               const customerId = o.user?.id;
+              const lookupEmail = o.guestEmail ?? null;
               return (
                 <tr key={o.id} className="border-b border-white/5 hover:bg-white/2 transition-colors">
                   {/* Invoice ID */}
@@ -89,12 +90,17 @@ export default async function AdminOrdersPage() {
                   {/* Customer — clickable */}
                   <td className="px-4 py-3">
                     {customerId ? (
-                      <Link href={`/admin/users?highlight=${customerId}`}
+                      <Link href={`/admin/customers/${customerId}`}
                         className="text-gray-300 hover:text-white transition-colors truncate max-w-[160px] block text-xs underline decoration-dotted underline-offset-2">
                         {customerEmail}
                       </Link>
+                    ) : lookupEmail ? (
+                      <Link href={`/admin/customers/${encodeURIComponent(lookupEmail)}`}
+                        className="text-gray-400 hover:text-white transition-colors truncate max-w-[160px] block text-xs underline decoration-dotted underline-offset-2">
+                        {customerEmail}
+                      </Link>
                     ) : (
-                      <span className="text-gray-500 text-xs truncate max-w-[160px] block">{customerEmail}</span>
+                      <span className="text-gray-500 text-xs">{customerEmail}</span>
                     )}
                     {o.user?.name && <p className="text-gray-600 text-xs">{o.user.name}</p>}
                   </td>

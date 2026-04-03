@@ -19,7 +19,7 @@ export default function AdminEmailPage() {
       const body: Record<string, string> = { subject, message };
       if (tab === "bulk") { body.to = "all"; body.type = "announcement"; }
       else if (tab === "single") { body.to = "custom"; body.customEmail = customEmail; body.type = "custom"; }
-      else { body.to = "custom"; body.customEmail = ""; body.type = "order_reminder"; body.orderId = orderId; }
+      else { body.to = "order"; body.type = "order_reminder"; body.orderId = orderId; }
 
       const res = await fetch("/api/admin/send-email", {
         method: "POST",

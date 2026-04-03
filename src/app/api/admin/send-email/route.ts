@@ -6,7 +6,7 @@ import { requireAdmin } from "@/lib/admin-auth";
 export const dynamic = "force-dynamic";
 
 const bodySchema = z.object({
-  to: z.enum(["all", "custom"]),
+  to: z.enum(["all", "custom", "order"]),
   customEmail: z.string().email().optional(),
   subject: z.string().min(1).max(200),
   message: z.string().min(1).max(5000),
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
     const { to, customEmail, subject, message, type, orderId } = parsed.data;
 
     // Order reminder — send to specific order's customer
-    if (type === "order_reminder" && orderId) {
+    if ((type === "order_reminder" || to === "order") && orderId) {
       const order = await db.order.findUnique({
         where: { id: orderId },
         include: { user: { select: { email: true } }, product: { select: { title: true } } },
