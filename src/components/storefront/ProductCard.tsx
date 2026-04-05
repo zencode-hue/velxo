@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { Star, Zap, Package, ShoppingCart } from "lucide-react";
 import PriceDisplay from "./PriceDisplay";
+import { productPath } from "@/lib/slug";
 
 export interface ProductCardProps {
   id: string;
@@ -30,10 +31,11 @@ export default function ProductCard({ id, title, price, category, imageUrl, avgR
   const available = unlimitedStock || inStock;
   const catColor = CATEGORY_COLORS[category] ?? "text-gray-400 bg-gray-500/10 border-gray-500/20";
   const catLabel = CATEGORY_LABELS[category] ?? category;
+  const href = productPath(id, title);
 
   return (
     <div className="glass-card group flex flex-col overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:border-orange-500/40">
-      <Link href={`/products/${id}`} className="relative w-full aspect-video bg-white/5 overflow-hidden block">
+      <Link href={href} className="relative w-full aspect-video bg-white/5 overflow-hidden block">
         {imageUrl ? (
           <Image src={imageUrl} alt={title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
         ) : (
@@ -57,7 +59,7 @@ export default function ProductCard({ id, title, price, category, imageUrl, avgR
         <span className={`self-start text-xs px-2 py-0.5 rounded-full border font-medium ${catColor}`}>
           {catLabel}
         </span>
-        <Link href={`/products/${id}`} className="text-sm font-semibold text-white line-clamp-2 leading-snug hover:text-orange-300 transition-colors">
+        <Link href={href} className="text-sm font-semibold text-white line-clamp-2 leading-snug hover:text-orange-300 transition-colors">
           {title}
         </Link>
         <div className="mt-auto pt-2 space-y-2.5">
@@ -71,7 +73,7 @@ export default function ProductCard({ id, title, price, category, imageUrl, avgR
               </span>
             )}
           </div>
-          <Link href={`/products/${id}`} className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90" style={{ background: available ? "linear-gradient(135deg, #ea580c, #f97316)" : "rgba(255,255,255,0.05)", boxShadow: available ? "0 2px 12px rgba(234,88,12,0.3)" : "none", opacity: available ? 1 : 0.5 }}>
+          <Link href={href} className="w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90" style={{ background: available ? "linear-gradient(135deg, #ea580c, #f97316)" : "rgba(255,255,255,0.05)", boxShadow: available ? "0 2px 12px rgba(234,88,12,0.3)" : "none", opacity: available ? 1 : 0.5 }}>
             <ShoppingCart size={14} />
             {available ? "Buy Now" : "Out of Stock"}
           </Link>

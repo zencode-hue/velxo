@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import ProductCard from "@/components/storefront/ProductCard";
 import ProductActions from "./ProductActions";
 import { Star, Package, CheckCircle, Zap, Shield, RefreshCw } from "lucide-react";
+import { extractProductId, productPath } from "@/lib/slug";
 
 const CATEGORY_LABELS: Record<string, string> = {
   STREAMING: "Streaming", AI_TOOLS: "AI Tools", SOFTWARE: "Software", GAMING: "Gaming",
@@ -39,9 +40,10 @@ interface PageProps { params: { id: string } }
 type ReviewItem = { id: string; rating: number; comment: string | null; createdAt: Date; user: { name: string | null } };
 
 async function getProduct(id: string) {
+  const realId = extractProductId(id);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const product = await (db.product.findFirst as any)({
-    where: { id, isActive: true },
+    where: { id: realId, isActive: true },
     select: {
       id: true, title: true, description: true, price: true, category: true,
       imageUrl: true, avgRating: true, stockCount: true, unlimitedStock: true,
@@ -75,20 +77,22 @@ async function getProduct(id: string) {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const realId = extractProductId(params.id);
   const product = await db.product.findFirst({
-    where: { id: params.id, isActive: true },
+    where: { id: realId, isActive: true },
     select: { title: true, description: true, imageUrl: true, price: true, avgRating: true },
   });
   if (!product) return { title: "Product Not Found - Velxo Shop" };
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const slugUrl = `${appUrl}${productPath(realId, product.title)}`;
   return {
     title: `${product.title} - Velxo Shop`,
     description: product.description.slice(0, 160),
-    alternates: { canonical: `${appUrl}/products/${params.id}` },
+    alternates: { canonical: slugUrl },
     openGraph: {
       title: `${product.title} - Velxo Shop`,
       description: product.description.slice(0, 160),
-      url: `${appUrl}/products/${params.id}`,
+      url: slugUrl,
       siteName: "Velxo Shop", type: "website",
       ...(product.imageUrl ? { images: [{ url: product.imageUrl }] } : {}),
     },
@@ -111,13 +115,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
     name: product.title,
     description: product.description,
     image: product.imageUrl ?? undefined,
-    url: `${appUrl}/products/${product.id}`,
+    url: `${appUrl}${productPath(product.id, product.title)}`,
     offers: {
       "@type": "Offer",
       priceCurrency: "USD",
       price: product.price.toFixed(2),
       availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      url: `${appUrl}/products/${product.id}`,
+      url: `${appUrl}${productPath(product.id, product.title)}`,
       seller: { "@type": "Organization", name: "Velxo Shop" },
     },
     ...(avgRating > 0 ? {

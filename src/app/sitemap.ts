@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { db } from "@/lib/db";
+import { productPath } from "@/lib/slug";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Always use the canonical non-www URL
@@ -8,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [products, blogPosts] = await Promise.all([
     db.product.findMany({
       where: { isActive: true },
-      select: { id: true, updatedAt: true },
+      select: { id: true, title: true, updatedAt: true },
     }),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db as any).blogPost.findMany({
@@ -18,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
 
   const productUrls = products.map((p) => ({
-    url: `${appUrl}/products/${p.id}`,
+    url: `${appUrl}${productPath(p.id, p.title)}`,
     lastModified: p.updatedAt,
     changeFrequency: "weekly" as const,
     priority: 0.8,
