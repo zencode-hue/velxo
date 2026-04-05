@@ -142,6 +142,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="eaaiCjFWJryD0qKxQzgRgw"
+          async
+        />
       </head>
       <body className="min-h-screen bg-background text-white antialiased">
         {children}

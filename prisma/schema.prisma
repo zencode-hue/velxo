@@ -70,7 +70,7 @@ model User {
 
 model Product {
   id          String   @id @default(cuid())
-  slug        String?  @unique
+  slug        String?
   title       String
   description String
   price       Decimal  @db.Decimal(10, 2)
@@ -92,7 +92,6 @@ model Product {
   @@index([title])
   @@index([isActive])
   @@index([isFeatured])
-  @@index([slug])
 }
 
 model InventoryItem {
