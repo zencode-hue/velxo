@@ -31,7 +31,7 @@ function parseOS(ua: string): string {
 
 export async function POST(req: NextRequest) {
   try {
-    const { path, referrer, sessionId } = await req.json();
+    const { path, referrer, sessionId, userId } = await req.json();
 
     const userAgent = req.headers.get("user-agent") ?? "";
     const forwarded = req.headers.get("x-forwarded-for");
@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
         referrer: referrer ? String(referrer).slice(0, 500) : null,
         userAgent: userAgent ? String(userAgent).slice(0, 500) : null,
         sessionId: sessionId ? String(sessionId).slice(0, 100) : null,
+        userId: userId ? String(userId).slice(0, 100) : null,
         ip: ip ? String(ip).slice(0, 50) : null,
         device: userAgent ? parseDevice(userAgent) : null,
         browser: userAgent ? parseBrowser(userAgent) : null,

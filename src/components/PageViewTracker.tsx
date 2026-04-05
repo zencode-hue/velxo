@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 function getOrCreateSessionId() {
   if (typeof window === "undefined") return null;
@@ -16,12 +17,12 @@ function getOrCreateSessionId() {
 export default function PageViewTracker() {
   const pathname = usePathname();
   const lastTracked = useRef<string>("");
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (lastTracked.current === pathname) return;
     lastTracked.current = pathname;
 
-    // Don't track admin pages
     if (pathname.startsWith("/admin")) return;
 
     const sessionId = getOrCreateSessionId();
@@ -32,9 +33,10 @@ export default function PageViewTracker() {
         path: pathname,
         referrer: document.referrer || null,
         sessionId,
+        userId: session?.user?.id ?? null,
       }),
     }).catch(() => {});
-  }, [pathname]);
+  }, [pathname, session?.user?.id]);
 
   return null;
 }

@@ -65,14 +65,31 @@ export default async function CustomerDetailPage({ params }: { params: { id: str
     product: { title: string; category: string };
   }>;
 
-  // Last known device info from recent page views
+  // Get last known device info — for registered users match by userId, for guests match by sessionId correlation
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pv = (db as any).pageView;
-  const lastView = await pv.findFirst({
-    orderBy: { createdAt: "desc" },
-    where: { ip: { not: null } },
-    select: { ip: true, country: true, browser: true, os: true, device: true, userAgent: true, referrer: true, createdAt: true, path: true },
-  }) as { ip: string | null; country: string | null; browser: string | null; os: string | null; device: string | null; userAgent: string | null; referrer: string | null; createdAt: Date; path: string } | null;
+
+  let lastView = null;
+  let recentPaths: { path: string; createdAt: Date }[] = [];
+
+  if (user) {
+    // Registered user — look up by userId
+    lastView = await pv.findFirst({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+      select: { ip: true, country: true, browser: true, os: true, device: true, userAgent: true, referrer: true, createdAt: true, path: true },
+    });
+    recentPaths = await pv.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+      select: { path: true, createdAt: true },
+    });
+  } else if (lookupEmail) {
+    // Guest — we can't directly link page views to a guest email
+    // Show a note that tracking requires login
+    lastView = null;
+  }
 
   const paidOrders = allOrders.filter((o) => o.status === "PAID");
   const totalSpent = paidOrders.reduce((s, o) => s + Number(o.amount), 0);
@@ -129,22 +146,37 @@ export default async function CustomerDetailPage({ params }: { params: { id: str
           </h2>
           {lastView ? (
             <div className="space-y-3 text-sm">
-              <Row label="IP Address" value={lastView.ip ?? "—"} valueClass="font-mono text-xs" />
-              <Row label="Country" value={lastView.country ?? "—"} />
-              <Row label="Browser" value={lastView.browser ?? "—"} />
-              <Row label="Operating System" value={lastView.os ?? "—"} />
-              <Row label="Device" value={lastView.device ?? "—"} />
-              <Row label="Last Visit" value={new Date(lastView.createdAt).toLocaleString()} />
-              <Row label="Last Page" value={lastView.path} valueClass="font-mono text-xs text-purple-300" />
-              {lastView.userAgent && (
+              <Row label="IP Address" value={(lastView as { ip: string | null }).ip ?? "—"} valueClass="font-mono text-xs" />
+              <Row label="Country" value={(lastView as { country: string | null }).country ?? "—"} />
+              <Row label="Browser" value={(lastView as { browser: string | null }).browser ?? "—"} />
+              <Row label="Operating System" value={(lastView as { os: string | null }).os ?? "—"} />
+              <Row label="Device" value={(lastView as { device: string | null }).device ?? "—"} />
+              <Row label="Last Visit" value={new Date((lastView as { createdAt: Date }).createdAt).toLocaleString()} />
+              <Row label="Last Page" value={(lastView as { path: string }).path} valueClass="font-mono text-xs text-purple-300" />
+              {(lastView as { userAgent: string | null }).userAgent && (
                 <div>
                   <p className="text-gray-500 text-xs mb-1">User Agent</p>
-                  <p className="text-gray-400 text-xs break-all leading-relaxed">{lastView.userAgent}</p>
+                  <p className="text-gray-400 text-xs break-all leading-relaxed">{(lastView as { userAgent: string | null }).userAgent}</p>
+                </div>
+              )}
+              {recentPaths.length > 1 && (
+                <div>
+                  <p className="text-gray-500 text-xs mb-2">Recent Pages Visited</p>
+                  <div className="space-y-1">
+                    {recentPaths.slice(0, 8).map((p, i) => (
+                      <div key={i} className="flex items-center justify-between">
+                        <span className="font-mono text-xs text-purple-300 truncate max-w-[180px]">{(p as { path: string }).path}</span>
+                        <span className="text-gray-600 text-xs">{new Date((p as { createdAt: Date }).createdAt).toLocaleDateString()}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
           ) : (
-            <p className="text-gray-600 text-sm">No page view data available yet.</p>
+            <p className="text-gray-600 text-sm">
+              {user ? "No page view data yet for this user." : "Page view tracking requires a registered account. Guest visitors are not tracked individually."}
+            </p>
           )}
         </div>
       </div>

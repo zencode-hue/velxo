@@ -321,6 +321,7 @@ model PageView {
   referrer  String?
   userAgent String?
   sessionId String?
+  userId    String?
   ip        String?
   device    String?  // "mobile" | "tablet" | "desktop"
   browser   String?
@@ -331,6 +332,7 @@ model PageView {
   @@index([createdAt])
   @@index([country])
   @@index([sessionId])
+  @@index([userId])
 }
 
 // ─── Site Settings ────────────────────────────────────────────────────────────
