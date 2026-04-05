@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Package, ShoppingCart, Users,
   Tag, UserCheck, Settings, Zap, Menu,
   TrendingUp, ExternalLink, FileText, BarChart2,
-  AlertTriangle, Webhook, ClipboardList, Mail,
+  AlertTriangle, Webhook, ClipboardList, Mail, Search,
 } from "lucide-react";
 
 const navItems = [
@@ -25,6 +25,7 @@ const navItems = [
   { href: "/admin/email", label: "Email Center", icon: Mail },
   { href: "/admin/webhook-logs", label: "Webhook Logs", icon: Webhook },
   { href: "/admin/audit-log", label: "Audit Log", icon: ClipboardList },
+  { href: "/admin/ip-lookup", label: "IP Lookup", icon: Search },
   { href: "/admin/setup", label: "Setup", icon: Settings },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
