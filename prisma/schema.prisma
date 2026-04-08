@@ -341,3 +341,24 @@ model SiteSetting {
   value     String
   updatedAt DateTime @updatedAt
 }
+
+// ─── Staff ────────────────────────────────────────────────────────────────────
+
+enum StaffStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+model StaffMember {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  passwordHash String
+  name         String
+  status       StaffStatus @default(PENDING)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([email])
+  @@index([status])
+}

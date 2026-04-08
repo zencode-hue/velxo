@@ -26,6 +26,7 @@ const navItems = [
   { href: "/admin/webhook-logs", label: "Webhook Logs", icon: Webhook },
   { href: "/admin/audit-log", label: "Audit Log", icon: ClipboardList },
   { href: "/admin/ip-lookup", label: "IP Lookup", icon: Search },
+  { href: "/admin/staff", label: "Staff", icon: Users },
   { href: "/admin/setup", label: "Setup", icon: Settings },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];

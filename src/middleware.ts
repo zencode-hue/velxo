@@ -44,9 +44,17 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  // ── Staff route protection ───────────────────────────────────────────────
+  if (pathname.startsWith("/staff") && !pathname.startsWith("/staff-login") && !pathname.startsWith("/staff-register")) {
+    const staffCookie = request.cookies.get("staff-session");
+    if (!staffCookie) {
+      return NextResponse.redirect(new URL("/staff-login", request.url));
+    }
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/api/v1/:path*", "/admin/:path*"],
+  matcher: ["/api/v1/:path*", "/admin/:path*", "/staff/:path*"],
 };
