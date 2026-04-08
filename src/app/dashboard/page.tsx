@@ -134,10 +134,14 @@ export default async function DashboardPage() {
           totalReferrals: partnerAffiliate._count.referrals,
           cryptoWallet: partnerAffiliate.cryptoWallet,
           walletType: partnerAffiliate.walletType,
-          status: partnerAffiliate.status,
+          status: String(partnerAffiliate.status),
           payoutRequests: partnerAffiliate.payoutRequests.map((p) => ({
-            ...p,
+            id: p.id,
             amount: Number(p.amount),
+            status: String(p.status),
+            createdAt: p.createdAt.toISOString(),
+            txHash: p.txHash ?? null,
+            walletType: p.walletType,
           })),
         } : null}
       />
