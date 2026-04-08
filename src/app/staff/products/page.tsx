@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { requireStaff } from "@/lib/staff-auth";
 import { Package } from "lucide-react";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ export default async function StaffProductsPage() {
               <th className="text-right px-5 py-3">Price</th>
               <th className="text-right px-5 py-3">Stock</th>
               <th className="text-center px-5 py-3">Status</th>
+              <th className="text-right px-5 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +49,11 @@ export default async function StaffProductsPage() {
                 </td>
                 <td className="px-5 py-3 text-center">
                   <span className={p.isActive ? "badge-green" : "badge-red"}>{p.isActive ? "Active" : "Inactive"}</span>
+                </td>
+                <td className="px-5 py-3 text-right">
+                  <Link href={`/staff/inventory/${p.id}`} className="text-xs text-purple-400 hover:text-purple-300 transition-colors">
+                    Add Stock
+                  </Link>
                 </td>
               </tr>
             ))}

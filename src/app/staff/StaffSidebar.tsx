@@ -4,13 +4,15 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import VelxoLogo from "@/components/VelxoLogo";
-import { LayoutDashboard, ShoppingCart, Package, AlertTriangle, Menu, LogOut, ExternalLink } from "lucide-react";
+import { LayoutDashboard, ShoppingCart, Package, AlertTriangle, Menu, LogOut, ExternalLink, Users, User } from "lucide-react";
 
 const navItems = [
   { href: "/staff", label: "Dashboard", icon: LayoutDashboard },
   { href: "/staff/orders", label: "Orders", icon: ShoppingCart },
   { href: "/staff/products", label: "Products", icon: Package },
   { href: "/staff/pending-stock", label: "Pending Stock", icon: AlertTriangle },
+  { href: "/staff/customers", label: "Customers", icon: Users },
+  { href: "/staff/profile", label: "My Profile", icon: User },
 ];
 
 function NavLinks({ pathname, onClick }: { pathname: string; onClick?: () => void }) {
