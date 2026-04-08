@@ -21,6 +21,7 @@ const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/discounts", label: "Discounts", icon: Tag },
   { href: "/admin/affiliates", label: "Affiliates", icon: UserCheck },
+  { href: "/admin/partners", label: "Partners", icon: TrendingUp },
   { href: "/admin/blog", label: "Blog", icon: FileText },
   { href: "/admin/email", label: "Email Center", icon: Mail },
   { href: "/admin/webhook-logs", label: "Webhook Logs", icon: Webhook },

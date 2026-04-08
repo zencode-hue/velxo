@@ -4,10 +4,11 @@ import type { Metadata } from "next";
 import { getServerSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { decrypt } from "@/lib/crypto";
-import { Package, ShoppingBag, Star, Users, Wallet } from "lucide-react";
+import { Package, ShoppingBag, Star, Wallet } from "lucide-react";
 import AffiliateSection from "./AffiliateSection";
 import BalanceSection from "./BalanceSection";
 import CopyButton from "./CopyButton";
+import PartnerSection from "./PartnerSection";
 
 export const metadata: Metadata = {
   title: "Dashboard — Velxo",
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 async function getDashboardData(userId: string) {
-  const [user, orders, affiliate] = await Promise.all([
+  const [user, orders, affiliate, partnerAffiliate] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db.user.findUnique as any)({ where: { id: userId }, select: { balance: true, email: true, name: true } }) as Promise<{ balance: { toString(): string }; email: string; name: string | null } | null>,
     db.order.findMany({
@@ -27,6 +28,17 @@ async function getDashboardData(userId: string) {
       },
     }),
     db.affiliate.findUnique({ where: { userId }, include: { _count: { select: { referrals: true } } } }),
+    db.partnerAffiliate.findUnique({
+      where: { userId },
+      include: {
+        _count: { select: { referrals: true } },
+        payoutRequests: {
+          orderBy: { createdAt: "desc" },
+          take: 5,
+          select: { id: true, amount: true, status: true, createdAt: true, txHash: true, walletType: true },
+        },
+      },
+    }),
   ]);
 
   const ordersWithCredentials = orders.map((order) => {
@@ -48,7 +60,7 @@ async function getDashboardData(userId: string) {
     };
   });
 
-  return { user, orders: ordersWithCredentials, affiliate };
+  return { user, orders: ordersWithCredentials, affiliate, partnerAffiliate };
 }
 
 const STATUS_BADGE: Record<string, string> = {
@@ -63,7 +75,7 @@ export default async function DashboardPage() {
   const session = await getServerSession();
   if (!session?.user?.id) redirect("/auth/login");
 
-  const { user, orders, affiliate } = await getDashboardData(session.user.id);
+  const { user, orders, affiliate, partnerAffiliate } = await getDashboardData(session.user.id);
   const appUrl = "https://velxo.shop";
   const balance = Number(user?.balance ?? 0);
 
@@ -97,7 +109,7 @@ export default async function DashboardPage() {
       {/* Balance section */}
       <BalanceSection balance={balance} />
 
-      {/* Affiliate section */}
+      {/* Promo Affiliate section */}
       <AffiliateSection
         affiliate={affiliate ? {
           referralCode: affiliate.referralCode,
@@ -106,6 +118,27 @@ export default async function DashboardPage() {
           totalEarned: Number(affiliate.totalEarned),
           pendingPayout: Number(affiliate.pendingPayout),
           commissionPct: Number(affiliate.commissionPct),
+        } : null}
+      />
+
+      {/* Partner Affiliate section */}
+      <PartnerSection
+        partner={partnerAffiliate ? {
+          id: partnerAffiliate.id,
+          referralCode: partnerAffiliate.referralCode,
+          referralLink: `${appUrl}/auth/register?pref=${partnerAffiliate.referralCode}`,
+          commissionPct: Number(partnerAffiliate.commissionPct),
+          balance: Number(partnerAffiliate.balance),
+          totalEarned: Number(partnerAffiliate.totalEarned),
+          totalPaidOut: Number(partnerAffiliate.totalPaidOut),
+          totalReferrals: partnerAffiliate._count.referrals,
+          cryptoWallet: partnerAffiliate.cryptoWallet,
+          walletType: partnerAffiliate.walletType,
+          status: partnerAffiliate.status,
+          payoutRequests: partnerAffiliate.payoutRequests.map((p) => ({
+            ...p,
+            amount: Number(p.amount),
+          })),
         } : null}
       />
 

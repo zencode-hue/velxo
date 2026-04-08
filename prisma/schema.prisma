@@ -61,6 +61,7 @@ model User {
   orders             Order[]
   reviews            Review[]
   affiliate          Affiliate?
+  partnerAffiliate   PartnerAffiliate?
   sessions           Session[]
   loginAttempts      LoginAttempt[]
   balanceTransactions BalanceTransaction[]
@@ -355,10 +356,80 @@ model StaffMember {
   email        String      @unique
   passwordHash String
   name         String
+  position     String?     // e.g. "Support Agent", "Inventory Manager"
+  bio          String?
+  phone        String?
+  avatarUrl    String?
   status       StaffStatus @default(PENDING)
+  joinedAt     DateTime?
+  lastActiveAt DateTime?
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
   @@index([email])
+  @@index([status])
+}
+
+// ─── Partner Affiliate (paid, can withdraw) ───────────────────────────────────
+
+enum PartnerAffiliateStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+enum PayoutStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model PartnerAffiliate {
+  id            String                 @id @default(cuid())
+  userId        String                 @unique
+  referralCode  String                 @unique
+  commissionPct Decimal                @default(15) @db.Decimal(5, 2)
+  balance       Decimal                @default(0) @db.Decimal(10, 2)
+  totalEarned   Decimal                @default(0) @db.Decimal(10, 2)
+  totalPaidOut  Decimal                @default(0) @db.Decimal(10, 2)
+  cryptoWallet  String?
+  walletType    String?                // "BTC" | "ETH" | "USDT_TRC20" | "USDT_ERC20" | "BNB"
+  status        PartnerAffiliateStatus @default(PENDING)
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+
+  user           User                   @relation(fields: [userId], references: [id])
+  referrals      PartnerReferral[]
+  payoutRequests PartnerPayoutRequest[]
+
+  @@index([referralCode])
+  @@index([status])
+}
+
+model PartnerReferral {
+  id                String   @id @default(cuid())
+  partnerAffiliateId String
+  referredUserId    String   @unique
+  commissionEarned  Decimal  @default(0) @db.Decimal(10, 2)
+  createdAt         DateTime @default(now())
+
+  partnerAffiliate PartnerAffiliate @relation(fields: [partnerAffiliateId], references: [id])
+}
+
+model PartnerPayoutRequest {
+  id                 String       @id @default(cuid())
+  partnerAffiliateId String
+  amount             Decimal      @db.Decimal(10, 2)
+  cryptoWallet       String
+  walletType         String
+  status             PayoutStatus @default(PENDING)
+  adminNote          String?
+  txHash             String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  partnerAffiliate PartnerAffiliate @relation(fields: [partnerAffiliateId], references: [id])
+
+  @@index([partnerAffiliateId])
   @@index([status])
 }

@@ -16,7 +16,7 @@ export default async function AdminStaffPage() {
 
   const staff = await db.staffMember.findMany({
     orderBy: { createdAt: "desc" },
-    select: { id: true, name: true, email: true, status: true, createdAt: true },
+    select: { id: true, name: true, email: true, position: true, status: true, joinedAt: true, createdAt: true },
   });
 
   const pending = staff.filter((s) => s.status === "PENDING").length;
@@ -47,6 +47,7 @@ export default async function AdminStaffPage() {
               <tr className="border-b border-white/5 text-gray-500 text-xs uppercase">
                 <th className="text-left px-5 py-3">Name</th>
                 <th className="text-left px-5 py-3">Email</th>
+                <th className="text-left px-5 py-3">Position</th>
                 <th className="text-center px-5 py-3">Status</th>
                 <th className="text-left px-5 py-3">Joined</th>
                 <th className="text-right px-5 py-3">Actions</th>
@@ -57,12 +58,15 @@ export default async function AdminStaffPage() {
                 <tr key={s.id} className="border-b border-white/5 hover:bg-white/2">
                   <td className="px-5 py-3 text-white font-medium">{s.name}</td>
                   <td className="px-5 py-3 text-gray-400 text-xs">{s.email}</td>
+                  <td className="px-5 py-3 text-gray-400 text-xs">{s.position ?? <span className="text-gray-600 italic">Not set</span>}</td>
                   <td className="px-5 py-3 text-center">
                     <span className={STATUS_BADGE[s.status] ?? "badge-purple"}>{s.status}</span>
                   </td>
-                  <td className="px-5 py-3 text-gray-500 text-xs">{new Date(s.createdAt).toLocaleDateString()}</td>
+                  <td className="px-5 py-3 text-gray-500 text-xs">
+                    {new Date(s.joinedAt ?? s.createdAt).toLocaleDateString()}
+                  </td>
                   <td className="px-5 py-3 text-right">
-                    <StaffActions staffId={s.id} currentStatus={s.status} />
+                    <StaffActions staffId={s.id} currentStatus={s.status} currentPosition={s.position} />
                   </td>
                 </tr>
               ))}
