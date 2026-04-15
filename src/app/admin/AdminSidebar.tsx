@@ -7,7 +7,7 @@ import VelxoLogo from "@/components/VelxoLogo";
 import {
   LayoutDashboard, Package, ShoppingCart, Users,
   Tag, UserCheck, Settings, Menu,
-  ExternalLink, FileText, BarChart2,
+  TrendingUp, ExternalLink, FileText, BarChart2,
   AlertTriangle, Webhook, ClipboardList, Mail, Search,
 } from "lucide-react";
 
