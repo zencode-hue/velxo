@@ -7,7 +7,7 @@ import VelxoLogo from "@/components/VelxoLogo";
 import {
   LayoutDashboard, Package, ShoppingCart, Users,
   Tag, UserCheck, Settings, Menu,
-  TrendingUp, ExternalLink, FileText, BarChart2,
+  ExternalLink, FileText, BarChart2,
   AlertTriangle, Webhook, ClipboardList, Mail, Search,
 } from "lucide-react";
 
@@ -39,15 +39,18 @@ function NavLinks({ pathname, onClick }: { pathname: string; onClick?: () => voi
         const active = pathname === href || (href !== "/admin" && pathname.startsWith(href));
         return (
           <Link key={href} href={href} onClick={onClick}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
-              active
-                ? "text-white bg-blue-500/15 border border-blue-500/25"
-                : "text-gray-400 hover:text-white hover:bg-white/5"
-            }`}>
-            <Icon size={16} className={active ? "text-blue-400" : ""} />
+            style={{
+              display: "flex", alignItems: "center", gap: "10px",
+              padding: "9px 12px", borderRadius: "12px",
+              fontSize: "13px", fontWeight: 500,
+              transition: "all 0.15s ease",
+              color: active ? "#fff" : "rgba(255,255,255,0.4)",
+              background: active ? "rgba(255,255,255,0.08)" : "transparent",
+              border: active ? "1px solid rgba(255,255,255,0.1)" : "1px solid transparent",
+            }}>
+            <Icon size={15} style={{ color: active ? "#c4b5fd" : "rgba(255,255,255,0.35)", flexShrink: 0 }} />
             {label}
-            {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400" />}
-          </Link>
+            {active && <div style={{ marginLeft: "auto", width: "5px", height: "5px", borderRadius: "50%", background: "#a78bfa" }} />}          </Link>
         );
       })}
     </nav>
@@ -65,47 +68,46 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex w-60 shrink-0 border-r border-white/5 bg-[#0d0f14] flex-col fixed h-full z-30">
-        <div className="h-16 flex items-center gap-2.5 px-5 border-b border-white/5 shrink-0">
-          <VelxoLogo size={28} />
-          <span className="font-bold text-white">Velxo Shop</span>
-          <TrendingUp size={14} className="text-blue-400 ml-auto" />
+      <aside className="hidden lg:flex w-60 shrink-0 flex-col fixed h-full z-30"
+        style={{ background: "rgba(6,6,6,0.95)", borderRight: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(24px)" }}>
+        <div className="h-16 flex items-center gap-2.5 px-5 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+          <VelxoLogo size={26} />
+          <span className="font-bold text-white text-sm">Velxo</span>
+          <span className="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ background: "rgba(167,139,250,0.12)", color: "#c4b5fd", border: "1px solid rgba(167,139,250,0.2)" }}>ADMIN</span>
         </div>
         <NavLinks pathname={pathname} />
-        <div className="p-4 border-t border-white/5 shrink-0">
-          <Link href="/" target="_blank" className="flex items-center gap-2 text-xs text-slate-600 hover:text-slate-300 transition-colors">
+        <div className="p-4 shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+          <Link href="/" target="_blank" className="flex items-center gap-2 text-xs transition-colors" style={{ color: "rgba(255,255,255,0.3)" }}>
             <ExternalLink size={12} /> View Store
           </Link>
         </div>
       </aside>
 
       {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center gap-3 px-4 h-14 border-b border-white/5 bg-[#0d0f14]">
-        <button onClick={() => setOpen(true)} className="text-slate-400 hover:text-white transition-colors">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center gap-3 px-4 h-14"
+        style={{ background: "rgba(6,6,6,0.95)", borderBottom: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(24px)" }}>
+        <button onClick={() => setOpen(true)} className="transition-colors" style={{ color: "rgba(255,255,255,0.5)" }}>
           <Menu size={20} />
         </button>
-        <div className="flex items-center gap-2">
-          <VelxoLogo size={24} />
-          <span className="font-bold text-white text-sm">Velxo Admin</span>
-        </div>
-        <span className="ml-auto text-xs text-slate-500">{currentLabel}</span>
+        <VelxoLogo size={22} />
+        <span className="font-bold text-white text-sm">Velxo Admin</span>
+        <span className="ml-auto text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>{currentLabel}</span>
       </div>
 
-      {/* Mobile spacer */}
       <div className="lg:hidden h-14" />
 
-      {/* Mobile drawer */}
       {open && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
-          <div className="fixed inset-0 bg-black/70" onClick={() => setOpen(false)} />
-          <aside className="relative w-64 bg-[#0d0f14] border-r border-white/5 flex flex-col z-50 h-full">
-            <div className="h-14 flex items-center gap-2.5 px-5 border-b border-white/5 shrink-0">
-              <VelxoLogo size={24} />
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-xl" onClick={() => setOpen(false)} />
+          <aside className="relative w-64 flex flex-col z-50 h-full"
+            style={{ background: "rgba(6,6,6,0.98)", borderRight: "1px solid rgba(255,255,255,0.07)" }}>
+            <div className="h-14 flex items-center gap-2.5 px-5 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+              <VelxoLogo size={22} />
               <span className="font-bold text-white text-sm">Velxo Admin</span>
             </div>
             <NavLinks pathname={pathname} onClick={() => setOpen(false)} />
-            <div className="p-4 border-t border-white/5 shrink-0">
-              <Link href="/" className="flex items-center gap-2 text-xs text-slate-600 hover:text-slate-300 transition-colors">
+            <div className="p-4 shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+              <Link href="/" className="flex items-center gap-2 text-xs transition-colors" style={{ color: "rgba(255,255,255,0.3)" }}>
                 <ExternalLink size={12} /> View Store
               </Link>
             </div>

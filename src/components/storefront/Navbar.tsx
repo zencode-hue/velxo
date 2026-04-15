@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import VelxoLogo from "@/components/VelxoLogo";
-import { Menu, X, Search, User, Zap } from "lucide-react";
+import { Menu, X, Search, User, Zap, ShoppingBag } from "lucide-react";
 
 const navLinks = [
   { href: "/products", label: "Products" },
@@ -21,7 +21,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 12);
+    const handler = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
@@ -30,37 +30,39 @@ export default function Navbar() {
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          scrolled
-            ? "bg-[#0a0b0f]/95 backdrop-blur-xl border-b border-[#1e2535]/80 shadow-lg shadow-black/20"
-            : "bg-transparent"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2.5 font-bold text-lg shrink-0">
-              <VelxoLogo size={26} />
-              <span style={{
-                background: "linear-gradient(135deg, #60a5fa, #818cf8)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}>
-                Velxo
-              </span>
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4">
+        <header
+          className="w-full max-w-5xl transition-all duration-500"
+          style={{
+            background: scrolled
+              ? "rgba(8,8,8,0.85)"
+              : "rgba(255,255,255,0.04)",
+            backdropFilter: "blur(40px) saturate(200%)",
+            WebkitBackdropFilter: "blur(40px) saturate(200%)",
+            border: "1px solid rgba(255,255,255,0.09)",
+            borderRadius: "20px",
+            boxShadow: scrolled
+              ? "0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)"
+              : "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)",
+          }}
+        >
+          <div className="flex items-center justify-between px-5 h-14">
+            <Link href="/" className="flex items-center gap-2.5 shrink-0">
+              <VelxoLogo size={24} />
+              <span className="font-bold text-base text-white tracking-tight">Velxo</span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-0.5">
               {navLinks.map(({ href, label }) => {
                 const active = pathname === href || pathname.startsWith(href + "/");
                 return (
                   <Link key={href} href={href}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
-                      active
-                        ? "text-white bg-blue-500/15 border border-blue-500/20"
-                        : "text-slate-400 hover:text-white hover:bg-white/5"
-                    }`}>
+                    className="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-150"
+                    style={{
+                      color: active ? "#fff" : "rgba(248,250,252,0.5)",
+                      background: active ? "rgba(255,255,255,0.09)" : "transparent",
+                      border: active ? "1px solid rgba(255,255,255,0.1)" : "1px solid transparent",
+                    }}>
                     {label}
                   </Link>
                 );
@@ -69,83 +71,89 @@ export default function Navbar() {
 
             <div className="flex items-center gap-2">
               <Link href="/search"
-                className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+                className="p-2 rounded-xl transition-all duration-150"
+                style={{ color: "rgba(248,250,252,0.5)" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.07)"; (e.currentTarget as HTMLElement).style.color = "#fff"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "rgba(248,250,252,0.5)"; }}
                 aria-label="Search">
-                <Search size={18} />
+                <Search size={17} />
               </Link>
 
               {session ? (
                 <Link href="/dashboard"
-                  className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">
-                  <User size={15} /> Dashboard
+                  className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150"
+                  style={{ color: "rgba(248,250,252,0.6)", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <User size={14} /> Dashboard
                 </Link>
               ) : (
                 <Link href="/auth/login"
-                  className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">
-                  <User size={15} /> Sign In
+                  className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150"
+                  style={{ color: "rgba(248,250,252,0.6)", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <User size={14} /> Sign In
                 </Link>
               )}
 
               <Link href="/products"
-                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all hover:-translate-y-0.5"
+                className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 relative overflow-hidden"
                 style={{
-                  background: "linear-gradient(135deg, #3b82f6, #6366f1)",
-                  boxShadow: "0 2px 12px rgba(59,130,246,0.3)",
+                  background: "rgba(167,139,250,0.15)",
+                  border: "1px solid rgba(167,139,250,0.3)",
+                  boxShadow: "0 0 20px rgba(167,139,250,0.15), inset 0 1px 0 rgba(255,255,255,0.1)",
                 }}>
-                <Zap size={14} /> Shop Now
+                <Zap size={13} /> Shop
               </Link>
 
-              <button
-                onClick={() => setOpen(!open)}
-                className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-all"
-                aria-label="Toggle menu">
-                {open ? <X size={20} /> : <Menu size={20} />}
+              <button onClick={() => setOpen(!open)}
+                className="md:hidden p-2 rounded-xl transition-all"
+                style={{ color: "rgba(248,250,252,0.6)" }}
+                aria-label="Menu">
+                {open ? <X size={19} /> : <Menu size={19} />}
               </button>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
-      <div className="h-16" />
+      <div className="h-20" />
 
       {open && (
-        <div className="md:hidden fixed inset-0 z-30 flex flex-col pt-16">
-          <div className="absolute inset-0 bg-[#0a0b0f]/98 backdrop-blur-xl" onClick={() => setOpen(false)} />
-          <nav className="relative z-10 flex flex-col p-4 space-y-1 border-b border-[#1e2535]">
-            {navLinks.map(({ href, label }) => {
-              const active = pathname === href || pathname.startsWith(href + "/");
-              return (
-                <Link key={href} href={href}
-                  className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                    active
-                      ? "text-white bg-blue-500/15 border border-blue-500/20"
-                      : "text-slate-400 hover:text-white hover:bg-white/5"
-                  }`}>
-                  {label}
-                </Link>
-              );
-            })}
-            <div className="pt-2 space-y-2">
+        <div className="md:hidden fixed inset-0 z-40 pt-20 px-4">
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" onClick={() => setOpen(false)} />
+          <div className="relative rounded-2xl overflow-hidden"
+            style={{ background: "rgba(12,12,12,0.95)", border: "1px solid rgba(255,255,255,0.1)", backdropFilter: "blur(40px)" }}>
+            <nav className="flex flex-col p-3 gap-1">
+              {navLinks.map(({ href, label }) => {
+                const active = pathname === href || pathname.startsWith(href + "/");
+                return (
+                  <Link key={href} href={href}
+                    className="flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all"
+                    style={{
+                      color: active ? "#fff" : "rgba(248,250,252,0.55)",
+                      background: active ? "rgba(255,255,255,0.08)" : "transparent",
+                    }}>
+                    {label}
+                  </Link>
+                );
+              })}
+              <div className="border-t my-2" style={{ borderColor: "rgba(255,255,255,0.06)" }} />
               {session ? (
-                <Link href="/dashboard"
-                  className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">
-                  <User size={15} /> Dashboard
+                <Link href="/dashboard" className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium" style={{ color: "rgba(248,250,252,0.6)" }}>
+                  <User size={14} /> Dashboard
                 </Link>
               ) : (
                 <>
-                  <Link href="/auth/login"
-                    className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">
-                    <User size={15} /> Sign In
+                  <Link href="/auth/login" className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium" style={{ color: "rgba(248,250,252,0.6)" }}>
+                    <User size={14} /> Sign In
                   </Link>
                   <Link href="/auth/register"
-                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-white"
-                    style={{ background: "linear-gradient(135deg, #3b82f6, #6366f1)" }}>
-                    Get Started
+                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-white mt-1"
+                    style={{ background: "rgba(167,139,250,0.15)", border: "1px solid rgba(167,139,250,0.3)" }}>
+                    <ShoppingBag size={14} /> Get Started
                   </Link>
                 </>
               )}
-            </div>
-          </nav>
+            </nav>
+          </div>
         </div>
       )}
     </>
