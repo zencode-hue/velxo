@@ -4,64 +4,15 @@ import type { Metadata } from "next";
 import { getServerSession } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { decrypt } from "@/lib/crypto";
-import { Package, ShoppingBag, Star, Wallet } from "lucide-react";
-import AffiliateSection from "./AffiliateSection";
-import BalanceSection from "./BalanceSection";
+import { Package, ShoppingBag, Wallet, Star, ArrowRight, TrendingUp } from "lucide-react";
 import CopyButton from "./CopyButton";
-import PartnerSection from "./PartnerSection";
 
 export const metadata: Metadata = {
   title: "Dashboard — Velxo",
-  description: "View your orders, balance, and affiliate stats.",
+  description: "Your Velxo account overview.",
 };
 
-async function getDashboardData(userId: string) {
-  const [user, orders, affiliate, partnerAffiliate] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (db.user.findUnique as any)({ where: { id: userId }, select: { balance: true, email: true, name: true } }) as Promise<{ balance: { toString(): string }; email: string; name: string | null } | null>,
-    db.order.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      include: {
-        product: { select: { title: true, category: true } },
-        deliveryLog: { include: { inventoryItem: { select: { encryptedData: true, iv: true, authTag: true } } } },
-      },
-    }),
-    db.affiliate.findUnique({ where: { userId }, include: { _count: { select: { referrals: true } } } }),
-    db.partnerAffiliate.findUnique({
-      where: { userId },
-      include: {
-        _count: { select: { referrals: true } },
-        payoutRequests: {
-          orderBy: { createdAt: "desc" },
-          take: 5,
-          select: { id: true, amount: true, status: true, createdAt: true, txHash: true, walletType: true },
-        },
-      },
-    }),
-  ]);
-
-  const ordersWithCredentials = orders.map((order) => {
-    let credentials: string | null = null;
-    if (order.deliveryLog?.inventoryItem) {
-      try {
-        const { encryptedData, iv, authTag } = order.deliveryLog.inventoryItem;
-        credentials = decrypt(encryptedData, iv, authTag);
-      } catch { credentials = null; }
-    }
-    return {
-      id: order.id,
-      productTitle: order.product.title,
-      productCategory: order.product.category,
-      amount: Number(order.amount),
-      status: order.status,
-      createdAt: order.createdAt,
-      credentials,
-    };
-  });
-
-  return { user, orders: ordersWithCredentials, affiliate, partnerAffiliate };
-}
+export const dynamic = "force-dynamic";
 
 const STATUS_BADGE: Record<string, string> = {
   PAID: "badge-green", PENDING: "badge-yellow", FAILED: "badge-red",
@@ -75,125 +26,146 @@ export default async function DashboardPage() {
   const session = await getServerSession();
   if (!session?.user?.id) redirect("/auth/login");
 
-  const { user, orders, affiliate, partnerAffiliate } = await getDashboardData(session.user.id);
-  const appUrl = "https://velxo.shop";
+  const [user, orders, affiliate, partnerAffiliate] = await Promise.all([
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (db.user.findUnique as any)({ where: { id: session.user.id }, select: { balance: true, name: true, email: true, createdAt: true } }),
+    db.order.findMany({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      include: {
+        product: { select: { title: true, category: true } },
+        deliveryLog: { include: { inventoryItem: { select: { encryptedData: true, iv: true, authTag: true } } } },
+      },
+    }),
+    db.affiliate.findUnique({ where: { userId: session.user.id } }),
+    db.partnerAffiliate.findUnique({ where: { userId: session.user.id } }),
+  ]);
+
   const balance = Number(user?.balance ?? 0);
+  const totalOrders = await db.order.count({ where: { userId: session.user.id } });
+  const deliveredOrders = await db.order.count({ where: { userId: session.user.id, status: "PAID" } });
+
+  const recentOrders = orders.map((order: {
+    id: string; amount: unknown; status: string; createdAt: Date;
+    product: { title: string; category: string };
+    deliveryLog?: { inventoryItem?: { encryptedData: string; iv: string; authTag: string } | null } | null;
+  }) => {
+    let credentials: string | null = null;
+    if (order.deliveryLog?.inventoryItem) {
+      try { credentials = decrypt(order.deliveryLog.inventoryItem.encryptedData, order.deliveryLog.inventoryItem.iv, order.deliveryLog.inventoryItem.authTag); }
+      catch { credentials = null; }
+    }
+    return { ...order, amount: Number(order.amount), credentials };
+  });
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-        <p className="text-gray-500 mt-1">Welcome back, {session.user.name ?? session.user.email}</p>
+    <div>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-white">Welcome back, {user?.name ?? session.user.email} 👋</h1>
+        <p className="text-gray-500 text-sm mt-1">Here&apos;s your account overview.</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <div className="glass-card p-5 flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-gray-500 text-sm"><ShoppingBag size={16} className="text-purple-400" />Orders</div>
-          <div className="text-2xl font-bold text-white">{orders.length}</div>
-        </div>
-        <div className="glass-card p-5 flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-gray-500 text-sm"><Package size={16} className="text-green-400" />Delivered</div>
-          <div className="text-2xl font-bold text-white">{orders.filter((o) => o.credentials).length}</div>
-        </div>
-        <div className="glass-card p-5 flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-gray-500 text-sm"><Wallet size={16} className="text-cyan-400" />Balance</div>
-          <div className="text-2xl font-bold text-cyan-400">${balance.toFixed(2)}</div>
-        </div>
-        <div className="glass-card p-5 flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-gray-500 text-sm"><Star size={16} className="text-yellow-400" />Earned</div>
-          <div className="text-2xl font-bold text-white">${(affiliate ? Number(affiliate.totalEarned) : 0).toFixed(2)}</div>
-        </div>
+        {[
+          { label: "Total Orders", value: totalOrders, icon: ShoppingBag, color: "text-purple-400", bg: "bg-purple-500/10" },
+          { label: "Delivered", value: deliveredOrders, icon: Package, color: "text-green-400", bg: "bg-green-500/10" },
+          { label: "Balance", value: `$${balance.toFixed(2)}`, icon: Wallet, color: "text-cyan-400", bg: "bg-cyan-500/10" },
+          { label: "Promo Earned", value: `$${Number(affiliate?.totalEarned ?? 0).toFixed(2)}`, icon: Star, color: "text-yellow-400", bg: "bg-yellow-500/10" },
+        ].map((s) => (
+          <div key={s.label} className="glass-card p-5">
+            <div className={`w-9 h-9 rounded-xl ${s.bg} flex items-center justify-center mb-3`}>
+              <s.icon size={16} className={s.color} />
+            </div>
+            <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
+            <div className="text-xs text-gray-500 mt-1">{s.label}</div>
+          </div>
+        ))}
       </div>
 
-      {/* Balance section */}
-      <BalanceSection balance={balance} />
+      {/* Quick links */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <Link href="/dashboard/wallet" className="glass-card p-4 flex items-center justify-between hover:border-cyan-500/40 transition-colors group">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-cyan-500/10 flex items-center justify-center">
+              <Wallet size={16} className="text-cyan-400" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-white">Top Up Wallet</p>
+              <p className="text-xs text-gray-500">${balance.toFixed(2)} available</p>
+            </div>
+          </div>
+          <ArrowRight size={14} className="text-gray-600 group-hover:text-cyan-400 transition-colors" />
+        </Link>
+        <Link href="/dashboard/affiliate" className="glass-card p-4 flex items-center justify-between hover:border-purple-500/40 transition-colors group">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-purple-500/10 flex items-center justify-center">
+              <TrendingUp size={16} className="text-purple-400" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-white">Promo Affiliate</p>
+              <p className="text-xs text-gray-500">{affiliate ? "Active" : "Join now"}</p>
+            </div>
+          </div>
+          <ArrowRight size={14} className="text-gray-600 group-hover:text-purple-400 transition-colors" />
+        </Link>
+        <Link href="/dashboard/partner" className="glass-card p-4 flex items-center justify-between hover:border-green-500/40 transition-colors group">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-green-500/10 flex items-center justify-center">
+              <Star size={16} className="text-green-400" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-white">Partner Program</p>
+              <p className="text-xs text-gray-500">{partnerAffiliate ? `${partnerAffiliate.status}` : "Apply now"}</p>
+            </div>
+          </div>
+          <ArrowRight size={14} className="text-gray-600 group-hover:text-green-400 transition-colors" />
+        </Link>
+      </div>
 
-      {/* Promo Affiliate section */}
-      <AffiliateSection
-        affiliate={affiliate ? {
-          referralCode: affiliate.referralCode,
-          referralLink: `${appUrl}/auth/register?ref=${affiliate.referralCode}`,
-          totalReferrals: affiliate._count.referrals,
-          totalEarned: Number(affiliate.totalEarned),
-          pendingPayout: Number(affiliate.pendingPayout),
-          commissionPct: Number(affiliate.commissionPct),
-        } : null}
-      />
-
-      {/* Partner Affiliate section */}
-      <PartnerSection
-        partner={partnerAffiliate ? {
-          id: partnerAffiliate.id,
-          referralCode: partnerAffiliate.referralCode,
-          referralLink: `${appUrl}/auth/register?pref=${partnerAffiliate.referralCode}`,
-          commissionPct: Number(partnerAffiliate.commissionPct),
-          balance: Number(partnerAffiliate.balance),
-          totalEarned: Number(partnerAffiliate.totalEarned),
-          totalPaidOut: Number(partnerAffiliate.totalPaidOut),
-          totalReferrals: partnerAffiliate._count.referrals,
-          cryptoWallet: partnerAffiliate.cryptoWallet,
-          walletType: partnerAffiliate.walletType,
-          status: String(partnerAffiliate.status),
-          payoutRequests: partnerAffiliate.payoutRequests.map((p) => ({
-            id: p.id,
-            amount: Number(p.amount),
-            status: String(p.status),
-            createdAt: p.createdAt.toISOString(),
-            txHash: p.txHash ?? null,
-            walletType: p.walletType,
-          })),
-        } : null}
-      />
-
-      {/* Orders */}
-      <h2 className="text-xl font-bold text-white mb-5 flex items-center gap-2">
-        <ShoppingBag size={18} className="text-purple-400" /> Order History
-      </h2>
-
-      {orders.length === 0 ? (
-        <div className="glass-card p-12 text-center text-gray-500">
-          <Package size={40} className="mx-auto mb-4 opacity-30" />
-          <p className="font-medium">No orders yet</p>
-          <Link href="/products" className="btn-primary mt-4 inline-flex text-sm px-6 py-2">Browse Products</Link>
+      {/* Recent orders */}
+      <div className="glass-card">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
+          <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+            <ShoppingBag size={15} className="text-purple-400" /> Recent Orders
+          </h2>
+          <Link href="/dashboard/orders" className="text-xs text-orange-400 hover:text-orange-300 transition-colors">View all</Link>
         </div>
-      ) : (
-        <div className="space-y-4">
-          {orders.map((order) => (
-            <div key={order.id} className="glass-card p-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
-                <div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-semibold text-white">{order.productTitle}</span>
-                    <span className="badge-purple text-xs">{CATEGORY_LABELS[order.productCategory] ?? order.productCategory}</span>
-                    <span className={`${STATUS_BADGE[order.status] ?? "badge-purple"} text-xs`}>{order.status}</span>
+        {recentOrders.length === 0 ? (
+          <div className="p-12 text-center text-gray-600">
+            <Package size={32} className="mx-auto mb-3 opacity-30" />
+            <p className="text-sm">No orders yet</p>
+            <Link href="/products" className="btn-primary mt-4 inline-flex text-sm px-5 py-2">Browse Products</Link>
+          </div>
+        ) : (
+          <div className="divide-y divide-white/5">
+            {recentOrders.map((order) => (
+              <div key={order.id} className="px-5 py-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-medium text-white truncate">{order.product.title}</span>
+                      <span className={`${STATUS_BADGE[order.status] ?? "badge-purple"} text-xs`}>{order.status}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      <Link href={`/orders/${order.id}`} className="text-purple-400 hover:text-purple-300">#{order.id.slice(0, 8)}</Link>
+                      {" · "}{new Date(order.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    <Link href={`/orders/${order.id}`} className="text-purple-400 hover:text-purple-300 transition-colors">
-                      Order #{order.id.slice(0, 8)}
-                    </Link> · {new Date(order.createdAt).toLocaleDateString()}
-                  </p>
+                  <span className="text-sm font-bold text-white shrink-0">${order.amount.toFixed(2)}</span>
                 </div>
-                <span className="text-lg font-bold text-white">${order.amount.toFixed(2)}</span>
-              </div>
-
-              {order.credentials && (
-                <div className="mt-3 p-3 bg-black/40 rounded-lg border border-purple-600/20">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs text-gray-500">Credentials / License Key</span>
+                {order.credentials && (
+                  <div className="mt-2 p-2.5 bg-black/40 rounded-lg border border-purple-600/20 flex items-center justify-between gap-2">
+                    <code className="text-xs text-purple-300 truncate">{order.credentials}</code>
                     <CopyButton text={order.credentials} />
                   </div>
-                  <code className="text-sm text-purple-300 break-all">{order.credentials}</code>
-                </div>
-              )}
-
-              {order.status === "PENDING_STOCK" && (
-                <p className="text-xs text-yellow-400 mt-2">Awaiting stock — you will be notified when fulfilled.</p>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
