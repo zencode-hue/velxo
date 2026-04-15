@@ -46,20 +46,10 @@ export default async function BlogPage() {
             const cat = CATEGORY_COLORS[post.category] ?? CATEGORY_COLORS.General;
             return (
               <Link key={post.slug} href={`/blog/${post.slug}`}
-                className="group rounded-2xl p-6 transition-all duration-300"
+                className="group rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1"
                 style={{
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(255,255,255,0.07)",
-                }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.12)";
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
-                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                 }}>
                 <div className="flex items-start justify-between mb-4">
                   <span className="text-3xl">{post.emoji}</span>
@@ -68,7 +58,7 @@ export default async function BlogPage() {
                     {post.category}
                   </span>
                 </div>
-                <h2 className="text-base font-bold text-white mb-2 leading-snug group-hover:text-white/80 transition-colors">
+                <h2 className="text-base font-bold text-white mb-2 leading-snug group-hover:opacity-80 transition-opacity">
                   {post.title}
                 </h2>
                 <p className="text-sm leading-relaxed mb-4 line-clamp-2" style={{ color: "rgba(255,255,255,0.4)" }}>
