@@ -23,7 +23,7 @@
 
 /* ─── Base ───────────────────────────────────────────────────────────────────── */
 @layer base {
-  * { @apply border-0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; }
   html { @apply scroll-smooth; }
 
   body {
