@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 const STATUS_CONFIG: Record<string, { icon: typeof CheckCircle; color: string; bg: string; label: string; desc: string }> = {
   PAID: { icon: CheckCircle, color: "text-green-400", bg: "bg-green-500/10 border-green-500/20", label: "Delivered", desc: "Payment confirmed and product delivered." },
   PENDING: { icon: Clock, color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20", label: "Awaiting Payment", desc: "Complete your payment to receive your product." },
-  PENDING_STOCK: { icon: Clock, color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/20", label: "Processing", desc: "Payment received. Preparing your order." },
+  PENDING_STOCK: { icon: Clock, color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20", label: "Processing", desc: "Payment received. Preparing your order." },
   FAILED: { icon: XCircle, color: "text-red-400", bg: "bg-red-500/10 border-red-500/20", label: "Payment Failed", desc: "Payment could not be processed." },
   REFUNDED: { icon: CheckCircle, color: "text-purple-400", bg: "bg-purple-500/10 border-purple-500/20", label: "Refunded", desc: "This order has been refunded." },
 };
@@ -69,7 +69,7 @@ export default async function InvoicePage({ params }: { params: { id: string } }
   ];
 
   return (
-    <div className="min-h-screen px-4 py-12" style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.05) 0%, transparent 50%)" }}>
+    <div className="min-h-screen px-4 py-12" style={{ background: "#000" }}>
       <div className="max-w-2xl mx-auto">
         <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors mb-8">
           <ArrowLeft size={14} /> Velxo Shop
@@ -167,11 +167,11 @@ export default async function InvoicePage({ params }: { params: { id: string } }
 
         {/* Pending stock — Discord claim */}
         {order.status === "PENDING_STOCK" && (
-          <div className="rounded-2xl p-5 mb-4" style={{ background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.2)" }}>
-            <p className="text-sm font-semibold text-orange-400 mb-3">Claim Your Product on Discord</p>
-            <p className="text-xs text-gray-400 mb-3">Your payment was received but stock is temporarily unavailable. Join our Discord and share your Invoice ID to claim your product.</p>
-            <div className="flex items-center gap-2 p-3 rounded-xl mb-3" style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.15)" }}>
-              <code className="font-mono text-sm text-orange-300 flex-1 break-all">{order.id}</code>
+          <div className="rounded-2xl p-5 mb-4" style={{ background: "rgba(167,139,250,0.05)", border: "1px solid rgba(167,139,250,0.15)" }}>
+            <p className="text-sm font-semibold text-white mb-3">Claim Your Product on Discord</p>
+            <p className="text-xs mb-3" style={{ color: "rgba(255,255,255,0.4)" }}>Your payment was received but stock is temporarily unavailable. Join our Discord and share your Invoice ID to claim your product.</p>
+            <div className="flex items-center gap-2 p-3 rounded-xl mb-3" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <code className="font-mono text-sm text-white/70 flex-1 break-all">{order.id}</code>
               <CopyButton text={order.id} />
             </div>
             <a href="https://discord.gg/2b8AkfW6EP" target="_blank" rel="noopener noreferrer"

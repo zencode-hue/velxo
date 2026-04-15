@@ -4,6 +4,7 @@ import Image from "next/image";
 import { db } from "@/lib/db";
 import ProductCard from "@/components/storefront/ProductCard";
 import ProductActions from "./ProductActions";
+import PriceDisplay from "@/components/storefront/PriceDisplay";
 import { Star, Package, CheckCircle, Zap, Shield, RefreshCw } from "lucide-react";
 import { extractProductId, productPath } from "@/lib/slug";
 
@@ -155,7 +156,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
         {/* Left — Image */}
         <div className="space-y-4">
-          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden" style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)" }}>
+          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
             {product.imageUrl ? (
               <Image src={product.imageUrl} alt={product.title} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" priority />
             ) : (
@@ -166,7 +167,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             )}
             {/* Best seller badge */}
             <div className="absolute top-3 left-3">
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold text-white" style={{ background: "linear-gradient(135deg, #f59e0b, #ef4444)" }}>
+              <span className="px-2.5 py-1 rounded-full text-xs font-bold text-white" style={{ background: "rgba(167,139,250,0.2)", border: "1px solid rgba(167,139,250,0.3)" }}>
                 🔥 BEST SELLER
               </span>
             </div>
@@ -179,7 +180,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               { icon: Shield, label: "Secure Payment", color: "text-green-400" },
               { icon: RefreshCw, label: "Replacement Guarantee", color: "text-blue-400" },
             ].map((b) => (
-              <div key={b.label} className="flex flex-col items-center gap-1.5 p-3 rounded-xl text-center" style={{ background: "rgba(17,17,17,0.8)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div key={b.label} className="flex flex-col items-center gap-1.5 p-3 rounded-xl text-center" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
                 <b.icon size={16} className={b.color} />
                 <span className="text-xs text-gray-500 leading-tight">{b.label}</span>
               </div>
@@ -219,8 +220,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
           {/* Price */}
           <div className="flex items-baseline gap-3">
-            <span className="text-4xl font-black text-white">${product.price.toFixed(2)}</span>
-            <span className="text-sm text-gray-500">USD</span>
+            <span className="text-4xl font-black text-white"><PriceDisplay usdAmount={product.price} /></span>
+            <span className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>USD base</span>
           </div>
 
           {/* Description */}
@@ -263,10 +264,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {product.reviews.map((review) => (
-              <div key={review.id} className="rounded-xl p-5" style={{ background: "rgba(17,17,17,0.8)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div key={review.id} className="rounded-xl p-5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ background: "linear-gradient(135deg, #7c3aed, #a78bfa)" }}>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white" style={{ background: "rgba(167,139,250,0.2)", border: "1px solid rgba(167,139,250,0.3)" }}>
                       {review.user.name?.[0]?.toUpperCase() ?? "U"}
                     </div>
                     <span className="text-sm font-medium text-white">{review.user.name ?? "Anonymous"}</span>

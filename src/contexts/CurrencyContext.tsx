@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { FALLBACK_RATES } from "@/lib/currency";
+import { FALLBACK_RATES, COUNTRY_CURRENCY } from "@/lib/currency";
 
 interface CurrencyContextType {
   currency: string;
@@ -23,24 +23,42 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
 
   const fetchRates = useCallback(async () => {
-    setLoading(true);
     try {
       const res = await fetch("https://open.er-api.com/v6/latest/USD");
       const data = await res.json();
       if (data.rates) setRates(data.rates);
     } catch {
-      // Use fallback rates silently
-    } finally {
-      setLoading(false);
+      // silently use fallback
     }
   }, []);
 
+  const detectCurrencyFromIP = useCallback(async () => {
+    try {
+      const res = await fetch("https://ipapi.co/json/");
+      const data = await res.json();
+      const countryCode = data.country_code as string;
+      const detected = COUNTRY_CURRENCY[countryCode];
+      if (detected) return detected;
+    } catch {
+      // fallback
+    }
+    return "USD";
+  }, []);
+
   useEffect(() => {
-    // Load saved currency
     const saved = localStorage.getItem("velxo_currency");
-    if (saved) setCurrencyState(saved);
-    fetchRates();
-  }, [fetchRates]);
+    if (saved) {
+      setCurrencyState(saved);
+      fetchRates();
+    } else {
+      // Auto-detect from IP
+      setLoading(true);
+      Promise.all([fetchRates(), detectCurrencyFromIP()]).then(([, detected]) => {
+        setCurrencyState(detected);
+        setLoading(false);
+      });
+    }
+  }, [fetchRates, detectCurrencyFromIP]);
 
   function setCurrency(c: string) {
     setCurrencyState(c);
