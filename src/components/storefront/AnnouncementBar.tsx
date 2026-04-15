@@ -25,7 +25,7 @@ export default function AnnouncementBar() {
 
   return (
     <div className="relative flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white"
-      style={{ background: "linear-gradient(90deg, #ea580c, #f97316, #ea580c)", backgroundSize: "200% 100%", animation: "shimmer 3s linear infinite" }}>
+      style={{ background: "linear-gradient(90deg, #3b82f6, #6366f1, #3b82f6)", backgroundSize: "200% 100%", animation: "shimmer 3s linear infinite" }}>
       <Zap size={14} className="text-yellow-300 shrink-0" />
       <Link href={link} className="hover:text-purple-200 transition-colors">{text}</Link>
       <button onClick={() => setVisible(false)} className="absolute right-3 text-white/60 hover:text-white transition-colors">

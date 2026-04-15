@@ -130,7 +130,7 @@ export default async function DashboardPage() {
           <h2 className="text-sm font-semibold text-white flex items-center gap-2">
             <ShoppingBag size={15} className="text-purple-400" /> Recent Orders
           </h2>
-          <Link href="/dashboard/orders" className="text-xs text-orange-400 hover:text-orange-300 transition-colors">View all</Link>
+          <Link href="/dashboard/orders" className="text-xs text-blue-400 hover:text-blue-300 transition-colors">View all</Link>
         </div>
         {recentOrders.length === 0 ? (
           <div className="p-12 text-center text-gray-600">

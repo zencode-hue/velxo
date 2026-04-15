@@ -67,7 +67,7 @@ export default async function StaffDashboardPage() {
         </div>
         {pendingStock > 0 && (
           <Link href="/staff/pending-stock"
-            className="flex items-center gap-2 text-sm text-orange-400 bg-orange-400/10 border border-orange-400/20 px-4 py-2 rounded-xl hover:bg-orange-400/20 transition-colors">
+            className="flex items-center gap-2 text-sm text-yellow-400 bg-yellow-400/10 border border-yellow-400/20 px-4 py-2 rounded-xl hover:bg-yellow-400/20 transition-colors">
             <AlertTriangle size={14} /> {pendingStock} pending stock order{pendingStock > 1 ? "s" : ""}
           </Link>
         )}
@@ -78,10 +78,10 @@ export default async function StaffDashboardPage() {
         {[
           { label: "Today's Revenue", value: `$${todayRev.toFixed(2)}`, icon: DollarSign, color: "text-green-400", bg: "bg-green-500/10", sub: `${todayOrders} orders` },
           { label: "Month Revenue", value: `$${monthRev.toFixed(2)}`, icon: TrendingUp, color: "text-cyan-400", bg: "bg-cyan-500/10", sub: `${weekOrders} this week` },
-          { label: "Pending Stock", value: pendingStock, icon: AlertTriangle, color: "text-orange-400", bg: "bg-orange-500/10", sub: "needs attention", link: "/staff/pending-stock" },
+          { label: "Pending Stock", value: pendingStock, icon: AlertTriangle, color: "text-yellow-400", bg: "bg-yellow-500/10", sub: "needs attention", link: "/staff/pending-stock" },
           { label: "Total Customers", value: totalCustomers, icon: Users, color: "text-purple-400", bg: "bg-purple-500/10", sub: `+${newCustomersWeek} this week` },
         ].map((s) => (
-          <div key={s.label} className={`glass-card p-5 ${s.link ? "cursor-pointer hover:border-orange-500/40 transition-colors" : ""}`}>
+          <div key={s.label} className={`glass-card p-5 ${s.link ? "cursor-pointer hover:border-blue-500/30 transition-colors" : ""}`}>
             {s.link ? (
               <Link href={s.link} className="block">
                 <StatCard {...s} />
@@ -117,7 +117,7 @@ export default async function StaffDashboardPage() {
           <h2 className="text-sm font-semibold text-white flex items-center gap-2">
             <ShoppingCart size={15} className="text-purple-400" /> Recent Orders
           </h2>
-          <Link href="/staff/orders" className="text-xs text-orange-400 hover:text-orange-300 transition-colors">View all</Link>
+          <Link href="/staff/orders" className="text-xs text-blue-400 hover:text-blue-300 transition-colors">View all</Link>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm min-w-[600px]">

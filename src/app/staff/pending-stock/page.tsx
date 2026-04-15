@@ -19,7 +19,7 @@ export default async function StaffPendingStockPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-        <AlertTriangle size={22} className="text-orange-400" /> Pending Stock Queue
+        <AlertTriangle size={22} className="text-yellow-400" /> Pending Stock Queue
       </h1>
       <p className="text-gray-500 text-sm mb-8">
         Paid orders waiting for inventory. Contact an admin to add stock and re-deliver.
@@ -48,7 +48,7 @@ export default async function StaffPendingStockPage() {
                 const waitingDays = Math.floor((Date.now() - new Date(o.createdAt).getTime()) / (1000 * 60 * 60 * 24));
                 return (
                   <tr key={o.id} className="border-b border-white/5 hover:bg-white/2">
-                    <td className="px-4 py-3 font-mono text-xs text-orange-400">{o.id.slice(0, 12)}…</td>
+                    <td className="px-4 py-3 font-mono text-xs text-blue-400">{o.id.slice(0, 12)}…</td>
                     <td className="px-4 py-3 text-gray-300 text-xs truncate max-w-[160px]">
                       {o.user?.email ?? (o as { guestEmail?: string | null }).guestEmail ?? "Guest"}
                     </td>

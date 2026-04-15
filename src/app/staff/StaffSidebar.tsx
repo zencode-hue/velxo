@@ -63,12 +63,12 @@ export default function StaffSidebar({ staffName, staffPosition }: { staffName: 
               return (
                 <Link key={href} href={href} onClick={onClick}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
-                    active ? "text-white bg-[#ea580c]/20 border border-[#ea580c]/30" : "text-gray-400 hover:text-white hover:bg-white/5"
+                    active ? "text-white bg-blue-500/15 border border-blue-500/25" : "text-slate-400 hover:text-white hover:bg-white/5"
                   }`}>
-                  <Icon size={15} className={active ? "text-[#f97316]" : ""} />
+                  <Icon size={15} className={active ? "text-blue-400" : ""} />
                   {label}
                   {alert && <div className="ml-auto w-2 h-2 rounded-full bg-orange-400 animate-pulse" />}
-                  {active && !alert && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#fbbf24]" />}
+                  {active && !alert && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-400" />}
                 </Link>
               );
             })}
@@ -84,7 +84,7 @@ export default function StaffSidebar({ staffName, staffPosition }: { staffName: 
         <VelxoLogo size={26} />
         <div>
           <span className="font-bold text-white text-sm block leading-tight">Staff Portal</span>
-          <span className="text-xs text-orange-400">Velxo</span>
+          <span className="text-xs text-blue-400">Velxo</span>
         </div>
       </div>
 
@@ -92,7 +92,7 @@ export default function StaffSidebar({ staffName, staffPosition }: { staffName: 
       <div className="px-4 py-3 border-b border-white/5">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold text-white shrink-0"
-            style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
+            style={{ background: "linear-gradient(135deg, #3b82f6, #6366f1)" }}>
             {initials}
           </div>
           <div className="min-w-0">
@@ -118,28 +118,28 @@ export default function StaffSidebar({ staffName, staffPosition }: { staffName: 
 
   return (
     <>
-      <aside className="hidden lg:flex w-60 shrink-0 border-r border-white/5 bg-[#110d06] flex-col fixed h-full z-30">
+      <aside className="hidden lg:flex w-60 shrink-0 border-r border-white/5 bg-[#0d0f14] flex-col fixed h-full z-30">
         <SidebarContent />
       </aside>
 
       {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center gap-3 px-4 h-14 border-b border-white/5 bg-[#110d06]">
-        <button onClick={() => setOpen(true)} className="text-gray-400 hover:text-white transition-colors">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 flex items-center gap-3 px-4 h-14 border-b border-white/5 bg-[#0d0f14]">
+        <button onClick={() => setOpen(true)} className="text-slate-400 hover:text-white transition-colors">
           <Menu size={20} />
         </button>
         <VelxoLogo size={22} />
         <span className="font-bold text-white text-sm">Staff Portal</span>
-        <span className="ml-auto text-xs text-gray-500">{currentLabel}</span>
+        <span className="ml-auto text-xs text-slate-500">{currentLabel}</span>
       </div>
       <div className="lg:hidden h-14" />
 
       {open && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="fixed inset-0 bg-black/70" onClick={() => setOpen(false)} />
-          <aside className="relative w-72 bg-[#0d0d0d] border-r border-white/5 flex flex-col z-50 h-full">
+          <aside className="relative w-72 bg-[#0d0f14] border-r border-white/5 flex flex-col z-50 h-full">
             <div className="flex items-center justify-between px-5 h-14 border-b border-white/5">
               <span className="font-bold text-white text-sm">Staff Portal</span>
-              <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-white"><X size={18} /></button>
+              <button onClick={() => setOpen(false)} className="text-slate-500 hover:text-white"><X size={18} /></button>
             </div>
             <SidebarContent onLinkClick={() => setOpen(false)} />
           </aside>

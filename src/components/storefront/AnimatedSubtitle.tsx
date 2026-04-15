@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 const SLIDES = [
   {
     category: "Streaming",
-    color: "#f97316",
+    color: "#60a5fa",
     items: ["Netflix", "Spotify", "DAZN", "Crunchyroll", "Disney+"],
   },
   {
     category: "AI Tools",
-    color: "#fbbf24",
+    color: "#818cf8",
     items: ["ChatGPT Plus", "Gemini Advanced", "Midjourney", "Claude Pro"],
   },
   {

@@ -37,7 +37,7 @@ export default function StaffRegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#0d0a07] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#0a0b0f] flex items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
           <div className="text-5xl mb-4">✅</div>
           <h2 className="text-xl font-bold text-white mb-2">Request Submitted</h2>
@@ -53,7 +53,7 @@ export default function StaffRegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0d0a07] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#0a0b0f] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-8">
           <VelxoLogo size={40} />
@@ -112,7 +112,7 @@ export default function StaffRegisterPage() {
 
           <p className="text-center text-sm text-gray-600 mt-4">
             Already have access?{" "}
-            <Link href="/staff-login" className="text-orange-400 hover:text-orange-300 transition-colors">
+            <Link href="/staff-login" className="text-blue-400 hover:text-blue-300 transition-colors">
               Sign in
             </Link>
           </p>

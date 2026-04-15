@@ -4,7 +4,8 @@ import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Zap, Eye, EyeOff, Lock } from "lucide-react";
+import { Eye, EyeOff, Lock } from "lucide-react";
+import VelxoLogo from "@/components/VelxoLogo";
 
 function LoginPageInner() {
   const router = useRouter();
@@ -91,17 +92,16 @@ function LoginPageInner() {
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
       {/* Purple glow */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 50% 30%, rgba(124,58,237,0.08) 0%, transparent 60%)"
+        background: "radial-gradient(ellipse at 50% 30%, rgba(59,130,246,0.08) 0%, transparent 60%)"
       }} />
 
       <div className="w-full max-w-md relative z-10">
-        {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 font-bold text-2xl">
-            <Zap size={24} className="text-purple-500" />
-            <span className="gradient-text">Velxo</span>
+          <Link href="/" className="inline-flex items-center gap-2.5 font-bold text-2xl">
+            <VelxoLogo size={28} />
+            <span style={{ background: "linear-gradient(135deg, #60a5fa, #818cf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Velxo</span>
           </Link>
-          <p className="text-gray-500 mt-2 text-sm">Sign in to your account</p>
+          <p className="text-slate-500 mt-2 text-sm">Sign in to your account</p>
         </div>
 
         {verified && (
@@ -152,7 +152,7 @@ function LoginPageInner() {
             {err && <p className="text-red-400 text-sm">{err}</p>}
 
             <div className="flex items-center justify-end">
-              <Link href="/auth/forgot-password" className="text-xs text-purple-400 hover:text-purple-300 transition-colors">
+              <Link href="/auth/forgot-password" className="text-xs text-blue-400 hover:text-blue-300 transition-colors">
                 Forgot password?
               </Link>
             </div>
@@ -184,9 +184,9 @@ function LoginPageInner() {
             Continue with Google
           </button>
 
-          <p className="text-center text-sm text-gray-500 mt-5">
+          <p className="text-center text-sm text-slate-500 mt-5">
             Don&apos;t have an account?{" "}
-            <Link href="/auth/register" className="text-purple-400 hover:text-purple-300 transition-colors">
+            <Link href="/auth/register" className="text-blue-400 hover:text-blue-300 transition-colors">
               Sign up
             </Link>
           </p>

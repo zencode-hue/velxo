@@ -42,11 +42,11 @@ export default function DealCard({
   const shadowHover = neon ? "0 0 30px rgba(0,255,136,0.15)" : "0 0 30px rgba(234,88,12,0.12)";
   const badgeBg = neon
     ? "linear-gradient(135deg, #00ff88, #00cc6a)"
-    : "linear-gradient(135deg, #ea580c, #dc2626)";
+    : "linear-gradient(135deg, #3b82f6, #6366f1)";
   const badgeColor = neon ? "#000" : "#fff";
   const ctaBg = neon
     ? "linear-gradient(135deg, #00ff88, #00cc6a)"
-    : "linear-gradient(135deg, #ea580c, #dc2626)";
+    : "linear-gradient(135deg, #3b82f6, #6366f1)";
   const ctaColor = neon ? "#000" : "#fff";
   const ctaShadow = neon
     ? "0 4px 15px rgba(0,255,136,0.3)"
