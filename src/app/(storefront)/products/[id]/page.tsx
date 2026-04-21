@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import ProductCard from "@/components/storefront/ProductCard";
 import ProductActions from "./ProductActions";
 import PriceDisplay from "@/components/storefront/PriceDisplay";
+import UrgencyBadges from "@/components/storefront/UrgencyBadges";
 import { Star, Package, CheckCircle, Zap, Shield, RefreshCw } from "lucide-react";
 import { extractProductId, productPath } from "@/lib/slug";
 
@@ -251,6 +252,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </div>
 
           {/* Actions — client component */}
+          <UrgencyBadges productId={product.id} stockCount={product.stockCount} unlimitedStock={product.unlimitedStock} />
           <ProductActions productId={product.id} productTitle={product.title} price={product.price} inStock={product.inStock} />
         </div>
       </div>

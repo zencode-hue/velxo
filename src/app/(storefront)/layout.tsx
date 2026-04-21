@@ -3,6 +3,7 @@ import Providers from "@/components/storefront/Providers";
 import PageViewTracker from "@/components/PageViewTracker";
 import AnnouncementBar from "@/components/storefront/AnnouncementBar";
 import TawkChat from "@/components/TawkChat";
+import RecentPurchasePopupWrapper from "@/components/storefront/RecentPurchasePopupWrapper";
 import Link from "next/link";
 import { Twitter, MessageCircle, Mail } from "lucide-react";
 import VelxoLogo from "@/components/VelxoLogo";
@@ -79,6 +80,7 @@ export default function StorefrontLayout({ children }: { children: React.ReactNo
         <Navbar />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <RecentPurchasePopupWrapper />
       </CurrencyProvider>
     </Providers>
   );

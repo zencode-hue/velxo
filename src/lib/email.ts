@@ -294,3 +294,29 @@ export async function sendInvoiceReminderEmail(
     )
   );
 }
+
+// ─── Partner Payout Notifications ────────────────────────────────────────────
+
+export async function sendPayoutNotificationEmail(
+  email: string,
+  action: "approved" | "rejected",
+  amount: number,
+  txHash?: string | null
+): Promise<void> {
+  const subject = action === "approved"
+    ? `💸 Payout of $${amount.toFixed(2)} Approved — ${APP_NAME}`
+    : `❌ Payout Request Rejected — ${APP_NAME}`;
+
+  const body = action === "approved"
+    ? `${h2("Your payout has been approved!")}
+       ${p(`Great news! Your payout request of <strong style="color:#f9fafb;">$${amount.toFixed(2)}</strong> has been approved and sent to your wallet.`)}
+       ${txHash ? `${p(`Transaction Hash: <code style="color:#a78bfa;">${txHash}</code>`)}` : ""}
+       ${p("The funds should arrive in your wallet within the next few minutes depending on network congestion.")}
+       <div style="margin:24px 0;">${btn(`${APP_URL}/dashboard/partner`, "View Partner Dashboard")}</div>`
+    : `${h2("Payout request rejected")}
+       ${p(`Unfortunately, your payout request of <strong style="color:#f9fafb;">$${amount.toFixed(2)}</strong> has been rejected.`)}
+       ${p("The amount has been returned to your partner balance. Please contact support if you have questions.")}
+       <div style="margin:24px 0;">${btn(`${APP_URL}/support`, "Contact Support")}</div>`;
+
+  await send(email, subject, html(action === "approved" ? "Payout approved" : "Payout rejected", body));
+}

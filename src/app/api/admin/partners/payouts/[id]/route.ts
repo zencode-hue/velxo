@@ -33,6 +33,16 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
           data: { totalPaidOut: { increment: Number(payout.amount) } },
         });
       });
+
+      // Notify partner via email
+      const partner = await db.partnerAffiliate.findUnique({
+        where: { id: payout.partnerAffiliateId },
+        include: { user: { select: { email: true } } },
+      });
+      if (partner?.user?.email) {
+        const { send: sendEmail } = await import("@/lib/email").then(m => ({ send: m.sendPayoutNotificationEmail })).catch(() => ({ send: null }));
+        if (sendEmail) await sendEmail(partner.user.email, "approved", Number(payout.amount), parsed.data.txHash).catch(() => {});
+      }
     } else {
       // Reject — refund balance back
       await db.$transaction(async (tx) => {
