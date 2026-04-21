@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { sendInvoiceReminderEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
+// v2
 
 /**
  * Cron: runs every 30 minutes via cron-job.org.
