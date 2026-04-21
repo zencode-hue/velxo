@@ -67,9 +67,10 @@ function CheckoutPageInner() {
     const data = await res.json();
     setPaying(false);
     if (!res.ok) { setPayErr(data.error); return; }
-    if (provider === "binance_gift_card" && data.data?.orderId) {
+    if (provider === "binance_gift_card" && (data.data?.orderId || data.data?.codeSubmitUrl)) {
       // Redirect to invoice — the InvoiceClient handles the full gift card flow
-      window.location.href = `/invoice/${data.data.orderId}`;
+      const orderId = data.data.orderId;
+      window.location.href = `/invoice/${orderId}`;
       return;
     }
     if (data.data?.redirectUrl) window.location.href = data.data.redirectUrl;

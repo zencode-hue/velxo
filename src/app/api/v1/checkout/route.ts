@@ -242,7 +242,6 @@ export async function POST(req: NextRequest) {
         : denomination.toFixed(1).replace(".", "-");
 
       const enebaUrl = `https://www.eneba.com/binance-binance-gift-card-usdt-${denomStr}-usd-key-global`;
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
       return NextResponse.json({
         data: {
