@@ -72,6 +72,8 @@ export default async function HomePage() {
   const siteSettings: Record<string, string> = settingsRes?.data ?? {};
   const discordUrl = siteSettings["discord_url"] || process.env.DISCORD_SERVER_URL || "https://discord.gg/velxo";
   const telegramUrl = siteSettings["telegram_url"] || "";
+  const discordMembers = siteSettings["discord_members"] || "1,000+";
+  const telegramMembers = siteSettings["telegram_members"] || "";
   const dealsEnabled = siteSettings["deals_enabled"] !== "false";
 
   const hotDeals = (dealsRes?.data?.deals ?? []).slice(0, 4) as Array<{
@@ -139,7 +141,7 @@ export default async function HomePage() {
       )}
 
       {/* Community Section — Discord & Telegram */}
-      <CommunitySection discordUrl={discordUrl} telegramUrl={telegramUrl} />
+      <CommunitySection discordUrl={discordUrl} telegramUrl={telegramUrl} discordMembers={discordMembers} telegramMembers={telegramMembers} />
 
       {/* Featured */}
       {featured.length > 0 && (

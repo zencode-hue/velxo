@@ -1,83 +1,118 @@
+"use client";
+
 import Link from "next/link";
-import { MessageCircle, Send, Users, Zap } from "lucide-react";
+import { MessageCircle, Send, Users, ArrowRight, ArrowLeft } from "lucide-react";
+import { useState, useEffect } from "react";
 
 interface Props {
   discordUrl: string;
   telegramUrl?: string;
+  discordMembers?: string;
+  telegramMembers?: string;
 }
 
-export default function CommunitySection({ discordUrl, telegramUrl }: Props) {
-  if (!discordUrl && !telegramUrl) return null;
+const slides = [
+  {
+    key: "discord",
+    icon: MessageCircle,
+    color: "#5865f2",
+    glow: "rgba(88,101,242,0.15)",
+    border: "rgba(88,101,242,0.25)",
+    label: "Discord Community",
+    cta: "Join Discord",
+    desc: "Get instant support, exclusive deals, and connect with thousands of members.",
+  },
+  {
+    key: "telegram",
+    icon: Send,
+    color: "#0088cc",
+    glow: "rgba(0,136,204,0.15)",
+    border: "rgba(0,136,204,0.25)",
+    label: "Telegram Channel",
+    cta: "Join Telegram",
+    desc: "Get deal alerts, restock notifications, and updates straight to your phone.",
+  },
+];
+
+export default function CommunitySection({ discordUrl, telegramUrl, discordMembers = "1,000+", telegramMembers = "" }: Props) {
+  const [active, setActive] = useState(0);
+
+  // Only show slides that have URLs
+  const available = slides.filter((s) => {
+    if (s.key === "discord") return !!discordUrl;
+    if (s.key === "telegram") return !!telegramUrl;
+    return false;
+  });
+
+  useEffect(() => {
+    if (available.length <= 1) return;
+    const t = setInterval(() => setActive((a) => (a + 1) % available.length), 5000);
+    return () => clearInterval(t);
+  }, [available.length]);
+
+  if (available.length === 0) return null;
+
+  const slide = available[active];
+  const Icon = slide.icon;
+  const url = slide.key === "discord" ? discordUrl : (telegramUrl ?? "");
+  const members = slide.key === "discord" ? discordMembers : telegramMembers;
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="rounded-2xl overflow-hidden relative"
-        style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="relative rounded-2xl overflow-hidden transition-all duration-500"
+        style={{ background: `rgba(255,255,255,0.03)`, border: `1px solid ${slide.border}`, boxShadow: `0 0 40px ${slide.glow}` }}>
+
         {/* Background glow */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at 30% 50%, rgba(88,101,242,0.08) 0%, transparent 60%)" }} />
-        {telegramUrl && (
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ background: "radial-gradient(ellipse at 70% 50%, rgba(0,136,204,0.06) 0%, transparent 60%)" }} />
-        )}
+        <div className="absolute inset-0 pointer-events-none transition-all duration-500"
+          style={{ background: `radial-gradient(ellipse at 30% 50%, ${slide.glow} 0%, transparent 60%)` }} />
 
         <div className="relative px-6 py-8 sm:px-10 sm:py-10">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="text-center sm:text-left">
-              <div className="flex items-center gap-2 justify-center sm:justify-start mb-2">
-                <Users size={16} style={{ color: "rgba(255,255,255,0.5)" }} />
-                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.4)" }}>
-                  Join Our Community
-                </span>
+            <div className="flex items-center gap-5">
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500"
+                style={{ background: `${slide.glow}`, border: `1px solid ${slide.border}` }}>
+                <Icon size={26} style={{ color: slide.color }} />
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                Get Support & Exclusive Deals
-              </h2>
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
-                Join thousands of members. Get instant support, early access to deals, and community perks.
-              </p>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <h2 className="text-lg font-bold text-white">{slide.label}</h2>
+                  {members && (
+                    <span className="text-xs px-2 py-0.5 rounded-full font-medium"
+                      style={{ background: `${slide.glow}`, color: slide.color, border: `1px solid ${slide.border}` }}>
+                      <Users size={10} className="inline mr-1" />{members} members
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>{slide.desc}</p>
+              </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-              {discordUrl && (
-                <Link href={discordUrl} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all hover:-translate-y-0.5"
-                  style={{
-                    background: "linear-gradient(135deg, #5865f2, #7289da)",
-                    boxShadow: "0 4px 20px rgba(88,101,242,0.3)",
-                  }}>
-                  <MessageCircle size={16} />
-                  Join Discord
-                </Link>
+            <div className="flex items-center gap-3 shrink-0">
+              {available.length > 1 && (
+                <div className="flex items-center gap-1">
+                  <button onClick={() => setActive((a) => (a - 1 + available.length) % available.length)}
+                    className="p-1.5 rounded-lg transition-all" style={{ color: "rgba(255,255,255,0.4)" }}>
+                    <ArrowLeft size={14} />
+                  </button>
+                  {available.map((_, i) => (
+                    <button key={i} onClick={() => setActive(i)}
+                      className="w-1.5 h-1.5 rounded-full transition-all"
+                      style={{ background: i === active ? slide.color : "rgba(255,255,255,0.2)" }} />
+                  ))}
+                  <button onClick={() => setActive((a) => (a + 1) % available.length)}
+                    className="p-1.5 rounded-lg transition-all" style={{ color: "rgba(255,255,255,0.4)" }}>
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
               )}
-              {telegramUrl && (
-                <Link href={telegramUrl} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all hover:-translate-y-0.5"
-                  style={{
-                    background: "linear-gradient(135deg, #0088cc, #00a8e8)",
-                    boxShadow: "0 4px 20px rgba(0,136,204,0.3)",
-                  }}>
-                  <Send size={16} />
-                  Join Telegram
-                </Link>
-              )}
-            </div>
-          </div>
 
-          {/* Stats row */}
-          <div className="flex items-center gap-6 mt-6 pt-6 flex-wrap justify-center sm:justify-start"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-            {[
-              { icon: Users, value: "10,000+", label: "Members" },
-              { icon: Zap, value: "Instant", label: "Support" },
-              { icon: MessageCircle, value: "24/7", label: "Active" },
-            ].map((s) => (
-              <div key={s.label} className="flex items-center gap-2">
-                <s.icon size={14} style={{ color: "rgba(255,255,255,0.3)" }} />
-                <span className="text-sm font-bold text-white">{s.value}</span>
-                <span className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>{s.label}</span>
-              </div>
-            ))}
+              <Link href={url} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all hover:-translate-y-0.5"
+                style={{ background: slide.color, boxShadow: `0 4px 20px ${slide.glow}` }}>
+                <Icon size={15} />
+                {slide.cta}
+              </Link>
+            </div>
           </div>
         </div>
       </div>

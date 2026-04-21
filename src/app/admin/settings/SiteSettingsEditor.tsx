@@ -13,8 +13,10 @@ const SECTIONS = [
     icon: MessageCircle,
     color: "text-indigo-400",
     fields: [
-      { key: "discord_url", label: "Discord Server URL", placeholder: "https://discord.gg/...", hint: "Shown on homepage and support pages" },
+      { key: "discord_url", label: "Discord Server URL", placeholder: "https://discord.gg/...", hint: "Shown on homepage community section" },
+      { key: "discord_members", label: "Discord Member Count", placeholder: "1,000+", hint: "Displayed on the community section (e.g. 1,000+)" },
       { key: "telegram_url", label: "Telegram Channel URL", placeholder: "https://t.me/...", hint: "Shown on homepage community section" },
+      { key: "telegram_members", label: "Telegram Member Count", placeholder: "500+", hint: "Displayed on the community section" },
       { key: "support_discord_url", label: "Support Discord URL", placeholder: "https://discord.gg/...", hint: "Used for support buttons (defaults to Discord URL)" },
     ],
   },
