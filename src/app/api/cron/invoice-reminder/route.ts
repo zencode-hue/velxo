@@ -5,11 +5,10 @@ import { sendInvoiceReminderEmail } from "@/lib/email";
 export const dynamic = "force-dynamic";
 
 /**
- * Cron: runs every ~10 minutes.
- * Finds PENDING orders created 25–35 minutes ago (the 30-min window)
- * that haven't had a reminder sent yet, and emails the customer.
+ * Cron: runs every 30 minutes via cron-job.org.
+ * Finds PENDING orders created 25-35 minutes ago (the 30-min window)
+ * that have not had a reminder sent yet, and emails the customer.
  *
- * Schedule on Vercel: */10 * * * *
  * Protect with CRON_SECRET header.
  */
 export async function GET(req: NextRequest) {

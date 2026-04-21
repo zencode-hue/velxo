@@ -179,34 +179,21 @@ export async function sendAdminLowStockAlert(productTitle: string, stockCount: n
  *                password_reset, affiliate_joined, balance_topped_up
  */
 export async function trackEvent(email: string, event: string, data?: Record<string, unknown>): Promise<void> {
-  const resendKey = process.env.RESEND_API_KEY;
-  if (!resendKey) return;
+  if (!process.env.RESEND_API_KEY) return;
 
   try {
-    const { Resend } = await import("resend");
-    const resend = new Resend(resendKey);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (resend.events as any).send({ event, email, ...(data ? { data } : {}) });
+    const resendKey = process.env.RESEND_API_KEY;
+    if (!resendKey) return;
+    // Use Resend REST API for contact events
+    await fetch("https://api.resend.com/contacts/events", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${resendKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ event, email, ...(data ? { data } : {}) }),
+    });
   } catch (err) {
-    // Non-fatal — don't crash the main flow
     console.warn(`[trackEvent] Failed to track "${event}" for ${email}:`, err);
   }
 }
-
-
-  await send(
-    ADMIN_EMAIL,
-    `Order pending stock — ${APP_NAME}`,
-    html(
-      "Order pending stock",
-      `${h2("Order Awaiting Stock")}
-       ${p(`Order <strong style="color:#f9fafb;">#${orderId}</strong> for <strong style="color:#f9fafb;">${productTitle}</strong> could not be fulfilled because there is no stock available.`)}
-       ${p("Please upload inventory for this product to complete the delivery.")}
-       <div style="margin:24px 0;">${btn(`${APP_URL}/admin/orders`, "View Orders")}</div>`
-    )
-  );
-}
-
 
 export async function sendAdminPendingStockAlert(orderId: string, productTitle: string): Promise<void> {
   await send(
