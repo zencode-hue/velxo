@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Wallet, Bitcoin, MessageCircle, Plus, X, ExternalLink } from "lucide-react";
+import { Wallet, Bitcoin, MessageCircle, Plus, X, ExternalLink, CreditCard } from "lucide-react";
 
 export default function BalanceSection({ balance }: { balance: number }) {
   const [showTopup, setShowTopup] = useState(false);
@@ -11,7 +11,7 @@ export default function BalanceSection({ balance }: { balance: number }) {
 
   const PRESETS = [5, 10, 25, 50, 100];
 
-  async function handleTopup(provider: "nowpayments" | "discord" | "binance_gift_card") {
+  async function handleTopup(provider: "nowpayments" | "discord" | "binance_gift_card" | "flutterwave") {
     const amt = parseFloat(amount);
     if (!amt || amt < 1) { setErr("Minimum top-up is $1"); return; }
     setLoading(true); setErr(null);
@@ -66,6 +66,14 @@ export default function BalanceSection({ balance }: { balance: number }) {
           {err && <p className="text-red-400 text-xs">{err}</p>}
 
           <div className="grid grid-cols-1 gap-3">
+            <button onClick={() => handleTopup("flutterwave")} disabled={loading}
+              className="flex items-center gap-3 p-3 rounded-xl border border-white/5 hover:border-green-500/40 hover:bg-green-500/5 transition-all text-left">
+              <CreditCard size={18} className="text-green-400 shrink-0" />
+              <div>
+                <p className="text-sm font-medium text-white">Card Payment</p>
+                <p className="text-xs text-gray-500">Visa, Mastercard via Flutterwave</p>
+              </div>
+            </button>
             <button onClick={() => handleTopup("binance_gift_card")} disabled={loading}
               className="flex items-center gap-3 p-3 rounded-xl border border-white/5 hover:border-yellow-500/40 hover:bg-yellow-500/5 transition-all text-left">
               <ExternalLink size={18} className="text-yellow-400 shrink-0" />

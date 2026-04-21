@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/admin-auth";
 import { ShoppingCart, ExternalLink } from "lucide-react";
 import RedeliverButton from "./RedeliverButton";
 import OrderActions from "./OrderActions";
+import GiftCardApproveButton from "./GiftCardApproveButton";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -122,6 +123,9 @@ export default async function AdminOrdersPage() {
                   <td className="px-4 py-3 text-right relative">
                     <div className="flex items-center justify-end gap-2">
                       {o.status === "PAID" && !o.deliveryLog && <RedeliverButton orderId={o.id} />}
+                      {o.status === "PENDING_STOCK" && o.paymentProvider === "binance_gift_card" && (
+                        <GiftCardApproveButton orderId={o.id} />
+                      )}
                       <OrderActions orderId={o.id} currentStatus={o.status} currentNote={(o as { adminNote?: string | null }).adminNote} />
                     </div>
                   </td>

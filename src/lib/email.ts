@@ -169,6 +169,45 @@ export async function sendAdminLowStockAlert(productTitle: string, stockCount: n
   await send(ADMIN_EMAIL, subject, html("Low stock alert", body));
 }
 
+// ─── Resend Contact Events ────────────────────────────────────────────────────
+
+/**
+ * Track a contact event in Resend for email automation/segmentation.
+ * Silently fails if RESEND_API_KEY or RESEND_AUDIENCE_ID is not set.
+ *
+ * Common events: invoice_created, order_delivered, user_registered,
+ *                password_reset, affiliate_joined, balance_topped_up
+ */
+export async function trackEvent(email: string, event: string, data?: Record<string, unknown>): Promise<void> {
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!resendKey) return;
+
+  try {
+    const { Resend } = await import("resend");
+    const resend = new Resend(resendKey);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (resend.events as any).send({ event, email, ...(data ? { data } : {}) });
+  } catch (err) {
+    // Non-fatal — don't crash the main flow
+    console.warn(`[trackEvent] Failed to track "${event}" for ${email}:`, err);
+  }
+}
+
+
+  await send(
+    ADMIN_EMAIL,
+    `Order pending stock — ${APP_NAME}`,
+    html(
+      "Order pending stock",
+      `${h2("Order Awaiting Stock")}
+       ${p(`Order <strong style="color:#f9fafb;">#${orderId}</strong> for <strong style="color:#f9fafb;">${productTitle}</strong> could not be fulfilled because there is no stock available.`)}
+       ${p("Please upload inventory for this product to complete the delivery.")}
+       <div style="margin:24px 0;">${btn(`${APP_URL}/admin/orders`, "View Orders")}</div>`
+    )
+  );
+}
+
+
 export async function sendAdminPendingStockAlert(orderId: string, productTitle: string): Promise<void> {
   await send(
     ADMIN_EMAIL,
@@ -183,3 +222,88 @@ export async function sendAdminPendingStockAlert(orderId: string, productTitle: 
   );
 }
 
+// ─── Invoice / Order Emails ───────────────────────────────────────────────────
+
+/**
+ * Sent immediately when an order is created (any payment method).
+ * Tells the customer their invoice is ready and links to it.
+ */
+export async function sendInvoiceCreatedEmail(
+  email: string,
+  orderId: string,
+  productTitle: string,
+  amount: number,
+  paymentProvider: string
+): Promise<void> {
+  const invoiceUrl = `${APP_URL}/invoice/${orderId}`;
+  const invoiceNum = orderId.slice(0, 8).toUpperCase();
+
+  const paymentLabels: Record<string, string> = {
+    nowpayments: "Crypto (NOWPayments)",
+    balance: "Wallet Balance",
+    binance_gift_card: "Binance Gift Card",
+    discord: "Discord Manual",
+  };
+
+  await send(
+    email,
+    `Invoice #${invoiceNum} — ${APP_NAME}`,
+    html(
+      `Invoice #${invoiceNum}`,
+      `${h2(`Your invoice is ready`)}
+       ${p(`Hi! Your order for <strong style="color:#f9fafb;">${productTitle}</strong> has been created.`)}
+       <table width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;border:1px solid #222;border-radius:8px;overflow:hidden;">
+         <tr style="background:#1a1a1a;">
+           <td style="padding:12px 16px;font-size:13px;color:#9ca3af;">Invoice</td>
+           <td style="padding:12px 16px;font-size:13px;color:#f9fafb;text-align:right;font-family:monospace;">#${invoiceNum}</td>
+         </tr>
+         <tr>
+           <td style="padding:12px 16px;font-size:13px;color:#9ca3af;">Product</td>
+           <td style="padding:12px 16px;font-size:13px;color:#f9fafb;text-align:right;">${productTitle}</td>
+         </tr>
+         <tr style="background:#1a1a1a;">
+           <td style="padding:12px 16px;font-size:13px;color:#9ca3af;">Amount</td>
+           <td style="padding:12px 16px;font-size:14px;font-weight:700;color:#f9fafb;text-align:right;">$${amount.toFixed(2)}</td>
+         </tr>
+         <tr>
+           <td style="padding:12px 16px;font-size:13px;color:#9ca3af;">Payment</td>
+           <td style="padding:12px 16px;font-size:13px;color:#f9fafb;text-align:right;">${paymentLabels[paymentProvider] ?? paymentProvider}</td>
+         </tr>
+       </table>
+       <div style="margin:28px 0;">${btn(invoiceUrl, "View Invoice →")}</div>
+       ${p(`Once your payment is confirmed, your product will be delivered instantly to this email address.`)}
+       ${p(`Keep your invoice link safe — you can always access your order at: <a href="${invoiceUrl}" style="color:#a78bfa;">${invoiceUrl}</a>`)}`
+    )
+  );
+}
+
+/**
+ * 30-minute reminder for PENDING orders that haven't been paid yet.
+ */
+export async function sendInvoiceReminderEmail(
+  email: string,
+  orderId: string,
+  productTitle: string,
+  amount: number
+): Promise<void> {
+  const invoiceUrl = `${APP_URL}/invoice/${orderId}`;
+  const invoiceNum = orderId.slice(0, 8).toUpperCase();
+
+  await send(
+    email,
+    `Don't forget your order — ${APP_NAME}`,
+    html(
+      "Complete your order",
+      `${h2("You left something behind 👀")}
+       ${p(`Your order for <strong style="color:#f9fafb;">${productTitle}</strong> is still waiting for payment.`)}
+       <div style="margin:20px 0;padding:20px;background:#1a1a1a;border:1px solid #333;border-radius:8px;text-align:center;">
+         <div style="font-size:28px;font-weight:800;color:#f9fafb;margin-bottom:4px;">$${amount.toFixed(2)}</div>
+         <div style="font-size:13px;color:#9ca3af;">${productTitle}</div>
+         <div style="font-size:12px;color:#6b7280;margin-top:4px;font-family:monospace;">Invoice #${invoiceNum}</div>
+       </div>
+       <div style="margin:28px 0;">${btn(invoiceUrl, "Complete Payment →")}</div>
+       ${p("Your order is reserved. Complete your payment to receive instant delivery.")}
+       ${p(`Questions? Reply to this email or visit our <a href="${APP_URL}/support" style="color:#a78bfa;">support page</a>.`)}`
+    )
+  );
+}

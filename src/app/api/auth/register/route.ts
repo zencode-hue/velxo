@@ -5,7 +5,7 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { db } from "@/lib/db";
-import { sendVerificationEmail } from "@/lib/email";
+import { sendVerificationEmail, trackEvent } from "@/lib/email";
 
 const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -73,6 +73,9 @@ export async function POST(req: NextRequest) {
         });
       }
     }
+
+    // Track registration event in Resend
+    await trackEvent(normalizedEmail, "user_registered", { name: name ?? null });
 
     return NextResponse.json(
       {

@@ -56,7 +56,7 @@ function CheckoutPageInner() {
     setDiscountInfo(data.data);
   }
 
-  async function handlePay(provider: "nowpayments" | "discord" | "balance" | "binance_gift_card") {
+  async function handlePay(provider: "nowpayments" | "discord" | "balance" | "binance_gift_card" | "flutterwave") {
     if (!productId) return;
     setPaying(true); setPayErr(null);
     const res = await fetch("/api/v1/checkout", {
@@ -67,10 +67,9 @@ function CheckoutPageInner() {
     const data = await res.json();
     setPaying(false);
     if (!res.ok) { setPayErr(data.error); return; }
-    if (provider === "binance_gift_card" && data.data?.codeSubmitUrl) {
-      // Open Eneba in new tab, redirect user to code submission page
-      window.open(data.data.redirectUrl, "_blank");
-      window.location.href = data.data.codeSubmitUrl;
+    if (provider === "binance_gift_card" && data.data?.orderId) {
+      // Redirect to invoice — the InvoiceClient handles the full gift card flow
+      window.location.href = `/invoice/${data.data.orderId}`;
       return;
     }
     if (data.data?.redirectUrl) window.location.href = data.data.redirectUrl;
@@ -186,16 +185,17 @@ function CheckoutPageInner() {
             <ArrowRight size={16} className="text-gray-600 group-hover:text-purple-400 transition-colors" />
           </button>
 
-          <div className="w-full flex items-center gap-4 p-4 rounded-xl border border-white/5 opacity-40 cursor-not-allowed">
-            <div className="w-10 h-10 rounded-xl bg-gray-500/10 flex items-center justify-center shrink-0">
-              <CreditCard size={20} className="text-gray-500" />
+          <button onClick={() => handlePay("flutterwave")} disabled={paying}
+            className="w-full flex items-center gap-4 p-4 rounded-xl border border-white/5 hover:border-green-500/40 hover:bg-green-500/5 transition-all text-left group">
+            <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center shrink-0">
+              <CreditCard size={20} className="text-green-400" />
             </div>
             <div className="flex-1">
               <p className="font-medium text-white text-sm">Card / Apple Pay / Google Pay</p>
-              <p className="text-xs text-gray-500">Coming soon</p>
+              <p className="text-xs text-gray-500">Visa, Mastercard, and more via Flutterwave</p>
             </div>
-            <span className="badge-purple text-xs">Soon</span>
-          </div>
+            <ArrowRight size={16} className="text-gray-600 group-hover:text-green-400 transition-colors" />
+          </button>
         </div>
 
         {paying && (

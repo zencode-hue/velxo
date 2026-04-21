@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { decrypt } from "@/lib/crypto";
-import { sendDeliveryEmail, sendAdminPendingStockAlert, sendAdminLowStockAlert } from "@/lib/email";
+import { sendDeliveryEmail, sendAdminPendingStockAlert, sendAdminLowStockAlert, trackEvent } from "@/lib/email";
 import { checkAndSendStockAlerts } from "@/lib/stock-alerts";
 import { sendDiscordNotification } from "@/lib/discord";
 
@@ -82,6 +82,13 @@ export async function deliverOrder(orderId: string): Promise<void> {
   await sendDeliveryEmail(deliveryEmail, {
     orderId, productTitle: product.title,
     credentials: decryptedCredentials, deliveredAt: now,
+  });
+
+  // Track delivery event in Resend for email automation
+  await trackEvent(deliveryEmail, "order_delivered", {
+    orderId,
+    productTitle: product.title,
+    amount: Number(order.amount),
   });
 
   await checkAndSendStockAlerts(product.id);

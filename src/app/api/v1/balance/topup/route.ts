@@ -7,7 +7,7 @@ import { getServerSession } from "@/lib/auth";
 
 const bodySchema = z.object({
   amount: z.number().min(1).max(500),
-  paymentProvider: z.enum(["nowpayments", "discord", "binance_gift_card"]),
+  paymentProvider: z.enum(["nowpayments", "discord", "binance_gift_card", "flutterwave"]),
 });
 
 export async function POST(req: NextRequest) {
@@ -79,6 +79,37 @@ export async function POST(req: NextRequest) {
       error: null,
       meta: {},
     });
+  }
+
+  if (paymentProvider === "flutterwave") {
+    const secretKey = process.env.FLUTTERWAVE_SECRET_KEY;
+    if (!secretKey) {
+      return NextResponse.json({ data: null, error: "Card payments not configured", meta: {} }, { status: 503 });
+    }
+
+    const fwRes = await fetch("https://api.flutterwave.com/v3/payments", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${secretKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        tx_ref: topupRef,
+        amount,
+        currency: "USD",
+        redirect_url: `${appUrl}/api/webhooks/flutterwave?topupRef=${topupRef}&userId=${session.user.id}&amount=${amount}`,
+        customer: { email: session.user.email },
+        meta: { topupRef, userId: session.user.id, amount },
+        customizations: {
+          title: "Balance Top-Up",
+          description: `Top up wallet by $${amount}`,
+        },
+      }),
+    });
+
+    if (!fwRes.ok) {
+      return NextResponse.json({ data: null, error: "Failed to create card payment", meta: {} }, { status: 502 });
+    }
+
+    const fwData = await fwRes.json() as { data?: { link?: string } };
+    return NextResponse.json({ data: { redirectUrl: fwData.data?.link, ref: topupRef }, error: null, meta: {} });
   }
 
   return NextResponse.json({ data: null, error: "Invalid payment provider", meta: {} }, { status: 400 });

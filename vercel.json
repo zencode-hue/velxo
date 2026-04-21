@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/deals-notify",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/invoice-reminder",
+      "schedule": "*/10 * * * *"
     }
   ]
 }

@@ -5,13 +5,14 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { getServerSession } from "@/lib/auth";
 import { sanitizeString } from "@/lib/sanitize";
+import { sendInvoiceCreatedEmail } from "@/lib/email";
 
 const DISCORD_SERVER_URL = process.env.DISCORD_SERVER_URL ?? "https://discord.gg/your-server";
 
 const bodySchema = z.object({
   productId: z.string().min(1),
   discountCode: z.string().optional(),
-  paymentProvider: z.enum(["nowpayments", "discord", "balance", "binance_gift_card"]),
+  paymentProvider: z.enum(["nowpayments", "discord", "balance", "binance_gift_card", "flutterwave"]),
   guestEmail: z.string().email().optional(),
 });
 
@@ -170,6 +171,17 @@ export async function POST(req: NextRequest) {
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
+    // Send invoice created email immediately (non-blocking)
+    if (deliveryEmail) {
+      sendInvoiceCreatedEmail(
+        deliveryEmail,
+        order.id,
+        product.title,
+        finalAmount,
+        paymentProvider
+      ).catch((e) => console.error("[checkout] invoice email failed:", e));
+    }
+
     if (paymentProvider === "nowpayments") {
       const apiKey = process.env.NOWPAYMENTS_API_KEY;
       if (!apiKey) {
@@ -242,6 +254,39 @@ export async function POST(req: NextRequest) {
         error: null,
         meta: {},
       });
+    }
+
+    if (paymentProvider === "flutterwave") {
+      const secretKey = process.env.FLUTTERWAVE_SECRET_KEY;
+      if (!secretKey) {
+        return NextResponse.json({ data: null, error: "Card payments not configured", meta: {} }, { status: 503 });
+      }
+
+      const fwRes = await fetch("https://api.flutterwave.com/v3/payments", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${secretKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tx_ref: order.id,
+          amount: finalAmount,
+          currency: "USD",
+          redirect_url: `${appUrl}/api/webhooks/flutterwave?orderId=${order.id}`,
+          customer: { email: deliveryEmail ?? "guest@checkout.com" },
+          meta: { orderId: order.id },
+          customizations: {
+            title: product.title,
+            description: `Purchase: ${product.title}`,
+          },
+        }),
+      });
+
+      if (!fwRes.ok) {
+        console.error("[checkout] Flutterwave error:", await fwRes.text());
+        return NextResponse.json({ data: null, error: "Failed to create card payment", meta: {} }, { status: 502 });
+      }
+
+      const fwData = await fwRes.json() as { data?: { link?: string } };
+      await db.order.update({ where: { id: order.id }, data: { paymentRef: order.id } });
+      return NextResponse.json({ data: { redirectUrl: fwData.data?.link }, error: null, meta: {} });
     }
 
     return NextResponse.json({ data: null, error: "Invalid payment provider", meta: {} }, { status: 400 });
