@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ExternalLink, Copy, Check, ChevronRight, Loader2, MessageCircle, CreditCard, Bitcoin, Wallet } from "lucide-react";
+import { ExternalLink, Copy, Check, ChevronRight, Loader2, MessageCircle, CreditCard, Bitcoin, Wallet, Clock } from "lucide-react";
 
 interface InvoiceClientProps {
   orderId: string;
@@ -15,16 +15,17 @@ interface InvoiceClientProps {
 const DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_URL ?? "https://discord.gg/2b8AkfW6EP";
 
 export default function InvoiceClient({ orderId, status, paymentProvider, amount, paymentRef, giftCardDenomination }: InvoiceClientProps) {
-  const [copied, setCopied] = useState(false);
-
-  function copyId() {
-    navigator.clipboard.writeText(orderId);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  if (status !== "PENDING") {
+    if (status === "PENDING_STOCK" && paymentProvider === "binance_gift_card") {
+      return (
+        <>
+          <GiftCardPendingSection orderId={orderId} />
+          <SupportSection orderId={orderId} />
+        </>
+      );
+    }
+    return <SupportSection orderId={orderId} />;
   }
-
-  // Only show action sections for PENDING orders
-  if (status !== "PENDING") return <SupportSection orderId={orderId} />;
 
   return (
     <>
@@ -37,8 +38,48 @@ export default function InvoiceClient({ orderId, status, paymentProvider, amount
   );
 }
 
+// ── Gift Card Pending Approval ────────────────────────────────────────────────
+function GiftCardPendingSection({ orderId }: { orderId: string }) {
+  return (
+    <div className="rounded-2xl p-5 mb-4" style={{ background: "rgba(240,185,11,0.05)", border: "1px solid rgba(240,185,11,0.2)" }}>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "rgba(240,185,11,0.12)", border: "1px solid rgba(240,185,11,0.2)" }}>
+          <Clock size={16} style={{ color: "#f0b90b" }} />
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-white">Gift Card — Pending Staff Approval</p>
+          <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Your code has been received and is being verified</p>
+        </div>
+      </div>
+      <div className="rounded-xl p-4 space-y-2.5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+          <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(52,211,153,0.15)" }}>
+            <Check size={11} style={{ color: "#34d399" }} />
+          </div>
+          Gift card code received by our team
+        </div>
+        <div className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+          <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 animate-pulse" style={{ background: "rgba(240,185,11,0.15)" }}>
+            <Clock size={11} style={{ color: "#f0b90b" }} />
+          </div>
+          Staff verifying and approving your payment
+        </div>
+        <div className="flex items-center gap-2.5 text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>
+          <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(255,255,255,0.05)" }}>
+            <span style={{ fontSize: "10px" }}>📧</span>
+          </div>
+          Product delivered to your email once approved
+        </div>
+      </div>
+      <p className="text-xs mt-3" style={{ color: "rgba(255,255,255,0.3)" }}>
+        Order ID: <span className="font-mono">{orderId.slice(0, 12)}…</span>
+      </p>
+    </div>
+  );
+}
+
 // ── Crypto (NOWPayments) ──────────────────────────────────────────────────────
-function CryptoSection({ orderId, paymentRef }: { orderId: string; paymentRef?: string | null }) {
+function CryptoSection({ orderId: _orderId, paymentRef }: { orderId: string; paymentRef?: string | null }) {
   return (
     <div className="rounded-2xl p-5 mb-4" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
       <div className="flex items-center gap-3 mb-4">
@@ -66,7 +107,7 @@ function CryptoSection({ orderId, paymentRef }: { orderId: string; paymentRef?: 
 }
 
 // ── Binance Gift Card ─────────────────────────────────────────────────────────
-function GiftCardSection({ orderId, amount, denomination }: { orderId: string; amount: number; denomination: number }) {
+function GiftCardSection({ orderId, amount: _amount, denomination }: { orderId: string; amount: number; denomination: number }) {
   const [step, setStep] = useState<"instructions" | "code" | "submitted">("instructions");
   const [code, setCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -128,7 +169,6 @@ function GiftCardSection({ orderId, amount, denomination }: { orderId: string; a
         </div>
       </div>
 
-      {/* Step tabs */}
       <div className="flex items-center gap-2 mb-4 text-xs">
         <button onClick={() => setStep("instructions")}
           className="px-3 py-1.5 rounded-lg font-medium transition-all"
@@ -147,7 +187,7 @@ function GiftCardSection({ orderId, amount, denomination }: { orderId: string; a
         <div className="space-y-4">
           <ol className="space-y-3">
             {[
-              { n: 1, text: `Click the button below to open Eneba and purchase a $${denomination} USD Binance Gift Card.` },
+              { n: 1, text: `Click the button below to open Eneba and purchase a ${denomination} USD Binance Gift Card.` },
               { n: 2, text: "Complete the purchase on Eneba. You'll receive a gift card code (e.g. XXXX-XXXX-XXXX-XXXX)." },
               { n: 3, text: "Come back to this invoice and click \"I have my code\" to enter it." },
               { n: 4, text: "Our staff will verify the code and deliver your product within minutes." },
@@ -159,17 +199,14 @@ function GiftCardSection({ orderId, amount, denomination }: { orderId: string; a
               </li>
             ))}
           </ol>
-
           <div className="p-3 rounded-xl text-xs" style={{ background: "rgba(240,185,11,0.06)", border: "1px solid rgba(240,185,11,0.15)", color: "#fde68a" }}>
             ⚠️ Purchase exactly a <strong>${denomination} USD</strong> Binance Gift Card. Other amounts won&apos;t be accepted.
           </div>
-
           <a href={enebaUrl} target="_blank" rel="noopener noreferrer"
             className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold"
             style={{ background: "#f0b90b", color: "#000" }}>
             <ExternalLink size={15} /> Buy ${denomination} USD Gift Card on Eneba
           </a>
-
           <button onClick={() => setStep("code")}
             className="w-full py-2.5 rounded-xl text-sm transition-all"
             style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)" }}>
@@ -184,27 +221,19 @@ function GiftCardSection({ orderId, amount, denomination }: { orderId: string; a
             <label className="block text-xs mb-2" style={{ color: "rgba(255,255,255,0.5)" }}>
               Paste your Binance Gift Card code
             </label>
-            <input
-              type="text"
-              value={code}
-              onChange={(e) => setCode(e.target.value.toUpperCase())}
+            <input type="text" value={code} onChange={(e) => setCode(e.target.value.toUpperCase())}
               placeholder="XXXX-XXXX-XXXX-XXXX"
-              className="input-field font-mono tracking-widest text-sm"
-              autoFocus
-            />
+              className="input-field font-mono tracking-widest text-sm" autoFocus />
             <p className="text-xs mt-1.5" style={{ color: "rgba(255,255,255,0.3)" }}>
               Enter the code exactly as shown after purchase on Eneba.
             </p>
           </div>
-
           {error && <p className="text-xs text-red-400">{error}</p>}
-
           <button onClick={submitCode} disabled={submitting || !code.trim()}
             className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold disabled:opacity-50"
             style={{ background: "#f0b90b", color: "#000" }}>
             {submitting ? <Loader2 size={15} className="animate-spin" /> : "Submit Gift Card Code"}
           </button>
-
           <button onClick={() => setStep("instructions")}
             className="text-xs transition-colors" style={{ color: "rgba(255,255,255,0.35)" }}>
             ← Back to instructions
@@ -218,7 +247,7 @@ function GiftCardSection({ orderId, amount, denomination }: { orderId: string; a
 // ── Discord Manual ────────────────────────────────────────────────────────────
 function DiscordSection({ orderId, amount }: { orderId: string; amount: number }) {
   const [copied, setCopied] = useState(false);
-  const msg = `Hi! I want to complete my order. Order ID: ${orderId} — Amount: $${amount.toFixed(2)}`;
+  const msg = `Hi! I want to complete my order. Order ID: ${orderId} — Amount: ${amount.toFixed(2)}`;
 
   function copy() {
     navigator.clipboard.writeText(orderId);
@@ -237,14 +266,8 @@ function DiscordSection({ orderId, amount }: { orderId: string; amount: number }
           <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Manual payment — join our server to pay</p>
         </div>
       </div>
-
       <ol className="space-y-2 mb-4">
-        {[
-          "Join our Discord server using the button below.",
-          "Send a message with your Order ID to our support team.",
-          "Complete the payment as instructed by staff.",
-          "Your product will be delivered once payment is confirmed.",
-        ].map((t, i) => (
+        {["Join our Discord server using the button below.", "Send a message with your Order ID to our support team.", "Complete the payment as instructed by staff.", "Your product will be delivered once payment is confirmed."].map((t, i) => (
           <li key={i} className="flex gap-3 text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
             <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
               style={{ background: "rgba(88,101,242,0.15)", color: "#818cf8" }}>{i + 1}</span>
@@ -252,14 +275,12 @@ function DiscordSection({ orderId, amount }: { orderId: string; amount: number }
           </li>
         ))}
       </ol>
-
       <div className="flex items-center gap-2 p-3 rounded-xl mb-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
         <code className="text-xs font-mono flex-1 break-all" style={{ color: "rgba(255,255,255,0.6)" }}>{orderId}</code>
         <button onClick={copy} className="shrink-0 transition-colors" style={{ color: copied ? "#34d399" : "rgba(255,255,255,0.4)" }}>
           {copied ? <Check size={13} /> : <Copy size={13} />}
         </button>
       </div>
-
       <a href={`${DISCORD_URL}?message=${encodeURIComponent(msg)}`} target="_blank" rel="noopener noreferrer"
         className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white"
         style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
@@ -269,7 +290,7 @@ function DiscordSection({ orderId, amount }: { orderId: string; amount: number }
   );
 }
 
-// ── Balance (shouldn't be pending but just in case) ───────────────────────────
+// ── Balance ───────────────────────────────────────────────────────────────────
 function BalanceSection() {
   return (
     <div className="rounded-2xl p-5 mb-4" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -283,7 +304,7 @@ function BalanceSection() {
   );
 }
 
-// ── Support section (always shown at bottom) ──────────────────────────────────
+// ── Support ───────────────────────────────────────────────────────────────────
 function SupportSection({ orderId }: { orderId: string }) {
   const msg = `Hi, I need help with my order. Order ID: ${orderId}`;
   return (
