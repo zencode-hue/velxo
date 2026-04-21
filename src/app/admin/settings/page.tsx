@@ -1,7 +1,10 @@
 import { requireAdmin } from "@/lib/admin-auth";
 import { Settings } from "lucide-react";
 import AnnouncementEditor from "./AnnouncementEditor";
+import SiteSettingsEditor from "./SiteSettingsEditor";
 import { db } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminSettingsPage() {
   await requireAdmin();
@@ -18,31 +21,31 @@ export default async function AdminSettingsPage() {
       </h1>
 
       <div className="space-y-6 max-w-2xl">
-        {/* Announcement Bar Editor */}
         <AnnouncementEditor
           initialText={map["announcement_text"] ?? "🎉 New products added daily — Browse now · Instant delivery on all orders"}
           initialEnabled={map["announcement_enabled"] !== "false"}
           initialLink={map["announcement_link"] ?? "/products"}
         />
 
-        {/* Env-based settings info */}
-        <div className="glass-card p-6 space-y-5">
-          <h2 className="text-base font-semibold text-white">Environment Variables</h2>
-          {[
-            { label: "Discord Webhook", key: "DISCORD_WEBHOOK_URL", hint: "Receive sale notifications" },
-            { label: "Affiliate Commission", key: "AFFILIATE_COMMISSION_PCT", hint: "Default: 10%" },
-            { label: "Encryption Key", key: "ENCRYPTION_KEY", hint: "openssl rand -hex 32" },
-            { label: "NOWPayments API Key", key: "NOWPAYMENTS_API_KEY", hint: "For crypto payments" },
-          ].map(({ label, key, hint }) => (
-            <div key={key}>
-              <p className="text-sm font-medium text-white mb-0.5">{label}</p>
-              <p className="text-xs text-gray-500 mb-1">{hint}</p>
-              <div className="p-2.5 bg-black/40 rounded-lg border border-white/5 font-mono text-xs text-gray-400">
-                {key}=...
-              </div>
-            </div>
-          ))}
-        </div>
+        <SiteSettingsEditor
+          initialValues={{
+            discord_url: map["discord_url"] ?? "",
+            telegram_url: map["telegram_url"] ?? "",
+            support_discord_url: map["support_discord_url"] ?? "",
+            affiliate_commission_pct: map["affiliate_commission_pct"] ?? "10",
+            partner_commission_pct: map["partner_commission_pct"] ?? "15",
+            store_name: map["store_name"] ?? "Velxo",
+            store_tagline: map["store_tagline"] ?? "Premium Digital Marketplace",
+            hero_title: map["hero_title"] ?? "",
+            hero_subtitle: map["hero_subtitle"] ?? "",
+            deals_enabled: map["deals_enabled"] ?? "true",
+            newsletter_enabled: map["newsletter_enabled"] ?? "true",
+            reviews_enabled: map["reviews_enabled"] ?? "true",
+            min_payout_amount: map["min_payout_amount"] ?? "10",
+            maintenance_mode: map["maintenance_mode"] ?? "false",
+            maintenance_message: map["maintenance_message"] ?? "We'll be back shortly.",
+          }}
+        />
       </div>
     </div>
   );

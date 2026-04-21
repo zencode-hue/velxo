@@ -48,7 +48,7 @@ export default function ProductActions({ productId, price, inStock }: Props) {
         <button disabled className="w-full py-4 rounded-xl font-bold text-gray-500 bg-gray-800 cursor-not-allowed">
           Out of Stock
         </button>
-        <p className="text-xs text-gray-600 text-center">This product is currently unavailable</p>
+        <NotifyMeForm productId={productId} />
       </div>
     );
   }
@@ -83,5 +83,54 @@ export default function ProductActions({ productId, price, inStock }: Props) {
         {wishlisted ? "Saved to Wishlist" : "Add to Wishlist"}
       </button>
     </div>
+  );
+}
+
+function NotifyMeForm({ productId }: { productId: string }) {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/v1/notify-stock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, email }),
+      });
+      setStatus(res.ok ? "done" : "error");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "done") {
+    return (
+      <p className="text-xs text-green-400 text-center py-2">
+        ✓ We&apos;ll email you when this is back in stock.
+      </p>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="space-y-2">
+      <p className="text-xs text-gray-500 text-center">Get notified when back in stock</p>
+      <div className="flex gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="your@email.com"
+          required
+          className="input-field flex-1 text-sm py-2"
+        />
+        <button type="submit" disabled={status === "loading"}
+          className="btn-secondary text-sm px-4 py-2 shrink-0">
+          {status === "loading" ? "…" : "Notify"}
+        </button>
+      </div>
+      {status === "error" && <p className="text-xs text-red-400 text-center">Failed. Try again.</p>}
+    </form>
   );
 }

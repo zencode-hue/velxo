@@ -205,6 +205,21 @@ function CheckoutPageInner() {
           </div>
         )}
         {payErr && <p className="text-red-400 text-sm text-center">{payErr}</p>}
+
+        {/* Trust badges */}
+        <div className="flex items-center justify-center gap-6 flex-wrap pt-2">
+          {[
+            { icon: "🔒", text: "Secure Payment" },
+            { icon: "⚡", text: "Instant Delivery" },
+            { icon: "🔄", text: "Replacement Guarantee" },
+          ].map((b) => (
+            <div key={b.text} className="flex items-center gap-1.5 text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+              <span>{b.icon}</span>
+              <span>{b.text}</span>
+            </div>
+          ))}
+        </div>
+
         <p className="text-center text-xs text-gray-600">By purchasing you agree to our terms. All sales are final for digital products.</p>
       </div>
     </div>

@@ -8,6 +8,8 @@ import ProductCard from "@/components/storefront/ProductCard";
 import FeaturedCategories from "@/components/storefront/FeaturedCategories";
 import TrustBadges from "@/components/storefront/TrustBadges";
 import NewsletterSection from "@/components/storefront/NewsletterSection";
+import CommunitySection from "@/components/storefront/CommunitySection";
+import LiveOrderTicker from "@/components/storefront/LiveOrderTicker";
 import { ArrowRight, Zap, Lock, Gem, Flame } from "lucide-react";
 import DealCard from "@/components/storefront/DealCard";
 import DealCountdown from "@/components/storefront/DealCountdown";
@@ -57,14 +59,20 @@ async function getFeatured() {
 
 export default async function HomePage() {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const [featured, streaming, aiTools, gaming, software, dealsRes] = await Promise.all([
+  const [featured, streaming, aiTools, gaming, software, dealsRes, settingsRes] = await Promise.all([
     getFeatured(),
     getProductsByCategory("STREAMING", 4),
     getProductsByCategory("AI_TOOLS", 4),
     getProductsByCategory("GAMING", 4),
     getProductsByCategory("SOFTWARE", 4),
     fetch(`${appUrl}/api/v1/deals`, { cache: "no-store" }).then((r) => r.json()).catch(() => ({ data: null })),
+    fetch(`${appUrl}/api/v1/settings`, { cache: "no-store" }).then((r) => r.json()).catch(() => ({ data: {} })),
   ]);
+
+  const siteSettings: Record<string, string> = settingsRes?.data ?? {};
+  const discordUrl = siteSettings["discord_url"] || process.env.DISCORD_SERVER_URL || "https://discord.gg/velxo";
+  const telegramUrl = siteSettings["telegram_url"] || "";
+  const dealsEnabled = siteSettings["deals_enabled"] !== "false";
 
   const hotDeals = (dealsRes?.data?.deals ?? []).slice(0, 4) as Array<{
     id: string; title: string; category: string; imageUrl: string | null;
@@ -84,6 +92,7 @@ export default async function HomePage() {
     <>
       <HeroSection />
       <TrustBadges />
+      <LiveOrderTicker />
 
       {/* ── Section 1: Intro / value prop — visually hidden, SEO only ── */}
       <section className="sr-only" aria-hidden="false">
@@ -96,7 +105,7 @@ export default async function HomePage() {
       </section>
 
       {/* Hot Deals strip — neon green vault theme */}
-      {hotDeals.length > 0 && (
+      {dealsEnabled && hotDeals.length > 0 && (
         <section className="py-16" style={{ background: "rgba(0,10,5,0.6)", borderTop: "1px solid rgba(0,255,136,0.1)", borderBottom: "1px solid rgba(0,255,136,0.1)" }}>
           <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,136,0.008) 2px, rgba(0,255,136,0.008) 4px)" }} />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -128,6 +137,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Community Section — Discord & Telegram */}
+      <CommunitySection discordUrl={discordUrl} telegramUrl={telegramUrl} />
 
       {/* Featured */}
       {featured.length > 0 && (

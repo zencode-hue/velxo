@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { ExternalLink, Copy, Check, ChevronRight, Loader2, MessageCircle, CreditCard, Bitcoin, Wallet, Clock } from "lucide-react";
 
 interface InvoiceClientProps {
@@ -15,6 +16,14 @@ interface InvoiceClientProps {
 const DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_URL ?? "https://discord.gg/2b8AkfW6EP";
 
 export default function InvoiceClient({ orderId, status, paymentProvider, amount, paymentRef, giftCardDenomination }: InvoiceClientProps) {
+  const router = useRouter();
+
+  // Auto-refresh every 15s for PENDING orders
+  useEffect(() => {
+    if (status !== "PENDING") return;
+    const interval = setInterval(() => router.refresh(), 15000);
+    return () => clearInterval(interval);
+  }, [status, router]);
   if (status !== "PENDING") {
     if (status === "PENDING_STOCK" && paymentProvider === "binance_gift_card") {
       return (

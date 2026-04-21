@@ -1,0 +1,32 @@
+Based on everything I've seen building this project, here's what I'd prioritize:
+
+**Conversion & Trust**
+- No social proof on the homepage — add a live "X orders delivered today" counter or recent purchase notifications
+- Product pages have no "frequently bought together" or upsell
+- The checkout has no trust badges (SSL, instant delivery, money-back) right before the pay button — that's where people abandon
+- No guest checkout email confirmation — guests can't find their order later
+
+**UX gaps**
+- Search page probably returns no results for typos — needs fuzzy search or at least category filters
+- Wishlist exists but there's no "notify me when back in stock" for out-of-stock products
+- No order tracking page that auto-refreshes — customers have to manually reload the invoice
+- The deals page countdown timer resets on refresh
+
+**Revenue**
+- No upsell at checkout success — "customers also bought" after purchase
+- Discount codes can't be stacked or have minimum order values
+- No referral reward for the person being referred (only the referrer earns)
+- Partner affiliate commission isn't actually credited anywhere in the checkout flow — the code exists but `creditAffiliateCommission` only handles promo affiliates, not partner affiliates
+
+**Operations**
+- Partner affiliate commission crediting is missing — when a `pref=` referral code is used at checkout, nothing credits the partner's balance
+- No email when a partner payout is approved/rejected
+- Staff can't see order details, only the list — no drill-down
+
+**SEO**
+- Blog posts have no internal linking to products
+- No structured data on the homepage
+- Product images don't have proper alt text from the product title
+
+What do you want to tackle first?
+do all every single one and also on landing page around where hot deals is add discord and telegram button link can be set from admin setting also let more things be easy to run from admin setting instead of coding all the time so tackle all

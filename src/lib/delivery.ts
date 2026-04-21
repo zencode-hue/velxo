@@ -97,6 +97,7 @@ export async function deliverOrder(orderId: string): Promise<void> {
   // Credit affiliate commission if the buyer was referred (logged-in users only)
   if (order.userId) {
     await creditAffiliateCommission(order.userId, Number(order.amount));
+    await creditPartnerCommission(order.userId, Number(order.amount));
   }
 
   const discordUrl = process.env.DISCORD_WEBHOOK_URL;
@@ -132,6 +133,25 @@ async function creditAffiliateCommission(userId: string, orderAmount: number): P
     where: { id: affiliate.id },
     data: {
       pendingPayout: { increment: commission },
+      totalEarned: { increment: commission },
+    },
+  });
+}
+
+async function creditPartnerCommission(userId: string, orderAmount: number): Promise<void> {
+  // Check if this user was referred by a partner affiliate
+  const partnerReferral = await db.partnerReferral.findUnique({ where: { referredUserId: userId } });
+  if (!partnerReferral) return;
+
+  const partner = await db.partnerAffiliate.findUnique({ where: { id: partnerReferral.partnerAffiliateId } });
+  if (!partner || partner.status !== "ACTIVE") return;
+
+  const commission = (orderAmount * Number(partner.commissionPct)) / 100;
+
+  await db.partnerAffiliate.update({
+    where: { id: partner.id },
+    data: {
+      balance: { increment: commission },
       totalEarned: { increment: commission },
     },
   });
