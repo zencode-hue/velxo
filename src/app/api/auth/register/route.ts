@@ -14,7 +14,8 @@ const registerSchema = z.object({
     .min(8, "Password must be at least 8 characters")
     .max(128, "Password too long"),
   name: z.string().min(1).max(100).optional(),
-  ref: z.string().optional(), // referral code
+  ref: z.string().optional(),  // promo affiliate referral code
+  pref: z.string().optional(), // partner affiliate referral code
 });
 
 export async function POST(req: NextRequest) {
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { email, password, name, ref } = parsed.data;
+    const { email, password, name, ref, pref } = parsed.data;
     const normalizedEmail = email.toLowerCase();
 
     const existing = await db.user.findUnique({
@@ -64,12 +65,22 @@ export async function POST(req: NextRequest) {
       // Email not configured — user is already verified above
     }
 
-    // Referral tracking: associate new user with affiliate if ref code provided
+    // Promo affiliate referral tracking
     if (ref) {
       const affiliate = await db.affiliate.findUnique({ where: { referralCode: ref.toUpperCase() } });
       if (affiliate && affiliate.userId !== user.id) {
         await db.referral.create({
           data: { affiliateId: affiliate.id, referredUserId: user.id },
+        });
+      }
+    }
+
+    // Partner affiliate referral tracking (pref= code)
+    if (pref) {
+      const partner = await db.partnerAffiliate.findUnique({ where: { referralCode: pref.toUpperCase() } });
+      if (partner && partner.userId !== user.id && partner.status === "ACTIVE") {
+        await db.partnerReferral.create({
+          data: { partnerAffiliateId: partner.id, referredUserId: user.id },
         });
       }
     }

@@ -320,3 +320,20 @@ export async function sendPayoutNotificationEmail(
 
   await send(email, subject, html(action === "approved" ? "Payout approved" : "Payout rejected", body));
 }
+
+// ─── Restock Notification ─────────────────────────────────────────────────────
+
+export async function sendRestockEmail(email: string, productTitle: string, productId: string): Promise<void> {
+  const productUrl = `${APP_URL}/products/${productId}`;
+  await send(
+    email,
+    `${productTitle} is back in stock! — ${APP_NAME}`,
+    html(
+      "Back in stock",
+      `${h2("Great news — it's back!")}
+       ${p(`<strong style="color:#f9fafb;">${productTitle}</strong> is now back in stock and ready to order.`)}
+       <div style="margin:24px 0;">${btn(productUrl, "Buy Now →")}</div>
+       ${p("Don't wait — stock is limited and may sell out quickly.")}`
+    )
+  );
+}

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { db } from "@/lib/db";
+import ProductCard from "@/components/storefront/ProductCard";
+import { productPath } from "@/lib/slug";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +38,21 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   if (!post) notFound();
 
+  // Find related products based on blog category
+  const categoryMap: Record<string, string> = {
+    Streaming: "STREAMING", "AI Tools": "AI_TOOLS", Software: "SOFTWARE", Gaming: "GAMING",
+  };
+  const productCategory = categoryMap[post.category];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const relatedProducts = productCategory ? await (db.product.findMany as any)({
+    where: { isActive: true, category: productCategory },
+    take: 3,
+    orderBy: { avgRating: "desc" },
+    select: { id: true, title: true, price: true, category: true, imageUrl: true, avgRating: true, stockCount: true, unlimitedStock: true },
+  }).then((ps: Array<{ id: string; title: string; price: { toString(): string }; category: string; imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean }>) =>
+    ps.map((p) => ({ id: p.id, title: p.title, price: Number(p.price), category: p.category, imageUrl: p.imageUrl, avgRating: Number(p.avgRating), stockCount: p.stockCount, unlimitedStock: p.unlimitedStock, inStock: p.unlimitedStock || p.stockCount > 0 }))
+  ) : [];
+
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors mb-8">
@@ -68,6 +85,25 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           Browse Products
         </Link>
       </div>
+
+      {/* Related products — internal linking for SEO */}
+      {relatedProducts.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-xl font-bold text-white mb-5 flex items-center gap-2">
+            <ShoppingBag size={18} style={{ color: "#c4b5fd" }} />
+            Related {post.category} Products
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {relatedProducts.map((p) => <ProductCard key={p.id} {...p} />)}
+          </div>
+          <div className="mt-4 text-center">
+            <Link href={productCategory ? `/products?category=${productCategory}` : "/products"}
+              className="text-sm text-purple-400 hover:text-purple-300 transition-colors">
+              View all {post.category} products →
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

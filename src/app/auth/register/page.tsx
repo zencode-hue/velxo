@@ -10,6 +10,7 @@ function RegisterPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const ref = searchParams.get("ref") ?? "";
+  const pref = searchParams.get("pref") ?? "";
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,7 +28,7 @@ function RegisterPageInner() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, ref }),
+        body: JSON.stringify({ name, email, password, ref, pref }),
       });
       const data = await res.json();
       if (!res.ok) {

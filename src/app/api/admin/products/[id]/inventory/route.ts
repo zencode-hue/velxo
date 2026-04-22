@@ -83,5 +83,24 @@ export async function POST(
     }),
   ]);
 
+  // Notify users who requested restock alerts
+  try {
+    const key = `stock_notify_${params.id}`;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const notifySetting = await (db as any).siteSetting.findUnique({ where: { key } });
+    if (notifySetting) {
+      const emails: string[] = JSON.parse(notifySetting.value);
+      if (emails.length > 0) {
+        const { sendRestockEmail } = await import("@/lib/email");
+        for (const email of emails) {
+          await sendRestockEmail(email, product.title, params.id).catch(() => {});
+        }
+        // Clear the list after notifying
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (db as any).siteSetting.update({ where: { key }, data: { value: "[]" } });
+      }
+    }
+  } catch { /* non-fatal */ }
+
   return NextResponse.json({ data: { imported: lines.length }, error: null, meta: {} }, { status: 200 });
 }

@@ -109,7 +109,11 @@ export default function StaffOrdersPage() {
             <tbody>
               {filtered.map((o) => (
                 <tr key={o.id} className="border-b border-white/5 hover:bg-white/2">
-                  <td className="px-4 py-3 font-mono text-xs text-purple-400">#{o.id.slice(0, 8).toUpperCase()}</td>
+                  <td className="px-4 py-3 font-mono text-xs text-purple-400">
+                    <a href={`/staff/orders/${o.id}`} className="hover:text-purple-300 transition-colors">
+                      #{o.id.slice(0, 8).toUpperCase()}
+                    </a>
+                  </td>
                   <td className="px-4 py-3 text-gray-300 text-xs truncate max-w-[160px]">
                     {o.user?.email ?? o.guestEmail ?? "Guest"}
                   </td>
