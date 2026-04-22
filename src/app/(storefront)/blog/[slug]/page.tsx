@@ -50,7 +50,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     orderBy: { avgRating: "desc" },
     select: { id: true, title: true, price: true, category: true, imageUrl: true, avgRating: true, stockCount: true, unlimitedStock: true },
   }).then((ps: Array<{ id: string; title: string; price: { toString(): string }; category: string; imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean }>) =>
-    ps.map((p) => ({ id: p.id, title: p.title, price: Number(p.price), category: p.category, imageUrl: p.imageUrl, avgRating: Number(p.avgRating), stockCount: p.stockCount, unlimitedStock: p.unlimitedStock, inStock: p.unlimitedStock || p.stockCount > 0 }))
+    ps.map((p: { id: string; title: string; price: { toString(): string }; category: string; imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean }) => ({ id: p.id, title: p.title, price: Number(p.price), category: p.category, imageUrl: p.imageUrl, avgRating: Number(p.avgRating), stockCount: p.stockCount, unlimitedStock: p.unlimitedStock, inStock: p.unlimitedStock || p.stockCount > 0 }))
   ) : [];
 
   return (
