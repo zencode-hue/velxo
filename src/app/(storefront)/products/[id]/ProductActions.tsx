@@ -12,9 +12,10 @@ interface Props {
   inStock: boolean;
   imageUrl?: string | null;
   category?: string;
+  onCartOpen?: () => void;
 }
 
-export default function ProductActions({ productId, productTitle, price, inStock, imageUrl, category }: Props) {
+export default function ProductActions({ productId, productTitle, price, inStock, imageUrl, category, onCartOpen }: Props) {
   const router = useRouter();
   const { addItem, items } = useCart();
   const [wishlisted, setWishlisted] = useState(() => {
@@ -36,6 +37,8 @@ export default function ProductActions({ productId, productTitle, price, inStock
     addItem({ id: productId, title: productTitle, price, category: category ?? "", imageUrl });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
+    // Open cart drawer if callback provided
+    if (onCartOpen) onCartOpen();
   }
 
   function handleBuyNow() {
