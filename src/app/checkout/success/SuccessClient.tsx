@@ -50,7 +50,7 @@ export default function SuccessClient({ pendingStock }: { pendingStock?: boolean
 
           <div className="flex gap-3 justify-center">
             {orderId && (
-              <Link href={`/orders/${orderId}`}
+              <Link href={`/invoice/${orderId}`}
                 className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm border border-white/10 hover:bg-white/5 transition-all">
                 <Package size={14} /> View Order
               </Link>
@@ -85,7 +85,7 @@ export default function SuccessClient({ pendingStock }: { pendingStock?: boolean
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {orderId && (
-            <Link href={`/orders/${orderId}`}
+            <Link href={`/invoice/${orderId}`}
               className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm"
               style={{ background: "linear-gradient(135deg, #ea580c, #f97316)" }}>
               <Package size={16} /> View Invoice

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin-auth";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { db } from "@/lib/db";
 import { z } from "zod";
 
@@ -11,19 +11,17 @@ const schema = z.object({
 });
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
-  try {
-    await requireAdmin();
-    const body = await req.json();
-    const parsed = schema.safeParse(body);
-    if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  const { error } = await requireAdminApi();
+  if (error) return error;
 
-    const partner = await db.partnerAffiliate.update({
-      where: { id: params.id },
-      data: parsed.data,
-      select: { id: true, status: true, commissionPct: true },
-    });
-    return NextResponse.json({ data: partner, error: null });
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const body = await req.json();
+  const parsed = schema.safeParse(body);
+  if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+
+  const partner = await db.partnerAffiliate.update({
+    where: { id: params.id },
+    data: parsed.data,
+    select: { id: true, status: true, commissionPct: true },
+  });
+  return NextResponse.json({ data: partner, error: null });
 }

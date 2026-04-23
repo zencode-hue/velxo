@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { requireAdmin } from "@/lib/admin-auth";
+import { requireAdminApi } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
-  await requireAdmin();
+  const { error } = await requireAdminApi();
+  if (error) return error;
 
   const ip = req.nextUrl.searchParams.get("ip")?.trim();
   if (!ip) return NextResponse.json({ error: "IP address required" }, { status: 400 });

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin-auth";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { db } from "@/lib/db";
 import { z } from "zod";
 
@@ -12,35 +12,31 @@ const schema = z.object({
 });
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
-  try {
-    await requireAdmin();
-    const body = await req.json();
-    const parsed = schema.safeParse(body);
-    if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  const { error } = await requireAdminApi();
+  if (error) return error;
 
-    const data: Record<string, unknown> = {};
-    if (parsed.data.status) data.status = parsed.data.status;
-    if (parsed.data.position !== undefined) data.position = parsed.data.position;
-    if (parsed.data.joinedAt) data.joinedAt = new Date(parsed.data.joinedAt);
+  const body = await req.json();
+  const parsed = schema.safeParse(body);
+  if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
-    const staff = await db.staffMember.update({
-      where: { id: params.id },
-      data,
-      select: { id: true, name: true, email: true, status: true, position: true },
-    });
+  const data: Record<string, unknown> = {};
+  if (parsed.data.status) data.status = parsed.data.status;
+  if (parsed.data.position !== undefined) data.position = parsed.data.position;
+  if (parsed.data.joinedAt) data.joinedAt = new Date(parsed.data.joinedAt);
 
-    return NextResponse.json({ data: staff, error: null });
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const staff = await db.staffMember.update({
+    where: { id: params.id },
+    data,
+    select: { id: true, name: true, email: true, status: true, position: true },
+  });
+
+  return NextResponse.json({ data: staff, error: null });
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
-  try {
-    await requireAdmin();
-    await db.staffMember.delete({ where: { id: params.id } });
-    return NextResponse.json({ data: null, error: null });
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const { error } = await requireAdminApi();
+  if (error) return error;
+
+  await db.staffMember.delete({ where: { id: params.id } });
+  return NextResponse.json({ data: null, error: null });
 }

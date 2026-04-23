@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin-auth";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { db } from "@/lib/db";
 import { z } from "zod";
 
@@ -12,53 +12,49 @@ const schema = z.object({
 });
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
-  try {
-    const session = await requireAdmin();
-    const body = await req.json();
-    const parsed = schema.safeParse(body);
-    if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  const { error } = await requireAdminApi();
+  if (error) return error;
 
-    const payout = await db.partnerPayoutRequest.findUnique({ where: { id: params.id } });
-    if (!payout) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    if (payout.status !== "PENDING") return NextResponse.json({ error: "Already processed" }, { status: 400 });
+  const body = await req.json();
+  const parsed = schema.safeParse(body);
+  if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
-    if (parsed.data.action === "approve") {
-      await db.$transaction(async (tx) => {
-        await tx.partnerPayoutRequest.update({
-          where: { id: params.id },
-          data: { status: "APPROVED", txHash: parsed.data.txHash, adminNote: parsed.data.adminNote },
-        });
-        await tx.partnerAffiliate.update({
-          where: { id: payout.partnerAffiliateId },
-          data: { totalPaidOut: { increment: Number(payout.amount) } },
-        });
+  const payout = await db.partnerPayoutRequest.findUnique({ where: { id: params.id } });
+  if (!payout) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (payout.status !== "PENDING") return NextResponse.json({ error: "Already processed" }, { status: 400 });
+
+  if (parsed.data.action === "approve") {
+    await db.$transaction(async (tx) => {
+      await tx.partnerPayoutRequest.update({
+        where: { id: params.id },
+        data: { status: "APPROVED", txHash: parsed.data.txHash, adminNote: parsed.data.adminNote },
       });
-
-      // Notify partner via email
-      const partner = await db.partnerAffiliate.findUnique({
+      await tx.partnerAffiliate.update({
         where: { id: payout.partnerAffiliateId },
-        include: { user: { select: { email: true } } },
+        data: { totalPaidOut: { increment: Number(payout.amount) } },
       });
-      if (partner?.user?.email) {
-        const { send: sendEmail } = await import("@/lib/email").then(m => ({ send: m.sendPayoutNotificationEmail })).catch(() => ({ send: null }));
-        if (sendEmail) await sendEmail(partner.user.email, "approved", Number(payout.amount), parsed.data.txHash).catch(() => {});
-      }
-    } else {
-      // Reject — refund balance back
-      await db.$transaction(async (tx) => {
-        await tx.partnerPayoutRequest.update({
-          where: { id: params.id },
-          data: { status: "REJECTED", adminNote: parsed.data.adminNote },
-        });
-        await tx.partnerAffiliate.update({
-          where: { id: payout.partnerAffiliateId },
-          data: { balance: { increment: Number(payout.amount) } },
-        });
-      });
-    }
+    });
 
-    return NextResponse.json({ data: { success: true }, error: null });
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const partner = await db.partnerAffiliate.findUnique({
+      where: { id: payout.partnerAffiliateId },
+      include: { user: { select: { email: true } } },
+    });
+    if (partner?.user?.email) {
+      const { send: sendEmail } = await import("@/lib/email").then(m => ({ send: m.sendPayoutNotificationEmail })).catch(() => ({ send: null }));
+      if (sendEmail) await sendEmail(partner.user.email, "approved", Number(payout.amount), parsed.data.txHash).catch(() => {});
+    }
+  } else {
+    await db.$transaction(async (tx) => {
+      await tx.partnerPayoutRequest.update({
+        where: { id: params.id },
+        data: { status: "REJECTED", adminNote: parsed.data.adminNote },
+      });
+      await tx.partnerAffiliate.update({
+        where: { id: payout.partnerAffiliateId },
+        data: { balance: { increment: Number(payout.amount) } },
+      });
+    });
   }
+
+  return NextResponse.json({ data: { success: true }, error: null });
 }
