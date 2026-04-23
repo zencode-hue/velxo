@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Twitter, MessageCircle, Mail } from "lucide-react";
 import VelxoLogo from "@/components/VelxoLogo";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
+import { CartProvider } from "@/contexts/CartContext";
 
 function Footer() {
   return (
@@ -76,15 +77,17 @@ export default function StorefrontLayout({ children }: { children: React.ReactNo
   return (
     <Providers>
       <CurrencyProvider>
-        <PageViewTracker />
-        <TawkChat />
-        <AnnouncementBar />
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
-        <RecentPurchasePopupWrapper />
-        <FloatingSupportButton />
-        <ExitIntentPopup />
+        <CartProvider>
+          <PageViewTracker />
+          <TawkChat />
+          <AnnouncementBar />
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <RecentPurchasePopupWrapper />
+          <FloatingSupportButton />
+          <ExitIntentPopup />
+        </CartProvider>
       </CurrencyProvider>
     </Providers>
   );

@@ -18,6 +18,9 @@ const PUBLIC_KEYS = [
   "maintenance_mode",
   "maintenance_message",
   "affiliate_commission_pct",
+  "announcement_enabled",
+  "announcement_text",
+  "announcement_link",
 ];
 
 export async function GET() {

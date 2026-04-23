@@ -138,14 +138,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable}>
       <head>
+        {/* DNS prefetch for external resources */}
+        <link rel="dns-prefetch" href="https://ipapi.co" />
+        <link rel="dns-prefetch" href="https://nowpayments.io" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* Analytics — defer to avoid render blocking */}
         <script
           src="https://analytics.ahrefs.com/analytics.js"
           data-key="eaaiCjFWJryD0qKxQzgRgw"
-          async
+          defer
         />
       </head>
       <body className="min-h-screen bg-background text-white antialiased">

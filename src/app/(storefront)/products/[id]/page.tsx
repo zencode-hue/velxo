@@ -253,7 +253,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
           {/* Actions — client component */}
           <UrgencyBadges productId={product.id} stockCount={product.stockCount} unlimitedStock={product.unlimitedStock} />
-          <ProductActions productId={product.id} productTitle={product.title} price={product.price} inStock={product.inStock} />
+          <ProductActions productId={product.id} productTitle={product.title} price={product.price} inStock={product.inStock} imageUrl={product.imageUrl} category={product.category} />
         </div>
       </div>
 
