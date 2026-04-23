@@ -3,18 +3,19 @@ import { decrypt } from "@/lib/crypto";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle, Clock, XCircle, Package, ArrowLeft, ExternalLink } from "lucide-react";
+import { CheckCircle, Clock, XCircle, Package, ArrowLeft } from "lucide-react";
 import CopyButton from "./CopyButton";
+import InvoiceClient from "./InvoiceClient";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
-const STATUS_CONFIG: Record<string, { icon: typeof CheckCircle; color: string; bg: string; label: string; desc: string }> = {
-  PAID: { icon: CheckCircle, color: "text-green-400", bg: "bg-green-500/10 border-green-500/20", label: "Delivered", desc: "Payment confirmed and product delivered." },
-  PENDING: { icon: Clock, color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20", label: "Awaiting Payment", desc: "Complete your payment to receive your product." },
-  PENDING_STOCK: { icon: Clock, color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20", label: "Processing", desc: "Payment received. Preparing your order." },
-  FAILED: { icon: XCircle, color: "text-red-400", bg: "bg-red-500/10 border-red-500/20", label: "Payment Failed", desc: "Payment could not be processed." },
-  REFUNDED: { icon: CheckCircle, color: "text-purple-400", bg: "bg-purple-500/10 border-purple-500/20", label: "Refunded", desc: "This order has been refunded." },
+const STATUS_CONFIG: Record<string, { icon: typeof CheckCircle; color: string; bg: string; label: string }> = {
+  PAID: { icon: CheckCircle, color: "text-green-400", bg: "bg-green-500/10 border-green-500/20", label: "Delivered" },
+  PENDING: { icon: Clock, color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20", label: "Awaiting Payment" },
+  PENDING_STOCK: { icon: Clock, color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20", label: "Processing" },
+  FAILED: { icon: XCircle, color: "text-red-400", bg: "bg-red-500/10 border-red-500/20", label: "Payment Failed" },
+  REFUNDED: { icon: CheckCircle, color: "text-purple-400", bg: "bg-purple-500/10 border-purple-500/20", label: "Refunded" },
 };
 
 const PAYMENT_LABELS: Record<string, string> = {
@@ -61,11 +62,10 @@ export default async function InvoicePage({ params }: { params: { id: string } }
   const invoiceNum = order.id.slice(0, 8).toUpperCase();
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
 
-  // Steps
   const steps = [
     { label: "Order Placed", done: true, time: new Date(order.createdAt).toLocaleString() },
-    { label: "Payment Confirmed", done: ["PAID", "PENDING_STOCK", "REFUNDED"].includes(order.status), time: order.status === "PAID" ? "Confirmed" : null },
-    { label: "Product Delivered", done: order.status === "PAID" && !!order.deliveryLog, time: order.deliveryLog ? "Delivered" : null },
+    { label: "Payment Confirmed", done: ["PAID", "PENDING_STOCK", "REFUNDED"].includes(order.status) },
+    { label: "Product Delivered", done: order.status === "PAID" && !!order.deliveryLog },
   ];
 
   return (
@@ -80,7 +80,9 @@ export default async function InvoicePage({ params }: { params: { id: string } }
           <div>
             <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Invoice</p>
             <h1 className="text-2xl font-bold text-white font-mono">#{invoiceNum}</h1>
-            <p className="text-xs text-gray-600 mt-1">{new Date(order.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
+            <p className="text-xs text-gray-600 mt-1">
+              {new Date(order.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+            </p>
           </div>
           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm font-medium ${status.bg} ${status.color}`}>
             <StatusIcon size={14} />
@@ -90,7 +92,7 @@ export default async function InvoicePage({ params }: { params: { id: string } }
 
         {/* Progress steps */}
         <div className="rounded-2xl p-5 mb-4" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(255,255,255,0.08)" }}>
-          <div className="flex items-start gap-0">
+          <div className="flex items-start">
             {steps.map((s, i) => (
               <div key={s.label} className="flex-1 flex flex-col items-center relative">
                 {i < steps.length - 1 && (
@@ -100,7 +102,6 @@ export default async function InvoicePage({ params }: { params: { id: string } }
                   {s.done ? <CheckCircle size={14} className="text-white" /> : <div className="w-2 h-2 rounded-full bg-gray-600" />}
                 </div>
                 <p className={`text-xs mt-2 text-center font-medium ${s.done ? "text-white" : "text-gray-600"}`}>{s.label}</p>
-                {s.time && <p className="text-xs text-gray-600 mt-0.5 text-center">{s.time}</p>}
               </div>
             ))}
           </div>
@@ -119,11 +120,11 @@ export default async function InvoicePage({ params }: { params: { id: string } }
             </div>
             <div className="flex-1">
               <p className="font-semibold text-white">{order.product.title}</p>
-              <p className="text-xs text-gray-500">{CATEGORY_LABELS[order.product.category] ?? order.product.category} · 1 year subscription</p>
+              <p className="text-xs text-gray-500">{CATEGORY_LABELS[order.product.category] ?? order.product.category}</p>
             </div>
             <div className="text-right">
               <p className="font-bold text-white">${Number(order.amount).toFixed(2)}</p>
-              <p className="text-xs text-green-400 capitalize">{order.status === "PAID" ? "Delivered" : order.status.toLowerCase()}</p>
+              <p className="text-xs text-green-400 capitalize">{order.status === "PAID" ? "Delivered" : order.status.toLowerCase().replace("_", " ")}</p>
             </div>
           </div>
         </div>
@@ -153,6 +154,16 @@ export default async function InvoicePage({ params }: { params: { id: string } }
           </div>
         </div>
 
+        {/* Interactive payment flow (gift card, crypto, etc.) */}
+        <InvoiceClient
+          orderId={order.id}
+          status={order.status}
+          paymentProvider={order.paymentProvider}
+          amount={Number(order.amount)}
+          paymentRef={order.paymentRef}
+          giftCardDenomination={Number(order.amount)}
+        />
+
         {/* Credentials — only shown if delivered */}
         {credentials && (
           <div className="rounded-2xl p-5 mb-4" style={{ background: "rgba(124,58,237,0.06)", border: "1px solid rgba(124,58,237,0.2)" }}>
@@ -165,23 +176,6 @@ export default async function InvoicePage({ params }: { params: { id: string } }
           </div>
         )}
 
-        {/* Pending stock — Discord claim */}
-        {order.status === "PENDING_STOCK" && (
-          <div className="rounded-2xl p-5 mb-4" style={{ background: "rgba(167,139,250,0.05)", border: "1px solid rgba(167,139,250,0.15)" }}>
-            <p className="text-sm font-semibold text-white mb-3">Claim Your Product on Discord</p>
-            <p className="text-xs mb-3" style={{ color: "rgba(255,255,255,0.4)" }}>Your payment was received but stock is temporarily unavailable. Join our Discord and share your Invoice ID to claim your product.</p>
-            <div className="flex items-center gap-2 p-3 rounded-xl mb-3" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <code className="font-mono text-sm text-white/70 flex-1 break-all">{order.id}</code>
-              <CopyButton text={order.id} />
-            </div>
-            <a href="https://discord.gg/2b8AkfW6EP" target="_blank" rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold text-white"
-              style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
-              <ExternalLink size={14} /> Join Discord to Claim
-            </a>
-          </div>
-        )}
-
         {/* Invoice ID */}
         <div className="rounded-2xl p-5 mb-6" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(255,255,255,0.08)" }}>
           <div className="flex items-center justify-between mb-2">
@@ -189,7 +183,7 @@ export default async function InvoicePage({ params }: { params: { id: string } }
             <CopyButton text={order.id} label="Copy ID" />
           </div>
           <code className="font-mono text-xs text-gray-400 break-all">{order.id}</code>
-          <p className="text-xs text-gray-700 mt-2">Share this link to access this invoice: {appUrl}/invoice/{order.id}</p>
+          <p className="text-xs text-gray-700 mt-2">{appUrl}/invoice/{order.id}</p>
         </div>
 
         <div className="flex gap-3">

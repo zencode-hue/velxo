@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Trash2, ShoppingBag, ArrowRight, Package } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 const CATEGORY_LABELS: Record<string, string> = {
   STREAMING: "Streaming", AI_TOOLS: "AI Tools", SOFTWARE: "Software", GAMING: "Gaming",
 };
