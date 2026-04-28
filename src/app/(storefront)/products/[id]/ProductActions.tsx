@@ -5,6 +5,15 @@ import { useRouter } from "next/navigation";
 import { ShoppingCart, Zap, Heart, Check } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
+interface Variant {
+  id: string;
+  name: string;
+  price: number;
+  stockCount: number;
+  unlimitedStock: boolean;
+  inStock: boolean;
+}
+
 interface Props {
   productId: string;
   productTitle: string;
@@ -12,19 +21,27 @@ interface Props {
   inStock: boolean;
   imageUrl?: string | null;
   category?: string;
-  onCartOpen?: () => void;
+  variants?: Variant[];
 }
 
-export default function ProductActions({ productId, productTitle, price, inStock, imageUrl, category, onCartOpen }: Props) {
+export default function ProductActions({ productId, productTitle, price, inStock, imageUrl, category, variants = [] }: Props) {
   const router = useRouter();
   const { addItem, items } = useCart();
+  const hasVariants = variants.length > 0;
+
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(
+    hasVariants ? (variants.find((v) => v.inStock) ?? variants[0]) : null
+  );
   const [wishlisted, setWishlisted] = useState(() => {
     if (typeof window === "undefined") return false;
-    const list = JSON.parse(localStorage.getItem("velxo_wishlist") ?? "[]") as string[];
-    return list.includes(productId);
+    return (JSON.parse(localStorage.getItem("velxo_wishlist") ?? "[]") as string[]).includes(productId);
   });
   const [addedToCart, setAddedToCart] = useState(false);
-  const inCart = items.some((i) => i.id === productId);
+
+  const effectivePrice = selectedVariant ? selectedVariant.price : price;
+  const effectiveInStock = selectedVariant ? selectedVariant.inStock : inStock;
+  const cartKey = selectedVariant ? `${productId}__${selectedVariant.id}` : productId;
+  const inCart = items.some((i) => i.id === cartKey);
 
   function toggleWishlist() {
     const list = JSON.parse(localStorage.getItem("velxo_wishlist") ?? "[]") as string[];
@@ -34,20 +51,31 @@ export default function ProductActions({ productId, productTitle, price, inStock
   }
 
   function handleAddToCart() {
-    addItem({ id: productId, title: productTitle, price, category: category ?? "", imageUrl });
+    const label = selectedVariant ? `${productTitle} — ${selectedVariant.name}` : productTitle;
+    addItem({
+      id: cartKey,
+      title: label,
+      price: effectivePrice,
+      category: category ?? "",
+      imageUrl,
+      variantId: selectedVariant?.id,
+      productId,
+    });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
-    // Open cart drawer if callback provided
-    if (onCartOpen) onCartOpen();
   }
 
   function handleBuyNow() {
-    router.push(`/checkout?productId=${productId}`);
+    const url = selectedVariant
+      ? `/checkout?productId=${productId}&variantId=${selectedVariant.id}`
+      : `/checkout?productId=${productId}`;
+    router.push(url);
   }
 
-  if (!inStock) {
+  if (!effectiveInStock) {
     return (
       <div className="space-y-3">
+        {hasVariants && <VariantSelector variants={variants} selected={selectedVariant} onSelect={setSelectedVariant} />}
         <button disabled className="w-full py-4 rounded-xl font-bold text-gray-500 cursor-not-allowed"
           style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
           Out of Stock
@@ -59,6 +87,8 @@ export default function ProductActions({ productId, productTitle, price, inStock
 
   return (
     <div className="space-y-3">
+      {hasVariants && <VariantSelector variants={variants} selected={selectedVariant} onSelect={setSelectedVariant} />}
+
       <div className="flex gap-3">
         <button onClick={handleAddToCart}
           className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-white text-sm transition-all hover:-translate-y-0.5"
@@ -74,11 +104,46 @@ export default function ProductActions({ productId, productTitle, price, inStock
           <Zap size={16} /> Buy Now
         </button>
       </div>
+
       <button onClick={toggleWishlist}
         className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${wishlisted ? "text-red-400 bg-red-500/10 border border-red-500/20" : "text-gray-500 hover:text-red-400 border border-white/10 hover:border-red-500/20 hover:bg-red-500/5"}`}>
         <Heart size={14} className={wishlisted ? "fill-red-400" : ""} />
         {wishlisted ? "Saved to Wishlist" : "Add to Wishlist"}
       </button>
+    </div>
+  );
+}
+
+function VariantSelector({ variants, selected, onSelect }: { variants: Variant[]; selected: Variant | null; onSelect: (v: Variant) => void }) {
+  return (
+    <div className="space-y-2">
+      <p className="text-sm font-medium text-white">Choose option:</p>
+      <div className="flex flex-wrap gap-2">
+        {variants.map((v) => {
+          const isSelected = selected?.id === v.id;
+          return (
+            <button key={v.id} type="button"
+              onClick={() => v.inStock && onSelect(v)}
+              disabled={!v.inStock}
+              className="relative px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
+              style={{
+                background: isSelected ? "rgba(167,139,250,0.2)" : "rgba(255,255,255,0.05)",
+                border: isSelected ? "1px solid rgba(167,139,250,0.5)" : "1px solid rgba(255,255,255,0.1)",
+                color: !v.inStock ? "rgba(255,255,255,0.25)" : isSelected ? "#c4b5fd" : "rgba(255,255,255,0.7)",
+                cursor: !v.inStock ? "not-allowed" : "pointer",
+                boxShadow: isSelected ? "0 0 12px rgba(167,139,250,0.2)" : "none",
+              }}>
+              <span>{v.name}</span>
+              <span className="ml-2 font-bold" style={{ color: isSelected ? "#c4b5fd" : "rgba(255,255,255,0.5)" }}>
+                ${v.price.toFixed(2)}
+              </span>
+              {!v.inStock && (
+                <span className="absolute -top-1.5 -right-1.5 text-[9px] px-1 rounded-full bg-red-500/80 text-white">sold out</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

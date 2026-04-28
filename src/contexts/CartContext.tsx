@@ -3,7 +3,9 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 
 export interface CartItem {
-  id: string;
+  id: string;          // unique key: productId or productId__variantId
+  productId: string;
+  variantId?: string;
   title: string;
   price: number;
   category: string;
@@ -41,10 +43,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === item.id);
-      if (existing) {
-        // Digital products: max 1 per item
-        return prev;
-      }
+      if (existing) return prev; // already in cart
       return [...prev, { ...item, quantity: 1 }];
     });
   }, []);

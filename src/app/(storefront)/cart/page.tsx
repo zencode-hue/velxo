@@ -85,7 +85,7 @@ export default function CartPage() {
       {/* Checkout each item individually (digital products) */}
       <div className="space-y-2">
         {items.map((item) => (
-          <Link key={item.id} href={`/checkout?productId=${item.id}`}
+          <Link key={item.id} href={`/checkout?productId=${item.productId}${item.variantId ? `&variantId=${item.variantId}` : ""}`}
             className="w-full flex items-center justify-between gap-3 px-5 py-3.5 rounded-xl font-semibold text-white text-sm transition-all"
             style={{ background: "rgba(167,139,250,0.12)", border: "1px solid rgba(167,139,250,0.25)" }}>
             <span className="truncate">{item.title}</span>

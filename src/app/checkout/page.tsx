@@ -164,11 +164,13 @@ function GiftCardInstructions({ amount, orderId, onClose }: { amount: number; or
 function CheckoutPageInner() {
   const searchParams = useSearchParams();
   const productId = searchParams.get("productId");
+  const variantIdParam = searchParams.get("variantId");
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [balance, setBalance] = useState<number | null>(null);
   const [country, setCountry] = useState<string | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<{ id: string; name: string; price: number } | null>(null);
   const [discountCode, setDiscountCode] = useState("");
   const [discountInfo, setDiscountInfo] = useState<{ value: number; type: string; discountAmount: number } | null>(null);
   const [discountErr, setDiscountErr] = useState<string | null>(null);
@@ -185,14 +187,25 @@ function CheckoutPageInner() {
       // Detect country for payment method filtering
       fetch("https://ipapi.co/json/").then((r) => r.json()).catch(() => null),
     ]).then(([productData, balanceData, geoData]) => {
-      setProduct(productData.data?.product ?? null);
+      const p = productData.data?.product ?? null;
+      setProduct(p);
       if (balanceData?.data?.balance !== undefined) setBalance(balanceData.data.balance);
       if (geoData?.country_code) setCountry(geoData.country_code);
+      // Auto-select variant from URL param
+      if (p?.variants?.length && variantIdParam) {
+        const v = p.variants.find((v: { id: string }) => v.id === variantIdParam);
+        if (v) setSelectedVariant(v);
+      } else if (p?.variants?.length) {
+        const first = p.variants.find((v: { inStock: boolean }) => v.inStock) ?? p.variants[0];
+        setSelectedVariant(first);
+      }
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [productId]);
 
-  const finalPrice = product ? Math.max(0, product.price - (discountInfo?.discountAmount ?? 0)) : 0;
+  const finalPrice = product
+    ? Math.max(0, (selectedVariant ? selectedVariant.price : product.price) - (discountInfo?.discountAmount ?? 0))
+    : 0;
   const canPayWithBalance = balance !== null && balance >= finalPrice;
   const isNorthAmerica = country ? NA_COUNTRIES.includes(country) : false;
 
@@ -216,7 +229,7 @@ function CheckoutPageInner() {
     const res = await fetch("/api/v1/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ productId, paymentProvider: provider, discountCode: discountCode || undefined }),
+      body: JSON.stringify({ productId, variantId: selectedVariant?.id ?? variantIdParam ?? undefined, paymentProvider: provider, discountCode: discountCode || undefined }),
     });
     const data = await res.json();
     setPaying(false);
@@ -265,9 +278,10 @@ function CheckoutPageInner() {
             <div>
               <p className="text-xs text-gray-500 mb-1">{product.category}</p>
               <p className="font-semibold text-white">{product.title}</p>
+              {selectedVariant && <p className="text-xs text-purple-400 mt-0.5">{selectedVariant.name}</p>}
             </div>
             <div className="text-right shrink-0">
-              {discountInfo && <p className="text-xs text-gray-500 line-through">${product.price.toFixed(2)}</p>}
+              {discountInfo && <p className="text-xs text-gray-500 line-through">${(selectedVariant ? selectedVariant.price : product.price).toFixed(2)}</p>}
               <p className="text-xl font-bold text-white">${finalPrice.toFixed(2)}</p>
             </div>
           </div>

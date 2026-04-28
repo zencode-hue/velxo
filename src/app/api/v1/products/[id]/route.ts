@@ -22,18 +22,19 @@ export async function GET(
         isActive: true,
         avgRating: true,
         stockCount: true,
+        unlimitedStock: true,
         createdAt: true,
         updatedAt: true,
+        variants: {
+          where: { isActive: true },
+          orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+          select: { id: true, name: true, price: true, stockCount: true, unlimitedStock: true, isActive: true, sortOrder: true },
+        },
         reviews: {
           orderBy: { createdAt: "desc" },
           select: {
-            id: true,
-            rating: true,
-            comment: true,
-            createdAt: true,
-            user: {
-              select: { name: true },
-            },
+            id: true, rating: true, comment: true, createdAt: true,
+            user: { select: { name: true } },
           },
         },
       },
@@ -80,6 +81,11 @@ export async function GET(
           inStock: product.stockCount > 0,
           createdAt: product.createdAt,
           updatedAt: product.updatedAt,
+          variants: (product.variants ?? []).map((v: { id: string; name: string; price: { toString(): string }; stockCount: number; unlimitedStock: boolean; isActive: boolean; sortOrder: number }) => ({
+            id: v.id, name: v.name, price: Number(v.price),
+            stockCount: v.stockCount, unlimitedStock: v.unlimitedStock,
+            inStock: v.unlimitedStock || v.stockCount > 0,
+          })),
           reviews: product.reviews.map((r: {
             id: string;
             rating: number;

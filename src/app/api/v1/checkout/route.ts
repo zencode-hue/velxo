@@ -11,6 +11,7 @@ const DISCORD_SERVER_URL = process.env.DISCORD_SERVER_URL ?? "https://discord.gg
 
 const bodySchema = z.object({
   productId: z.string().min(1),
+  variantId: z.string().optional(),
   discountCode: z.string().optional(),
   paymentProvider: z.enum(["nowpayments", "discord", "balance", "binance_gift_card", "flutterwave"]),
   guestEmail: z.string().email().optional(),
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ data: null, error: parsed.error.errors[0].message, meta: {} }, { status: 400 });
     }
 
-    const { productId, discountCode, paymentProvider, guestEmail } = parsed.data;
+    const { productId, variantId, discountCode, paymentProvider, guestEmail } = parsed.data;
 
     // Must have either a session or a guest email
     const userId = session?.user?.id ?? null;
@@ -42,7 +43,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ data: null, error: "Please provide your email to continue as guest", meta: {} }, { status: 401 });
     }
 
-    // Balance payment requires a logged-in user
     if (paymentProvider === "balance" && !userId) {
       return NextResponse.json({ data: null, error: "Sign in to pay with balance", meta: {} }, { status: 401 });
     }
@@ -55,7 +55,24 @@ export async function POST(req: NextRequest) {
     if (!product) {
       return NextResponse.json({ data: null, error: "Product not found", meta: {} }, { status: 400 });
     }
-    if (!product.unlimitedStock && product.stockCount <= 0) {
+
+    // If variant specified, validate it and use its price/stock
+    let variantName: string | null = null;
+    let effectivePrice = Number(product.price);
+    let effectiveStock = { unlimited: product.unlimitedStock, count: product.stockCount };
+
+    if (variantId) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const variant = await (db as any).productVariant.findFirst({
+        where: { id: variantId, productId: product.id, isActive: true },
+      }) as { id: string; name: string; price: { toString(): string }; unlimitedStock: boolean; stockCount: number } | null;
+      if (!variant) return NextResponse.json({ data: null, error: "Variant not found", meta: {} }, { status: 400 });
+      variantName = variant.name;
+      effectivePrice = Number(variant.price);
+      effectiveStock = { unlimited: variant.unlimitedStock, count: variant.stockCount };
+    }
+
+    if (!effectiveStock.unlimited && effectiveStock.count <= 0) {
       return NextResponse.json({ data: null, error: "Product is out of stock", meta: {} }, { status: 400 });
     }
 
@@ -80,13 +97,13 @@ export async function POST(req: NextRequest) {
       }
 
       discountCodeRecord = code;
-      const productPrice = Number(product.price);
+      const productPrice = effectivePrice;
       discountAmount = code.type === "PERCENTAGE"
         ? (productPrice * Number(code.value)) / 100
         : Math.min(Number(code.value), productPrice);
     }
 
-    const finalAmount = Math.max(0, Number(product.price) - discountAmount);
+    const finalAmount = Math.max(0, effectivePrice - discountAmount);
 
     // Balance payment — deduct immediately
     if (paymentProvider === "balance") {
@@ -103,6 +120,8 @@ export async function POST(req: NextRequest) {
           data: {
             userId: userId ?? undefined,
             productId: product.id,
+            variantId: variantId ?? null,
+            variantName: variantName ?? null,
             amount: finalAmount,
             discountAmount,
             status: "PAID",
@@ -153,6 +172,8 @@ export async function POST(req: NextRequest) {
           userId: userId ?? undefined,
           guestEmail: userId ? null : (guestEmail ?? null),
           productId: product.id,
+          variantId: variantId ?? null,
+          variantName: variantName ?? null,
           amount: finalAmount,
           discountAmount,
           status: "PENDING",

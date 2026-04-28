@@ -49,12 +49,17 @@ async function getProduct(id: string) {
     select: {
       id: true, title: true, description: true, price: true, category: true,
       imageUrl: true, avgRating: true, stockCount: true, unlimitedStock: true,
+      variants: {
+        where: { isActive: true },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+        select: { id: true, name: true, price: true, stockCount: true, unlimitedStock: true },
+      },
       reviews: {
         orderBy: { createdAt: "desc" },
         select: { id: true, rating: true, comment: true, createdAt: true, user: { select: { name: true } } },
       },
     },
-  }) as ({ id: string; title: string; description: string; price: { toString(): string }; category: string; imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean; reviews: ReviewItem[] } | null);
+  }) as ({ id: string; title: string; description: string; price: { toString(): string }; category: string; imageUrl: string | null; avgRating: { toString(): string }; stockCount: number; unlimitedStock: boolean; variants: Array<{ id: string; name: string; price: { toString(): string }; stockCount: number; unlimitedStock: boolean }>; reviews: ReviewItem[] } | null);
 
   if (!product) return null;
 
@@ -70,6 +75,11 @@ async function getProduct(id: string) {
     price: Number(product.price),
     avgRating: Number(product.avgRating),
     inStock: product.unlimitedStock || product.stockCount > 0,
+    variants: product.variants.map((v) => ({
+      id: v.id, name: v.name, price: Number(v.price),
+      stockCount: v.stockCount, unlimitedStock: v.unlimitedStock,
+      inStock: v.unlimitedStock || v.stockCount > 0,
+    })),
     relatedProducts: related.map((p) => ({
       id: p.id, title: p.title, price: Number(p.price), category: p.category,
       imageUrl: p.imageUrl, avgRating: Number(p.avgRating), stockCount: p.stockCount,
@@ -253,7 +263,15 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
           {/* Actions — client component */}
           <UrgencyBadges productId={product.id} stockCount={product.stockCount} unlimitedStock={product.unlimitedStock} />
-          <ProductActions productId={product.id} productTitle={product.title} price={product.price} inStock={product.inStock} imageUrl={product.imageUrl} category={product.category} />
+          <ProductActions
+            productId={product.id}
+            productTitle={product.title}
+            price={product.price}
+            inStock={product.inStock}
+            imageUrl={product.imageUrl}
+            category={product.category}
+            variants={product.variants}
+          />
         </div>
       </div>
 
