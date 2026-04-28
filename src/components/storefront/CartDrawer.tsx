@@ -141,7 +141,10 @@ export default function CartDrawer({ open, onClose }: Props) {
             </p>
             <div className="space-y-2">
               {items.map((item) => (
-                <Link key={item.id} href={`/checkout?productId=${item.id}`} onClick={onClose}
+                <Link
+                  key={item.id}
+                  href={`/checkout?productId=${item.productId}${item.variantId ? `&variantId=${item.variantId}` : ""}`}
+                  onClick={onClose}
                   className="w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white transition-all hover:-translate-y-0.5"
                   style={{ background: "rgba(167,139,250,0.1)", border: "1px solid rgba(167,139,250,0.2)" }}>
                   <span className="truncate text-xs">{item.title}</span>
