@@ -114,7 +114,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             Related {post.category} Products
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {relatedProducts.map((p) => <ProductCard key={p.id} {...p} />)}
+            {relatedProducts.map((p: { id: string; title: string; price: number; category: string; imageUrl: string | null; avgRating: number; stockCount: number; unlimitedStock: boolean; inStock: boolean }) => <ProductCard key={p.id} {...p} />)}
           </div>
           <div className="mt-4 text-center">
             <Link href={productCategory ? `/products?category=${productCategory}` : "/products"}

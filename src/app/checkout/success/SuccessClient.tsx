@@ -79,7 +79,7 @@ export default function SuccessClient({ pendingStock }: { pendingStock?: boolean
         {orderId && (
           <div className="rounded-xl p-4 mb-6" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(255,255,255,0.08)" }}>
             <p className="text-xs text-gray-500 mb-1">Order Reference</p>
-            <p className="font-mono text-sm text-white">{orderId}</p>
+            <p className="font-mono text-sm text-white">VLX-{orderId.slice(-6).toUpperCase()}</p>
           </div>
         )}
 

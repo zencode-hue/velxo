@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import SuccessClient from "./SuccessClient";
 import { CheckCircle } from "lucide-react";
-import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
 export default async function SuccessPage({ searchParams }: { searchParams: { orderId?: string } }) {

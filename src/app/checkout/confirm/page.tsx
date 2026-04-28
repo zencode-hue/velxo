@@ -141,9 +141,9 @@ function ConfirmPageInner() {
     setPaying(false);
     if (!res.ok) { setPayErr(data.error); return; }
 
-    if (selectedPayment === "binance_gift_card" && data.data?.codeSubmitUrl) {
-      window.open(data.data.redirectUrl, "_blank");
-      window.location.href = data.data.codeSubmitUrl;
+    if (selectedPayment === "binance_gift_card" && data.data?.orderId) {
+      // Redirect to invoice — InvoiceClient handles the full gift card flow inline
+      window.location.href = `/invoice/${data.data.orderId}`;
       return;
     }
     if (selectedPayment === "balance" && data.data?.orderId) {
@@ -187,7 +187,7 @@ function ConfirmPageInner() {
   return (
     <div className="min-h-screen px-4 py-12" style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.06) 0%, transparent 50%)" }}>
       <div className="max-w-2xl mx-auto">
-        <Link href={`/products/${productId}`} className="text-sm text-gray-500 hover:text-white transition-colors flex items-center gap-1 mb-8">
+        <Link href={product ? `/products/${product.id}` : "/products"} className="text-sm text-gray-500 hover:text-white transition-colors flex items-center gap-1 mb-8">
           ← Back to product
         </Link>
 
@@ -393,12 +393,15 @@ function ConfirmPageInner() {
             <div className="rounded-2xl p-5" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(255,255,255,0.08)" }}>
               <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">Invoice ID</p>
               <div className="flex items-center gap-3 p-3 rounded-xl" style={{ background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.2)" }}>
-                <code className="font-mono text-sm text-purple-300 flex-1 break-all">{invoiceId}</code>
+                <div className="flex-1">
+                  <p className="text-xs text-gray-500 mb-0.5">Reference</p>
+                  <code className="font-mono text-sm text-purple-300">VLX-{invoiceId.slice(-6).toUpperCase()}</code>
+                </div>
                 <button onClick={copyInvoice} className="shrink-0 p-1.5 rounded-lg transition-all hover:bg-white/10">
                   {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} className="text-gray-400" />}
                 </button>
               </div>
-              <p className="text-xs text-gray-600 mt-2">Save this Invoice ID — you can use it to track your order or claim on Discord if needed.</p>
+              <p className="text-xs text-gray-600 mt-2">Save this — you can use it to track your order or get support.</p>
             </div>
 
             <div className="flex gap-3">

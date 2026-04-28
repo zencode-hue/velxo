@@ -52,7 +52,7 @@ export default function TrackOrderPage() {
               <input
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
-                placeholder="e.g. cm1abc123..."
+                placeholder="e.g. VLX-ABC123 or full order ID"
                 required
                 className="input-field font-mono text-sm"
               />

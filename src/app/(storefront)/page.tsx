@@ -193,7 +193,7 @@ export default async function HomePage() {
             { icon: Zap, color: "text-blue-400", title: "Trusted by Thousands", desc: "Over 10,000 orders delivered to happy customers across 50+ countries worldwide." },
             { icon: Lock, color: "text-purple-400", title: "Premium Quality Products", desc: "Every product is verified before listing. We stand behind everything in our catalog with a replacement guarantee." },
           ].map((item) => (
-            <div key={item.title} className="rounded-xl border border-white/8 bg-[#1a1208] p-6 text-center hover:border-[#ea580c]/30 transition-colors">
+            <div key={item.title} className="glass-card p-6 text-center hover:border-purple-500/20 transition-colors">
               <div className="flex justify-center mb-4">
                 <item.icon size={36} className={item.color} />
               </div>
@@ -240,7 +240,7 @@ export default async function HomePage() {
             { q: "What payment methods do you accept?", a: "We accept crypto via NOWPayments (BTC, ETH, USDT, 100+ coins), Binance gift cards, Discord manual payment, and wallet balance." },
             { q: "Why are your prices cheaper than official plans?", a: "We source subscriptions in bulk and pass the savings on to you. All products are legitimate and fully functional." },
           ].map((item) => (
-            <details key={item.q} className="group rounded-xl border border-white/8 bg-[#1a1208] hover:border-purple-600/20 transition-all">
+            <details key={item.q} className="group rounded-xl border border-white/8 glass-card hover:border-purple-600/20 transition-all">
               <summary className="p-5 cursor-pointer font-semibold text-white text-sm flex items-center justify-between list-none">
                 {item.q}
                 <span className="text-gray-500 group-open:rotate-180 transition-transform">▾</span>

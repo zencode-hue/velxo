@@ -14,6 +14,7 @@ export interface ProductCardProps {
   inStock?: boolean;
   unlimitedStock?: boolean;
   stockCount?: number;
+  variants?: Array<{ price: number; inStock: boolean }>;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {

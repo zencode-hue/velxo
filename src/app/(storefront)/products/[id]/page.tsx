@@ -6,7 +6,7 @@ import ProductCard from "@/components/storefront/ProductCard";
 import ProductActions from "./ProductActions";
 import PriceDisplay from "@/components/storefront/PriceDisplay";
 import UrgencyBadges from "@/components/storefront/UrgencyBadges";
-import { Star, Package, CheckCircle, Zap, Shield, RefreshCw } from "lucide-react";
+import { Star, Package, Zap, Shield, RefreshCw } from "lucide-react";
 import { extractProductId, productPath } from "@/lib/slug";
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -201,18 +201,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
         {/* Right — Info */}
         <div className="flex flex-col gap-5">
-          {/* Category + stock */}
+          {/* Category badge */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${catColor}`}>
               {CATEGORY_LABELS[product.category]}
             </span>
-            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${product.inStock ? "text-green-400 bg-green-500/10 border-green-500/30" : "text-red-400 bg-red-500/10 border-red-500/30"}`}>
-              {product.inStock && <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />}
-              {product.inStock ? "Available" : "Out of Stock"}
-            </span>
-            {product.inStock && !product.unlimitedStock && (
-              <span className="text-xs text-gray-500">{product.stockCount} in stock</span>
-            )}
           </div>
 
           {/* Title */}
@@ -229,10 +222,24 @@ export default async function ProductDetailPage({ params }: PageProps) {
             <span className="text-sm text-gray-500">({reviewCount} review{reviewCount !== 1 ? "s" : ""})</span>
           </div>
 
-          {/* Price */}
+          {/* Price — shown as range if variants exist, otherwise base price */}
           <div className="flex items-baseline gap-3">
-            <span className="text-4xl font-black text-white"><PriceDisplay usdAmount={product.price} /></span>
-            <span className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>USD base</span>
+            {product.variants.length > 0 ? (
+              <>
+                <span className="text-4xl font-black text-white">
+                  ${Math.min(...product.variants.map((v) => v.price)).toFixed(2)}
+                  {Math.min(...product.variants.map((v) => v.price)) !== Math.max(...product.variants.map((v) => v.price)) && (
+                    <span className="text-2xl font-bold text-gray-400"> – ${Math.max(...product.variants.map((v) => v.price)).toFixed(2)}</span>
+                  )}
+                </span>
+                <span className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>select plan below</span>
+              </>
+            ) : (
+              <>
+                <span className="text-4xl font-black text-white"><PriceDisplay usdAmount={product.price} /></span>
+                <span className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>USD</span>
+              </>
+            )}
           </div>
 
           {/* Description */}
@@ -248,20 +255,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             </p>
           </div>
 
-          {/* Features */}
-          <div className="space-y-2">
-            <p className="text-sm font-semibold text-white">Features & Benefits:</p>
-            <ul className="space-y-1.5">
-              {features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-gray-400">
-                  <CheckCircle size={14} className="text-green-400 shrink-0 mt-0.5" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Actions — client component */}
+          {/* Actions — client component handles price/stock/variants reactively */}
           <UrgencyBadges productId={product.id} stockCount={product.stockCount} unlimitedStock={product.unlimitedStock} />
           <ProductActions
             productId={product.id}
@@ -271,6 +265,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             imageUrl={product.imageUrl}
             category={product.category}
             variants={product.variants}
+            features={features}
           />
         </div>
       </div>

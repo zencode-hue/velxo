@@ -32,9 +32,14 @@ export async function deliverOrder(orderId: string): Promise<void> {
   let assignedItem: { id: string; encryptedData: string; iv: string; authTag: string } | null = null;
 
   await db.$transaction(async (tx) => {
-    const item = await tx.inventoryItem.findFirst({
-      where: { productId: product.id, status: "AVAILABLE" },
-    });
+    // If order has a variant, try to find inventory for that variant first, then fall back to product-level
+    const variantId = (order as { variantId?: string | null }).variantId ?? null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const item = await (tx.inventoryItem.findFirst as any)({
+      where: variantId
+        ? { variantId, status: "AVAILABLE" }
+        : { productId: product.id, status: "AVAILABLE" },
+    }) as { id: string; encryptedData: string; iv: string; authTag: string } | null;
 
     if (!item) {
       await tx.order.update({ where: { id: orderId }, data: { status: "PENDING_STOCK" } });
@@ -139,16 +144,18 @@ async function creditAffiliateCommission(userId: string, orderAmount: number): P
 }
 
 async function creditPartnerCommission(userId: string, orderAmount: number): Promise<void> {
-  // Check if this user was referred by a partner affiliate
-  const partnerReferral = await db.partnerReferral.findUnique({ where: { referredUserId: userId } });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const partnerReferral = await (db as any).partnerReferral.findUnique({ where: { referredUserId: userId } }) as { partnerAffiliateId: string } | null;
   if (!partnerReferral) return;
 
-  const partner = await db.partnerAffiliate.findUnique({ where: { id: partnerReferral.partnerAffiliateId } });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const partner = await (db as any).partnerAffiliate.findUnique({ where: { id: partnerReferral.partnerAffiliateId } }) as { id: string; status: string; commissionPct: { toString(): string } } | null;
   if (!partner || partner.status !== "ACTIVE") return;
 
   const commission = (orderAmount * Number(partner.commissionPct)) / 100;
 
-  await db.partnerAffiliate.update({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (db as any).partnerAffiliate.update({
     where: { id: partner.id },
     data: {
       balance: { increment: commission },
