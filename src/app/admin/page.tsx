@@ -22,7 +22,6 @@ export default async function AdminDashboard() {
     lowStockProducts,
     recentOrders,
     pendingPartnerPayouts,
-    activeDiscounts,
   ] = await Promise.all([
     db.user.count(),
     db.user.count({ where: { createdAt: { gte: todayStart } } }),
@@ -49,7 +48,6 @@ export default async function AdminDashboard() {
     }),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (db as any).partnerPayoutRequest.count({ where: { status: "PENDING" } }).catch(() => 0),
-    db.discountCode.count({ where: { expiresAt: { gt: now } } }).catch(() => 0),
   ]);
 
   const STATUS_BADGE: Record<string, { label: string; color: string }> = {
@@ -71,7 +69,7 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "All Time Revenue", value: `$${Number(revenue._sum.amount ?? 0).toFixed(2)}`, icon: DollarSign, color: "#fbbf24", sub: `${totalOrders} total orders` },
-          { label: "Today", value: `$${Number(revenueToday._sum.amount ?? 0).toFixed(2)}`, icon: TrendingUp, color: "#4ade80", sub: `${revenueToday._count} orders · ${ordersToday} placed` },
+          { label: "Today", value: `$${Number(revenueToday._sum.amount ?? 0).toFixed(2)}`, icon: TrendingUp, color: "#4ade80", sub: `${revenueToday._count} orders, ${ordersToday} placed` },
           { label: "This Week", value: `$${Number(revenueWeek._sum.amount ?? 0).toFixed(2)}`, icon: TrendingUp, color: "#60a5fa", sub: `${revenueWeek._count} orders` },
           { label: "This Month", value: `$${Number(revenueMonth._sum.amount ?? 0).toFixed(2)}`, icon: TrendingUp, color: "#c4b5fd", sub: `${revenueMonth._count} orders` },
         ].map(({ label, value, icon: Icon, color, sub }) => (
