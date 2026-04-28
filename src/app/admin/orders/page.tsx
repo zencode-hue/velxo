@@ -75,7 +75,7 @@ export default async function AdminOrdersPage() {
                     <div className="flex items-center gap-1.5">
                       <a href={`${appUrl}/invoice/${o.id}`} target="_blank" rel="noopener noreferrer"
                         className="font-mono text-xs text-purple-400 hover:text-purple-300 transition-colors">
-                        #{o.id.slice(0, 8).toUpperCase()}
+                        VLX-{o.id.slice(-6).toUpperCase()}
                       </a>
                       <a href={`${appUrl}/invoice/${o.id}`} target="_blank" rel="noopener noreferrer">
                         <ExternalLink size={10} className="text-gray-600 hover:text-gray-400" />

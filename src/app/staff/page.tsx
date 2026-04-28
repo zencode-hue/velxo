@@ -134,7 +134,7 @@ export default async function StaffDashboardPage() {
             <tbody>
               {recentOrders.map((o) => (
                 <tr key={o.id} className="border-b border-white/5 hover:bg-white/2">
-                  <td className="px-5 py-3 font-mono text-xs text-purple-400">#{o.id.slice(0, 8).toUpperCase()}</td>
+                  <td className="px-5 py-3 font-mono text-xs text-purple-400">VLX-{o.id.slice(-6).toUpperCase()}</td>
                   <td className="px-5 py-3 text-gray-400 text-xs truncate max-w-[140px]">
                     {o.user?.email ?? (o as { guestEmail?: string | null }).guestEmail ?? "Guest"}
                   </td>

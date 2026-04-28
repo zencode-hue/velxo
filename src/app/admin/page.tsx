@@ -1,4 +1,4 @@
-﻿import { db } from "@/lib/db";
+import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/admin-auth";
 import { DollarSign, ShoppingCart, Users, Package, AlertTriangle, TrendingUp, Clock, CheckCircle, XCircle, ArrowRight, Tag, UserCheck } from "lucide-react";
 import RevenueChart from "./RevenueChart";
@@ -71,7 +71,7 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "All Time Revenue", value: `$${Number(revenue._sum.amount ?? 0).toFixed(2)}`, icon: DollarSign, color: "#fbbf24", sub: `${totalOrders} total orders` },
-          { label: "Today", value: `$${Number(revenueToday._sum.amount ?? 0).toFixed(2)}`, icon: TrendingUp, color: "#4ade80", sub: `${revenueToday._count} orders · ${ordersToday} placed` },
+          { label: "Today", value: `$${Number(revenueToday._sum.amount ?? 0).toFixed(2)}`, icon: TrendingUp, color: "#4ade80", sub: `${revenueToday._count} orders � ${ordersToday} placed` },
           { label: "This Week", value: `$${Number(revenueWeek._sum.amount ?? 0).toFixed(2)}`, icon: TrendingUp, color: "#60a5fa", sub: `${revenueWeek._count} orders` },
           { label: "This Month", value: `$${Number(revenueMonth._sum.amount ?? 0).toFixed(2)}`, icon: TrendingUp, color: "#c4b5fd", sub: `${revenueMonth._count} orders` },
         ].map(({ label, value, icon: Icon, color, sub }) => (
@@ -184,7 +184,7 @@ export default async function AdminDashboard() {
               <div key={o.id} className="flex items-center gap-3 px-5 py-3 hover:bg-white/2 transition-colors">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-gray-500">#{o.id.slice(0, 8).toUpperCase()}</span>
+                    <span className="text-xs font-mono text-gray-500">VLX-{o.id.slice(-6).toUpperCase()}</span>
                     <span className="text-xs px-1.5 py-0.5 rounded-full font-medium" style={{ background: `${badge.color}18`, color: badge.color, border: `1px solid ${badge.color}30` }}>
                       {badge.label}
                     </span>

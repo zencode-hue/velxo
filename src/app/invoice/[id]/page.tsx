@@ -31,7 +31,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   return {
-    title: `Invoice #${params.id.slice(0, 8).toUpperCase()} - Velxo Shop`,
+    title: `Invoice VLX-${params.id.slice(-6).toUpperCase()} - Velxo Shop`,
     robots: { index: false, follow: false },
   };
 }
@@ -59,7 +59,7 @@ export default async function InvoicePage({ params }: { params: { id: string } }
 
   const status = STATUS_CONFIG[order.status] ?? STATUS_CONFIG.PENDING;
   const StatusIcon = status.icon;
-  const invoiceNum = order.id.slice(0, 8).toUpperCase();
+  const invoiceNum = `VLX-${order.id.slice(-6).toUpperCase()}`;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
 
   const steps = [

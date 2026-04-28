@@ -222,7 +222,7 @@ export default async function CustomerDetailPage({ params }: { params: { id: str
             <tbody>
               {allOrders.map((o) => (
                 <tr key={o.id} className="border-b border-white/5 hover:bg-white/2">
-                  <td className="px-5 py-3 font-mono text-xs text-purple-400">#{o.id.slice(0, 8).toUpperCase()}</td>
+                  <td className="px-5 py-3 font-mono text-xs text-purple-400">VLX-{o.id.slice(-6).toUpperCase()}</td>
                   <td className="px-5 py-3 text-white text-xs truncate max-w-[160px]">{o.product.title}</td>
                   <td className="px-5 py-3 text-right text-white">${Number(o.amount).toFixed(2)}</td>
                   <td className="px-5 py-3 text-gray-400 text-xs">{PAYMENT_SHORT[o.paymentProvider] ?? o.paymentProvider}</td>

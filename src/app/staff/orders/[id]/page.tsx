@@ -57,7 +57,7 @@ export default async function StaffOrderDetailPage({ params }: { params: { id: s
           <ArrowLeft size={18} />
         </Link>
         <div>
-          <h1 className="text-xl font-bold text-white font-mono">#{order.id.slice(0, 8).toUpperCase()}</h1>
+          <h1 className="text-xl font-bold text-white font-mono">VLX-{order.id.slice(-6).toUpperCase()}</h1>
           <p className="text-xs text-gray-500 mt-0.5">{new Date(order.createdAt).toLocaleString()}</p>
         </div>
         <div className={`ml-auto flex items-center gap-1.5 text-sm font-medium ${status.color}`}>

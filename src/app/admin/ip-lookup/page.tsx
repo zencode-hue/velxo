@@ -196,7 +196,7 @@ export default function IpLookupPage() {
                 <tbody>
                   {result.orders.map((o) => (
                     <tr key={o.id} className="border-b border-white/5 hover:bg-white/2">
-                      <td className="px-5 py-2.5 font-mono text-purple-400">#{o.id.slice(0, 8).toUpperCase()}</td>
+                      <td className="px-5 py-2.5 font-mono text-purple-400">VLX-{o.id.slice(-6).toUpperCase()}</td>
                       <td className="px-5 py-2.5 text-white truncate max-w-[140px]">{o.productTitle}</td>
                       <td className="px-5 py-2.5 text-gray-400">{o.email}</td>
                       <td className="px-5 py-2.5 text-right text-white">${o.amount.toFixed(2)}</td>

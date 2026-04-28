@@ -64,7 +64,7 @@ function GiftCardPageInner() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-white">Card Payment (Key)</h1>
-            <p className="text-xs text-gray-500">Order #{orderId.slice(0, 8)}… · ${amount} USD</p>
+            <p className="text-xs text-gray-500">Order VLX-{orderId.slice(-6).toUpperCase()} · ${amount} USD</p>
           </div>
         </div>
 

@@ -1,3 +1,4 @@
+// v2 - cart drawer with variant support
 "use client";
 
 import { useEffect, useRef } from "react";

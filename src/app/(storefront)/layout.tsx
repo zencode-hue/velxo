@@ -7,7 +7,7 @@ import RecentPurchasePopupWrapper from "@/components/storefront/RecentPurchasePo
 import FloatingSupportButton from "@/components/storefront/FloatingSupportButton";
 import ExitIntentPopup from "@/components/storefront/ExitIntentPopup";
 import Link from "next/link";
-import { Twitter, MessageCircle, Mail } from "lucide-react";
+import { MessageCircle, Mail, XIcon } from "lucide-react";
 import VelxoLogo from "@/components/VelxoLogo";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { CartProvider } from "@/contexts/CartContext";
@@ -28,7 +28,7 @@ function Footer() {
                 <MessageCircle size={15} />
               </a>
               <a href="https://twitter.com/velxoshop" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg text-slate-600 hover:text-blue-400 hover:bg-blue-500/10 transition-all">
-                <Twitter size={15} />
+                <XIcon size={15} />
               </a>
               <a href="mailto:support@velxo.shop" className="p-2 rounded-lg text-slate-600 hover:text-sky-400 hover:bg-sky-500/10 transition-all">
                 <Mail size={15} />

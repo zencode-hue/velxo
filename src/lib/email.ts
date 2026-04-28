@@ -223,7 +223,7 @@ export async function sendInvoiceCreatedEmail(
   paymentProvider: string
 ): Promise<void> {
   const invoiceUrl = `${APP_URL}/invoice/${orderId}`;
-  const invoiceNum = orderId.slice(0, 8).toUpperCase();
+  const invoiceNum = `VLX-${orderId.slice(-6).toUpperCase()}`;
 
   const paymentLabels: Record<string, string> = {
     nowpayments: "Crypto (NOWPayments)",
@@ -274,7 +274,7 @@ export async function sendInvoiceReminderEmail(
   amount: number
 ): Promise<void> {
   const invoiceUrl = `${APP_URL}/invoice/${orderId}`;
-  const invoiceNum = orderId.slice(0, 8).toUpperCase();
+  const invoiceNum = `VLX-${orderId.slice(-6).toUpperCase()}`;
 
   await send(
     email,
