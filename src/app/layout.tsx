@@ -11,30 +11,22 @@ const inter = Inter({
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
 const APP_NAME = "Velxo Shop";
 const APP_DESCRIPTION = "Buy cheap Netflix, Spotify, IPTV, ChatGPT Plus, gaming keys and software licenses. Instant automated delivery. Secure crypto payments. Best prices guaranteed.";
+const OG_IMAGE = `${APP_URL}/opengraph-image`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
-    template: "%s - Velxo Shop",
+    default: "Velxo Shop — Cheap Netflix, Spotify & Digital Subscriptions",
+    template: "%s | Velxo Shop",
   },
   description: APP_DESCRIPTION,
   keywords: [
-    "buy digital products",
-    "streaming subscriptions",
-    "Netflix subscription",
-    "Spotify premium",
-    "ChatGPT Plus",
-    "AI tools",
-    "software licenses",
-    "gaming keys",
-    "instant delivery digital goods",
-    "crypto payment digital store",
-    "buy Netflix account",
-    "buy Spotify account",
-    "digital marketplace",
-    "Velxo Shop",
-    "velxo.shop",
+    "buy digital products", "streaming subscriptions", "cheap Netflix subscription",
+    "buy Spotify premium cheap", "affordable IPTV", "ChatGPT Plus cheap",
+    "gaming keys", "software licenses", "instant delivery digital goods",
+    "crypto payment digital store", "buy Netflix account", "buy Spotify account",
+    "digital marketplace", "Velxo Shop", "velxo.shop",
+    "cheap streaming services", "digital subscriptions",
   ],
   authors: [{ name: "Velxo Shop", url: APP_URL }],
   creator: "Velxo Shop",
@@ -48,14 +40,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: APP_URL,
     siteName: "Velxo Shop",
-    title: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
+    title: "Velxo Shop — Cheap Netflix, Spotify & Digital Subscriptions",
     description: APP_DESCRIPTION,
     images: [
       {
-        url: `${APP_URL}/og-image.png`,
+        url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Velxo Shop - Buy Cheap Digital Subscriptions",
+        alt: "Velxo Shop — Buy Cheap Digital Subscriptions",
+        type: "image/png",
       },
     ],
   },
@@ -63,9 +56,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@velxoshop",
     creator: "@velxoshop",
-    title: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
+    title: "Velxo Shop — Cheap Netflix, Spotify & Digital Subscriptions",
     description: APP_DESCRIPTION,
-    images: [`${APP_URL}/og-image.png`],
+    images: [OG_IMAGE],
   },
   robots: {
     index: true,
@@ -87,6 +80,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: APP_URL,
+  },
+  verification: {
+    // Add Google Search Console verification token here when available
+    // google: "your-token",
   },
 };
 

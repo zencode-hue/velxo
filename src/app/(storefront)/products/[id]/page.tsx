@@ -6,7 +6,7 @@ import ProductCard from "@/components/storefront/ProductCard";
 import ProductActions from "./ProductActions";
 import PriceDisplay from "@/components/storefront/PriceDisplay";
 import UrgencyBadges from "@/components/storefront/UrgencyBadges";
-import { Star, Package, Zap, Shield, RefreshCw } from "lucide-react";
+import { Star, Package, Zap, Shield, RefreshCw, CheckCircle } from "lucide-react";
 import { extractProductId, productPath } from "@/lib/slug";
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -92,21 +92,41 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const realId = extractProductId(params.id);
   const product = await db.product.findFirst({
     where: { id: realId, isActive: true },
-    select: { title: true, description: true, imageUrl: true, price: true, avgRating: true },
+    select: { title: true, description: true, imageUrl: true, price: true, avgRating: true, category: true },
   });
   if (!product) return { title: "Product Not Found - Velxo Shop" };
+
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
   const slugUrl = `${appUrl}${productPath(realId, product.title)}`;
+  const catLabel = CATEGORY_LABELS[product.category] ?? "Digital";
+  const price = Number(product.price).toFixed(2);
+
+  // Rich description for social embeds
+  const ogDescription = `Buy ${product.title} for $${price} — Instant delivery to your email. ${product.description.slice(0, 100)}`;
+
+  const ogImage = product.imageUrl
+    ? [{ url: product.imageUrl, width: 1200, height: 630, alt: `${product.title} - Velxo Shop` }]
+    : [{ url: `${appUrl}/opengraph-image`, width: 1200, height: 630, alt: "Velxo Shop" }];
+
   return {
-    title: `${product.title} - Velxo Shop`,
-    description: product.description.slice(0, 160),
+    title: `Buy ${product.title} — $${price} | Velxo Shop`,
+    description: `${product.title} for $${price}. ${catLabel} subscription with instant delivery. ${product.description.slice(0, 100)}`,
     alternates: { canonical: slugUrl },
     openGraph: {
-      title: `${product.title} - Velxo Shop`,
-      description: product.description.slice(0, 160),
+      title: `${product.title} — $${price} | Velxo Shop`,
+      description: ogDescription,
       url: slugUrl,
-      siteName: "Velxo Shop", type: "website",
-      ...(product.imageUrl ? { images: [{ url: product.imageUrl }] } : {}),
+      siteName: "Velxo Shop",
+      type: "website",
+      images: ogImage,
+      locale: "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@velxoshop",
+      title: `${product.title} — $${price} | Velxo Shop`,
+      description: ogDescription,
+      images: ogImage.map((i) => i.url),
     },
   };
 }
@@ -147,11 +167,26 @@ export default async function ProductDetailPage({ params }: PageProps) {
     } : {}),
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: appUrl },
+      { "@type": "ListItem", position: 2, name: "Products", item: `${appUrl}/products` },
+      { "@type": "ListItem", position: 3, name: CATEGORY_LABELS[product.category], item: `${appUrl}/products?category=${product.category}` },
+      { "@type": "ListItem", position: 4, name: product.title, item: `${appUrl}${productPath(product.id, product.title)}` },
+    ],
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-xs text-gray-600 mb-6">
@@ -255,7 +290,20 @@ export default async function ProductDetailPage({ params }: PageProps) {
             </p>
           </div>
 
-          {/* Actions — client component handles price/stock/variants reactively */}
+          {/* Features */}
+          <div className="space-y-2">
+            <p className="text-sm font-semibold text-white">What&apos;s included:</p>
+            <ul className="space-y-1.5">
+              {features.map((f) => (
+                <li key={f} className="flex items-start gap-2 text-sm text-gray-400">
+                  <CheckCircle size={14} className="text-green-400 shrink-0 mt-0.5" />
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Actions */}
           <UrgencyBadges productId={product.id} stockCount={product.stockCount} unlimitedStock={product.unlimitedStock} />
           <ProductActions
             productId={product.id}
@@ -265,7 +313,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
             imageUrl={product.imageUrl}
             category={product.category}
             variants={product.variants}
-            features={features}
           />
         </div>
       </div>

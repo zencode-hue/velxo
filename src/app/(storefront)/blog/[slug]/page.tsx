@@ -22,20 +22,29 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const post = await (db as any).blogPost.findUnique({
     where: { slug: params.slug, published: true },
-    select: { title: true, excerpt: true },
-  }) as { title: string; excerpt: string } | null;
+    select: { title: true, excerpt: true, emoji: true },
+  }) as { title: string; excerpt: string; emoji: string } | null;
   if (!post) return { title: "Post Not Found — Velxo" };
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const ogImage = `${appUrl}/opengraph-image`;
   return {
-    title: `${post.title} - Velxo Blog`,
+    title: `${post.title} — Velxo Blog`,
     description: post.excerpt,
     alternates: { canonical: `${appUrl}/blog/${params.slug}` },
     openGraph: {
-      title: `${post.title} - Velxo Blog`,
+      title: `${post.title} — Velxo Blog`,
       description: post.excerpt,
       url: `${appUrl}/blog/${params.slug}`,
       siteName: "Velxo Shop",
       type: "article",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@velxoshop",
+      title: `${post.title} — Velxo Blog`,
+      description: post.excerpt,
+      images: [ogImage],
     },
   };
 }
