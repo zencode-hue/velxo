@@ -5,11 +5,11 @@
 export function slugify(title: string): string {
   return title
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")   // remove special chars
+    .replace(/[^a-z0-9\s-]/g, "")
     .trim()
-    .replace(/\s+/g, "-")            // spaces to hyphens
-    .replace(/-+/g, "-")             // collapse multiple hyphens
-    .slice(0, 80);                   // max length
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 80);
 }
 
 /**
@@ -29,4 +29,13 @@ export function productPath(id: string, title: string, slug?: string | null): st
 export function extractProductId(segment: string): string {
   const parts = segment.split("--");
   return parts.length > 1 ? parts[parts.length - 1] : segment;
+}
+
+/**
+ * Formats a raw order ID (cuid) into the display format VLX-XXXXXX.
+ * This is the single source of truth for order ID display across the app.
+ * e.g. "cm1abc123xyz" → "VLX-3XYZ12"
+ */
+export function formatOrderId(id: string): string {
+  return `VLX-${id.slice(-6).toUpperCase()}`;
 }

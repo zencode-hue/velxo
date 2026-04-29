@@ -3,6 +3,7 @@ import { decrypt } from "@/lib/crypto";
 import { sendDeliveryEmail, sendAdminPendingStockAlert, sendAdminLowStockAlert, trackEvent } from "@/lib/email";
 import { checkAndSendStockAlerts } from "@/lib/stock-alerts";
 import { sendDiscordNotification } from "@/lib/discord";
+import { formatOrderId } from "@/lib/slug";
 
 export interface DeliveryResult {
   success: boolean;
@@ -47,7 +48,7 @@ export async function deliverOrder(orderId: string): Promise<void> {
       await sendDeliveryEmail(deliveryEmail, {
         orderId, productTitle: product.title,
         status: "pending_stock",
-        message: `Your order is awaiting stock. Join our Discord and use your Order ID to claim your product: ${orderId}`,
+        message: `Your order is awaiting stock. Join our Discord and use your reference ${formatOrderId(orderId)} to claim your product.`,
       });
       // Notify Discord with the pending stock order so admin can fulfill manually
       const discordUrl = process.env.DISCORD_WEBHOOK_URL;
@@ -57,11 +58,11 @@ export async function deliverOrder(orderId: string): Promise<void> {
             title: "⚠️ Order Pending Stock — Manual Fulfillment Required",
             color: 0xf97316,
             fields: [
-              { name: "Order ID", value: `\`${orderId}\``, inline: true },
+              { name: "Reference", value: `**${formatOrderId(orderId)}**`, inline: true },
               { name: "Product", value: product.title, inline: true },
               { name: "Customer Email", value: deliveryEmail, inline: false },
             ],
-            description: `Customer has paid but no inventory is available. They have been directed to Discord to claim their product using Order ID \`${orderId}\`.`,
+            description: `Customer has paid but no inventory is available. They have been directed to Discord to claim their product using reference **${formatOrderId(orderId)}**.`,
             timestamp: new Date().toISOString(),
             footer: { text: "Add inventory and redeliver, or fulfill manually on Discord" },
           }],
@@ -115,7 +116,7 @@ export async function deliverOrder(orderId: string): Promise<void> {
           { name: "Product", value: product.title, inline: true },
           { name: "Amount", value: `$${Number(order.amount).toFixed(2)}`, inline: true },
           { name: "Customer", value: deliveryEmail, inline: false },
-          { name: "Order ID", value: `\`${orderId}\``, inline: false },
+          { name: "Reference", value: `**${formatOrderId(orderId)}**`, inline: false },
           { name: "Payment", value: order.paymentProvider, inline: true },
         ],
         timestamp: new Date().toISOString(),

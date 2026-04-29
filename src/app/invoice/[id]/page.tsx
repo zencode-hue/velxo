@@ -6,6 +6,7 @@ import Image from "next/image";
 import { CheckCircle, Clock, XCircle, Package, ArrowLeft } from "lucide-react";
 import CopyButton from "./CopyButton";
 import InvoiceClient from "./InvoiceClient";
+import { formatOrderId } from "@/lib/slug";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -176,14 +177,14 @@ export default async function InvoicePage({ params }: { params: { id: string } }
           </div>
         )}
 
-        {/* Invoice ID */}
+        {/* Invoice Reference */}
         <div className="rounded-2xl p-5 mb-6" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(255,255,255,0.08)" }}>
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-gray-500 uppercase tracking-wider">Invoice ID</p>
-            <CopyButton text={order.id} label="Copy ID" />
+            <p className="text-xs text-gray-500 uppercase tracking-wider">Order Reference</p>
+            <CopyButton text={formatOrderId(order.id)} label="Copy" />
           </div>
-          <code className="font-mono text-xs text-gray-400 break-all">{order.id}</code>
-          <p className="text-xs text-gray-700 mt-2">{appUrl}/invoice/{order.id}</p>
+          <p className="font-mono text-lg font-bold text-purple-300">{formatOrderId(order.id)}</p>
+          <p className="text-xs text-gray-700 mt-1">{appUrl}/invoice/{order.id}</p>
         </div>
 
         <div className="flex gap-3">

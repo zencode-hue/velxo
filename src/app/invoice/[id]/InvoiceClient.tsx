@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ExternalLink, Copy, Check, ChevronRight, Loader2, MessageCircle, CreditCard, Bitcoin, Wallet, Clock } from "lucide-react";
+import { formatOrderId } from "@/lib/slug";
 
 interface InvoiceClientProps {
   orderId: string;
@@ -18,12 +19,12 @@ const DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_URL ?? "https://discord.gg/2
 export default function InvoiceClient({ orderId, status, paymentProvider, amount, paymentRef, giftCardDenomination }: InvoiceClientProps) {
   const router = useRouter();
 
-  // Auto-refresh every 15s for PENDING orders
   useEffect(() => {
     if (status !== "PENDING") return;
     const interval = setInterval(() => router.refresh(), 15000);
     return () => clearInterval(interval);
   }, [status, router]);
+
   if (status !== "PENDING") {
     if (status === "PENDING_STOCK" && paymentProvider === "binance_gift_card") {
       return (
@@ -81,7 +82,7 @@ function GiftCardPendingSection({ orderId }: { orderId: string }) {
         </div>
       </div>
       <p className="text-xs mt-3" style={{ color: "rgba(255,255,255,0.3)" }}>
-        Order ID: <span className="font-mono">{orderId.slice(0, 12)}…</span>
+        Reference: <span className="font-mono text-purple-300">{formatOrderId(orderId)}</span>
       </p>
     </div>
   );
@@ -196,7 +197,7 @@ function GiftCardSection({ orderId, amount: _amount, denomination }: { orderId: 
         <div className="space-y-4">
           <ol className="space-y-3">
             {[
-              { n: 1, text: `Click the button below to open Eneba and purchase a ${denomination} USD Binance Gift Card.` },
+              { n: 1, text: `Click the button below to open Eneba and purchase a $${denomination} USD Binance Gift Card.` },
               { n: 2, text: "Complete the purchase on Eneba. You'll receive a gift card code (e.g. XXXX-XXXX-XXXX-XXXX)." },
               { n: 3, text: "Come back to this invoice and click \"I have my code\" to enter it." },
               { n: 4, text: "Our staff will verify the code and deliver your product within minutes." },
@@ -256,10 +257,13 @@ function GiftCardSection({ orderId, amount: _amount, denomination }: { orderId: 
 // ── Discord Manual ────────────────────────────────────────────────────────────
 function DiscordSection({ orderId, amount }: { orderId: string; amount: number }) {
   const [copied, setCopied] = useState(false);
-  const msg = `Hi! I want to complete my order. Order ID: ${orderId} — Amount: ${amount.toFixed(2)}`;
+  // Discord message uses the display ID so staff can reference it easily
+  const displayId = formatOrderId(orderId);
+  const msg = `Hi! I want to complete my order. Reference: ${displayId} — Amount: $${amount.toFixed(2)}`;
 
   function copy() {
-    navigator.clipboard.writeText(orderId);
+    // Copy the display ID (VLX-XXXXXX) — easier for customers to share
+    navigator.clipboard.writeText(displayId);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
@@ -276,7 +280,7 @@ function DiscordSection({ orderId, amount }: { orderId: string; amount: number }
         </div>
       </div>
       <ol className="space-y-2 mb-4">
-        {["Join our Discord server using the button below.", "Send a message with your Order ID to our support team.", "Complete the payment as instructed by staff.", "Your product will be delivered once payment is confirmed."].map((t, i) => (
+        {["Join our Discord server using the button below.", "Send a message with your Order Reference to our support team.", "Complete the payment as instructed by staff.", "Your product will be delivered once payment is confirmed."].map((t, i) => (
           <li key={i} className="flex gap-3 text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
             <span className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
               style={{ background: "rgba(88,101,242,0.15)", color: "#818cf8" }}>{i + 1}</span>
@@ -285,7 +289,7 @@ function DiscordSection({ orderId, amount }: { orderId: string; amount: number }
         ))}
       </ol>
       <div className="flex items-center gap-2 p-3 rounded-xl mb-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
-        <code className="text-xs font-mono flex-1 break-all" style={{ color: "rgba(255,255,255,0.6)" }}>{orderId}</code>
+        <code className="text-sm font-mono flex-1 text-purple-300 font-bold">{displayId}</code>
         <button onClick={copy} className="shrink-0 transition-colors" style={{ color: copied ? "#34d399" : "rgba(255,255,255,0.4)" }}>
           {copied ? <Check size={13} /> : <Copy size={13} />}
         </button>
@@ -315,12 +319,13 @@ function BalanceSection() {
 
 // ── Support ───────────────────────────────────────────────────────────────────
 function SupportSection({ orderId }: { orderId: string }) {
-  const msg = `Hi, I need help with my order. Order ID: ${orderId}`;
+  const displayId = formatOrderId(orderId);
+  const msg = `Hi, I need help with my order. Reference: ${displayId}`;
   return (
     <div className="rounded-2xl p-5 mb-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
       <p className="text-xs font-semibold text-white mb-1">Need help with this order?</p>
       <p className="text-xs mb-3" style={{ color: "rgba(255,255,255,0.35)" }}>
-        Our support team is available on Discord. Share your Order ID and we&apos;ll sort it out.
+        Our support team is available on Discord. Share your reference <span className="font-mono text-purple-300">{displayId}</span> and we&apos;ll sort it out.
       </p>
       <a href={`${DISCORD_URL}?message=${encodeURIComponent(msg)}`} target="_blank" rel="noopener noreferrer"
         className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium text-white transition-all"

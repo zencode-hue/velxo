@@ -133,7 +133,7 @@ export async function sendDeliveryEmail(email: string, orderDetails: object): Pr
     html(
       "Order delivered",
       `${h2("Your order is ready!")}
-       ${p(`Order ID: <strong style="color:#f9fafb;">${d.orderId ?? "N/A"}</strong>`)}
+       ${p(`Order: <strong style="color:#f9fafb;">${d.orderId ? `VLX-${d.orderId.slice(-6).toUpperCase()}` : "N/A"}</strong>`)}
        ${p(`Product: <strong style="color:#f9fafb;">${d.productTitle ?? "N/A"}</strong>`)}
        ${credentials ? `${p("Your credentials / license key:")}${credBlock}` : p("Your order is being processed.")}
        <div style="margin:24px 0;">${btn(`${APP_URL}/dashboard`, "View Dashboard")}</div>
@@ -202,7 +202,7 @@ export async function sendAdminPendingStockAlert(orderId: string, productTitle: 
     html(
       "Order pending stock",
       `${h2("Order Awaiting Stock")}
-       ${p(`Order <strong style="color:#f9fafb;">#${orderId}</strong> for <strong style="color:#f9fafb;">${productTitle}</strong> could not be fulfilled because there is no stock available.`)}
+       ${p(`Order <strong style="color:#f9fafb;">VLX-${orderId.slice(-6).toUpperCase()}</strong> for <strong style="color:#f9fafb;">${productTitle}</strong> could not be fulfilled because there is no stock available.`)}
        ${p("Please upload inventory for this product to complete the delivery.")}
        <div style="margin:24px 0;">${btn(`${APP_URL}/admin/orders`, "View Orders")}</div>`
     )
