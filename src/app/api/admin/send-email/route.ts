@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireAdminApi } from "@/lib/admin-auth";
+import { sendMarketingEmail } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -16,43 +17,8 @@ const bodySchema = z.object({
   preview: z.boolean().optional(),
 });
 
-async function sendEmail(to: string, subject: string, htmlBody: string) {
-  const FROM = process.env.EMAIL_FROM ?? "noreply@velxo.shop";
-  const resendKey = process.env.RESEND_API_KEY;
-  if (!resendKey) throw new Error("RESEND_API_KEY not configured");
-  const { Resend } = await import("resend");
-  const resend = new Resend(resendKey);
-  await resend.emails.send({ from: FROM, to, subject, html: htmlBody });
-}
-
-function buildHtml(subject: string, message: string): string {
-  const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "Velxo Shop";
-  const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
-  return `<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><title>${subject}</title></head>
-<body style="margin:0;padding:0;background:#000;font-family:system-ui,sans-serif;color:#f9fafb;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#000;padding:40px 0;">
-    <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="background:#0a0a0a;border:1px solid rgba(167,139,250,0.2);border-radius:12px;overflow:hidden;">
-        <tr><td style="background:linear-gradient(135deg,#7c3aed,#a78bfa);padding:24px 32px;">
-          <span style="font-size:22px;font-weight:700;color:#fff;">${APP_NAME}</span>
-        </td></tr>
-        <tr><td style="padding:32px;">
-          <div style="color:#d1d5db;line-height:1.8;font-size:15px;white-space:pre-wrap;">${message}</div>
-          <div style="margin-top:32px;">
-            <a href="${APP_URL}/products" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:14px;">Browse Products</a>
-          </div>
-        </td></tr>
-        <tr><td style="padding:16px 32px;border-top:1px solid rgba(255,255,255,0.06);font-size:12px;color:#6b7280;text-align:center;">
-          © ${new Date().getFullYear()} ${APP_NAME}. All rights reserved. &nbsp;·&nbsp;
-          <a href="${APP_URL}" style="color:#a78bfa;text-decoration:none;">${APP_URL}</a>
-        </td></tr>
-      </table>
-    </td></tr>
-  </table>
-</body>
-</html>`;
+async function sendEmail(to: string, subject: string, message: string) {
+  await sendMarketingEmail(to, subject, message);
 }
 
 /**
@@ -123,14 +89,14 @@ export async function POST(req: NextRequest) {
       const email = order.user?.email ?? (order as { guestEmail?: string | null }).guestEmail;
       if (!email) return NextResponse.json({ error: "No email for this order" }, { status: 400 });
       if (preview) return NextResponse.json({ count: 1, preview: true });
-      await sendEmail(email, subject, buildHtml(subject, message));
+      await sendEmail(email, subject, message);
       return NextResponse.json({ ok: true, sent: 1 });
     }
 
     // ── Single custom email ───────────────────────────────────────────────────
     if (to === "custom" && customEmail) {
       if (preview) return NextResponse.json({ count: 1, preview: true });
-      await sendEmail(customEmail, subject, buildHtml(subject, message));
+      await sendEmail(customEmail, subject, message);
       return NextResponse.json({ ok: true, sent: 1 });
     }
 
@@ -148,7 +114,7 @@ export async function POST(req: NextRequest) {
 
       for (const email of emails) {
         try {
-          await sendEmail(email, subject, buildHtml(subject, message));
+          await sendEmail(email, subject, message);
           sent++;
           // 150ms delay between sends to stay within Resend rate limits
           await new Promise((r) => setTimeout(r, 150));
