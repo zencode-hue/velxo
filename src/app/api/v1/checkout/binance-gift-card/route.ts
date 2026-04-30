@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-
-export const dynamic = "force-dynamic";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { getServerSession } from "@/lib/auth";
 import { sendDiscordNotification } from "@/lib/discord";
+
+export const dynamic = "force-dynamic";
 
 const bodySchema = z.object({
   orderId: z.string().min(1),
@@ -36,10 +36,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ data: null, error: "Order not found", meta: {} }, { status: 404 });
     }
 
-    // Allow both logged-in users and guests (match by userId or guestEmail)
-    const isOwner = session?.user?.id
-      ? order.userId === session.user.id
-      : true; // guest — trust orderId is secret enough
+    const isOwner = session?.user?.id ? order.userId === session.user.id : true;
     if (!isOwner) {
       return NextResponse.json({ data: null, error: "Order not found", meta: {} }, { status: 404 });
     }
@@ -55,32 +52,51 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ data: null, error: "Payment method not configured", meta: {} }, { status: 503 });
     }
 
+    // Check if this is a cart group order
+    const cartGroupId = (order as { adminNote?: string | null }).adminNote;
+    const isCartOrder = cartGroupId?.startsWith("cart_gc_");
+
+    let allOrderIds = [orderId];
+    let totalAmount = Number(order.amount);
+    let productSummary = order.product.title;
+
+    if (isCartOrder && cartGroupId) {
+      const cartOrders = await db.order.findMany({
+        where: { adminNote: cartGroupId, paymentProvider: "binance_gift_card" },
+        include: { product: { select: { title: true } } },
+      });
+      allOrderIds = cartOrders.map((o) => o.id);
+      totalAmount = cartOrders.reduce((s, o) => s + Number(o.amount), 0);
+      productSummary = cartOrders.map((o) => o.product.title).join(", ");
+    }
+
     await sendDiscordNotification(webhookUrl, {
-      embeds: [
-        {
-          title: "💳 Binance Gift Card Payment Received",
-          color: 0xf0b90b, // Binance yellow
-          fields: [
-            { name: "Order ID", value: orderId, inline: true },
-            { name: "Amount", value: `$${Number(order.amount).toFixed(2)} USD`, inline: true },
-            { name: "Product", value: order.product.title, inline: false },
-            { name: "Customer", value: deliveryEmail ?? "Guest", inline: false },
-            { name: "Gift Card Code", value: `\`\`\`${giftCardCode}\`\`\``, inline: false },
-          ],
-          timestamp: new Date().toISOString(),
-          footer: { text: "Verify and mark order as PAID after redeeming the gift card" },
-        },
-      ],
+      embeds: [{
+        title: "💳 Binance Gift Card Payment Received",
+        color: 0xf0b90b,
+        fields: [
+          { name: isCartOrder ? "Cart Group" : "Order ID", value: isCartOrder ? cartGroupId! : orderId, inline: true },
+          { name: "Amount", value: `$${totalAmount.toFixed(2)} USD`, inline: true },
+          { name: "Products", value: productSummary.slice(0, 200), inline: false },
+          { name: "Customer", value: deliveryEmail ?? "Guest", inline: false },
+          { name: "Gift Card Code", value: `\`\`\`${giftCardCode}\`\`\``, inline: false },
+          ...(isCartOrder ? [{ name: "Order IDs", value: allOrderIds.join("\n"), inline: false }] : []),
+        ],
+        timestamp: new Date().toISOString(),
+        footer: { text: "Verify and mark ALL orders as PAID after redeeming the gift card" },
+      }],
     });
 
-    // Mark order as pending stock — admin will verify and fulfill
-    await db.order.update({
-      where: { id: orderId },
-      data: { status: "PENDING_STOCK", paymentRef: `gift_card:${giftCardCode.slice(0, 8)}***` },
-    });
+    // Mark all orders as PENDING_STOCK
+    for (const oid of allOrderIds) {
+      await db.order.update({
+        where: { id: oid },
+        data: { status: "PENDING_STOCK", paymentRef: `gift_card:${giftCardCode.slice(0, 8)}***` },
+      });
+    }
 
     return NextResponse.json({
-      data: { message: "Gift card code submitted successfully. Your order will be processed shortly." },
+      data: { message: "Gift card code submitted. Your order will be processed shortly." },
       error: null,
       meta: {},
     });

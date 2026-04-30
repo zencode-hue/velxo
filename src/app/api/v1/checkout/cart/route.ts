@@ -12,7 +12,7 @@ const bodySchema = z.object({
     productId: z.string().min(1),
     variantId: z.string().optional(),
   })).min(1).max(20),
-  paymentProvider: z.enum(["nowpayments", "balance"]),
+  paymentProvider: z.enum(["nowpayments", "balance", "binance_gift_card"]),
   discountCode: z.string().optional(),
   guestEmail: z.string().email().optional(),
 });
@@ -41,7 +41,6 @@ export async function POST(req: NextRequest) {
     if (paymentProvider === "balance" && !userId) {
       return NextResponse.json({ error: "Sign in to pay with balance" }, { status: 401 });
     }
-
     // Validate all products and compute total
     let totalAmount = 0;
     const resolvedItems: Array<{ productId: string; variantId?: string; title: string; price: number }> = [];
@@ -236,6 +235,52 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({
         data: { redirectUrl: npData.invoice_url, orderIds, cartGroupId },
+        error: null,
+      });
+    }
+
+    // ── Binance Gift Card — create one order for the total, customer submits code ──
+    if (paymentProvider === "binance_gift_card") {
+      // Find the nearest Eneba denomination >= finalAmount
+      const denominations = [
+        0.5, 1, 2, 3, 4, 5, 6, 7, 7.5, 8, 9, 10, 10.5, 11, 12, 13, 14, 15,
+        17, 18, 20, 20.5, 22, 25, 27, 28, 29, 30, 33, 33.5, 35, 40, 43, 43.5,
+        44, 44.5, 45, 45.5, 46, 50, 50.5, 55, 60, 65, 66, 70, 100, 150, 200,
+        250, 300, 400, 500, 750,
+      ];
+      const denomination = denominations.find((d) => d >= finalAmount) ?? finalAmount;
+
+      // Create one order for the cart total
+      const cartGroupId = `cart_gc_${Date.now()}`;
+      const orderIds: string[] = [];
+
+      for (const item of resolvedItems) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const order = await (db.order.create as any)({
+          data: {
+            userId: userId ?? undefined,
+            guestEmail: userId ? null : (guestEmail ?? null),
+            productId: item.productId,
+            variantId: item.variantId ?? null,
+            variantName: null,
+            amount: item.price,
+            discountAmount: 0,
+            status: "PENDING",
+            paymentProvider: "binance_gift_card",
+            adminNote: cartGroupId,
+          },
+        });
+        orderIds.push(order.id);
+      }
+
+      return NextResponse.json({
+        data: {
+          orderId: orderIds[0],   // primary order ID for the gift card modal
+          orderIds,
+          cartGroupId,
+          denomination,
+          totalAmount: finalAmount,
+        },
         error: null,
       });
     }
