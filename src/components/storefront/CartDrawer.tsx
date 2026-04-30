@@ -213,35 +213,28 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
             <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 11, textAlign: "center", marginBottom: 12 }}>
               Digital products are purchased individually
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {items.map((item) => (
-                <Link
-                  key={item.id}
-                  href={`/checkout?productId=${item.productId}${item.variantId ? `&variantId=${item.variantId}` : ""}`}
-                  onClick={onClose}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 8,
-                    padding: "10px 14px",
-                    borderRadius: 10,
-                    background: "rgba(167,139,250,0.1)",
-                    border: "1px solid rgba(167,139,250,0.2)",
-                    textDecoration: "none",
-                    color: "#fff",
-                    fontSize: 12,
-                    fontWeight: 500,
-                  }}
-                >
-                  <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.title}</span>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-                    <Zap size={11} color="#a78bfa" />
-                    <span style={{ color: "#c4b5fd" }}>${item.price.toFixed(2)}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            <Link
+              href="/cart"
+              onClick={onClose}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                padding: "12px 16px",
+                borderRadius: 12,
+                background: "rgba(167,139,250,0.15)",
+                border: "1px solid rgba(167,139,250,0.35)",
+                textDecoration: "none",
+                color: "#fff",
+                fontSize: 14,
+                fontWeight: 700,
+                boxShadow: "0 4px 20px rgba(167,139,250,0.2)",
+              }}
+            >
+              <Zap size={15} color="#c4b5fd" />
+              Checkout All — ${total.toFixed(2)}
+            </Link>
           </div>
         )}
       </div>
