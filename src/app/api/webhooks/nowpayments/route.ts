@@ -110,6 +110,19 @@ async function processNowPaymentsEvent(
     return;
   }
 
+  // Handle cart checkout (order_id starts with "cart_")
+  if (orderId.startsWith("cart_")) {
+    if (paymentStatus === "finished") {
+      await processCartPayment(orderId, paymentId);
+    } else if (paymentStatus === "failed" || paymentStatus === "expired") {
+      await db.order.updateMany({
+        where: { adminNote: orderId, paymentProvider: "nowpayments" },
+        data: { status: "FAILED" },
+      });
+    }
+    return;
+  }
+
   // Find order by paymentRef or id
   const order = await db.order.findFirst({
     where: {
@@ -131,6 +144,30 @@ async function processNowPaymentsEvent(
     await deliverOrder(order.id);
   } else if (paymentStatus === "failed" || paymentStatus === "expired") {
     await db.order.update({ where: { id: order.id }, data: { status: "FAILED" } });
+  }
+}
+
+/**
+ * Delivers all orders in a cart group when crypto payment confirms.
+ */
+async function processCartPayment(cartGroupId: string, paymentId: string | undefined): Promise<void> {
+  const orders = await db.order.findMany({
+    where: { adminNote: cartGroupId, paymentProvider: "nowpayments", status: "PENDING" },
+    select: { id: true },
+  });
+
+  if (orders.length === 0) {
+    console.warn(`[NOWPayments Webhook] No pending orders for cart group: ${cartGroupId}`);
+    return;
+  }
+
+  for (const order of orders) {
+    await db.order.update({ where: { id: order.id }, data: { status: "PAID" } });
+    try {
+      await deliverOrder(order.id);
+    } catch (err) {
+      console.error(`[NOWPayments Webhook] Cart delivery failed for order ${order.id}:`, err);
+    }
   }
 }
 

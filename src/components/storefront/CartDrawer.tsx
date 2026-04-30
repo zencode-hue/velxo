@@ -233,7 +233,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
               }}
             >
               <Zap size={15} color="#c4b5fd" />
-              Checkout All — ${total.toFixed(2)}
+              Checkout — ${total.toFixed(2)}
             </Link>
           </div>
         )}
