@@ -133,7 +133,7 @@ export async function sendDeliveryEmail(email: string, orderDetails: object): Pr
     html(
       "Order delivered",
       `${h2("Your order is ready!")}
-       ${p(`Order: <strong style="color:#f9fafb;">${d.orderId ? `VLX-${d.orderId.slice(-6).toUpperCase()}` : "N/A"}</strong>`)}
+       ${p(`Order: <strong style="color:#f9fafb;">${d.orderId ? `VLX-${String(d.orderId).slice(-6).toUpperCase()}` : "N/A"}</strong>`)}
        ${p(`Product: <strong style="color:#f9fafb;">${d.productTitle ?? "N/A"}</strong>`)}
        ${credentials ? `${p("Your credentials / license key:")}${credBlock}` : p("Your order is being processed.")}
        <div style="margin:24px 0;">${btn(`${APP_URL}/dashboard`, "View Dashboard")}</div>
