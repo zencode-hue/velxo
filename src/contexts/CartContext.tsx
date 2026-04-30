@@ -1,76 +1,100 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
 
 export interface CartItem {
-  id: string;          // unique key: productId or productId__variantId
+  id: string;        // unique key — productId or productId__variantId
   productId: string;
   variantId?: string;
   title: string;
   price: number;
   category: string;
   imageUrl?: string | null;
-  quantity: number;
 }
 
-interface CartContextType {
+interface CartState {
+  items: CartItem[];
+}
+
+type CartAction =
+  | { type: "ADD"; item: CartItem }
+  | { type: "REMOVE"; id: string }
+  | { type: "CLEAR" }
+  | { type: "LOAD"; items: CartItem[] };
+
+function cartReducer(state: CartState, action: CartAction): CartState {
+  switch (action.type) {
+    case "ADD":
+      if (state.items.find((i) => i.id === action.item.id)) return state;
+      return { items: [...state.items, action.item] };
+    case "REMOVE":
+      return { items: state.items.filter((i) => i.id !== action.id) };
+    case "CLEAR":
+      return { items: [] };
+    case "LOAD":
+      return { items: action.items };
+    default:
+      return state;
+  }
+}
+
+interface CartContextValue {
   items: CartItem[];
   count: number;
   total: number;
-  addItem: (item: Omit<CartItem, "quantity">) => void;
+  addItem: (item: CartItem) => void;
   removeItem: (id: string) => void;
-  updateQty: (id: string, qty: number) => void;
   clearCart: () => void;
 }
 
-const CartContext = createContext<CartContextType | null>(null);
+const CartContext = createContext<CartContextValue | null>(null);
+
+const STORAGE_KEY = "vlx_cart_v1";
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [state, dispatch] = useReducer(cartReducer, { items: [] });
 
-  // Persist to localStorage
+  // Load from localStorage on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("velxo_cart");
-      if (saved) setItems(JSON.parse(saved));
-    } catch {}
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as CartItem[];
+        if (Array.isArray(parsed)) {
+          dispatch({ type: "LOAD", items: parsed });
+        }
+      }
+    } catch {
+      // ignore
+    }
   }, []);
 
+  // Persist to localStorage on every change
   useEffect(() => {
-    try { localStorage.setItem("velxo_cart", JSON.stringify(items)); } catch {}
-  }, [items]);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
+    } catch {
+      // ignore
+    }
+  }, [state.items]);
 
-  const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
-    setItems((prev) => {
-      const existing = prev.find((i) => i.id === item.id);
-      if (existing) return prev; // already in cart
-      return [...prev, { ...item, quantity: 1 }];
-    });
-  }, []);
+  const count = state.items.length;
+  const total = state.items.reduce((s, i) => s + i.price, 0);
 
-  const removeItem = useCallback((id: string) => {
-    setItems((prev) => prev.filter((i) => i.id !== id));
-  }, []);
+  const value: CartContextValue = {
+    items: state.items,
+    count,
+    total,
+    addItem: (item) => dispatch({ type: "ADD", item }),
+    removeItem: (id) => dispatch({ type: "REMOVE", id }),
+    clearCart: () => dispatch({ type: "CLEAR" }),
+  };
 
-  const updateQty = useCallback((id: string, qty: number) => {
-    if (qty <= 0) { removeItem(id); return; }
-    setItems((prev) => prev.map((i) => i.id === id ? { ...i, quantity: qty } : i));
-  }, [removeItem]);
-
-  const clearCart = useCallback(() => setItems([]), []);
-
-  const count = items.reduce((s, i) => s + i.quantity, 0);
-  const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
-
-  return (
-    <CartContext.Provider value={{ items, count, total, addItem, removeItem, updateQty, clearCart }}>
-      {children}
-    </CartContext.Provider>
-  );
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
-export function useCart() {
+export function useCart(): CartContextValue {
   const ctx = useContext(CartContext);
-  if (!ctx) throw new Error("useCart must be used within CartProvider");
+  if (!ctx) throw new Error("useCart must be used inside <CartProvider>");
   return ctx;
 }
