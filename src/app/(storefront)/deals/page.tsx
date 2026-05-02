@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Tag, Clock, Zap, Lock } from "lucide-react";
 import DealCard from "@/components/storefront/DealCard";
 import DealCountdown from "@/components/storefront/DealCountdown";
+import { getDealsData, type DealItem } from "@/lib/server-data";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -11,25 +12,10 @@ export const metadata: Metadata = {
   description: "Daily deals with 20% off — refreshes every 24 hours. Limited time only.",
 };
 
-interface Deal {
-  id: string; title: string; category: string; imageUrl: string | null;
-  originalPrice: number; dealPrice: number; discountPct: number;
-  savings: number; inStock: boolean; avgRating: number;
-}
-
-async function getDeals(): Promise<{ deals: Deal[]; resetAt: string }> {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  try {
-    const res = await fetch(`${appUrl}/api/v1/deals`, { cache: "no-store" });
-    const data = await res.json();
-    return data.data ?? { deals: [], resetAt: new Date().toISOString() };
-  } catch {
-    return { deals: [], resetAt: new Date().toISOString() };
-  }
-}
+// DealItem type imported from server-data
 
 export default async function DealsPage() {
-  const { deals, resetAt } = await getDeals();
+  const { deals, resetAt } = await getDealsData();
 
   return (
     <div className="min-h-screen" style={{ background: "#080c0a" }}>

@@ -13,6 +13,7 @@ import LiveOrderTicker from "@/components/storefront/LiveOrderTicker";
 import { ArrowRight, Zap, Lock, Gem, Flame } from "lucide-react";
 import DealCard from "@/components/storefront/DealCard";
 import DealCountdown from "@/components/storefront/DealCountdown";
+import { getDealsData, getSiteSettings } from "@/lib/server-data";
 
 export const metadata: Metadata = {
   title: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
@@ -58,30 +59,24 @@ async function getFeatured() {
 }
 
 export default async function HomePage() {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const [featured, streaming, aiTools, gaming, software, dealsRes, settingsRes] = await Promise.all([
+  const [featured, streaming, aiTools, gaming, software, dealsData, siteSettings] = await Promise.all([
     getFeatured(),
     getProductsByCategory("STREAMING", 4),
     getProductsByCategory("AI_TOOLS", 4),
     getProductsByCategory("GAMING", 4),
     getProductsByCategory("SOFTWARE", 4),
-    fetch(`${appUrl}/api/v1/deals`, { cache: "no-store" }).then((r) => r.json()).catch(() => ({ data: null })),
-    fetch(`${appUrl}/api/v1/settings`, { cache: "no-store" }).then((r) => r.json()).catch(() => ({ data: {} })),
+    getDealsData(),
+    getSiteSettings(),
   ]);
 
-  const siteSettings: Record<string, string> = settingsRes?.data ?? {};
   const discordUrl = siteSettings["discord_url"] || process.env.DISCORD_SERVER_URL || "https://discord.gg/velxo";
   const telegramUrl = siteSettings["telegram_url"] || "";
   const discordMembers = siteSettings["discord_members"] || "1,000+";
   const telegramMembers = siteSettings["telegram_members"] || "";
   const dealsEnabled = siteSettings["deals_enabled"] !== "false";
 
-  const hotDeals = (dealsRes?.data?.deals ?? []).slice(0, 4) as Array<{
-    id: string; title: string; category: string; imageUrl: string | null;
-    originalPrice: number; dealPrice: number; discountPct: number;
-    savings: number; inStock: boolean; avgRating: number;
-  }>;
-  const dealsResetAt: string = dealsRes?.data?.resetAt ?? new Date().toISOString();
+  const hotDeals = dealsData.deals.slice(0, 4);
+  const dealsResetAt = dealsData.resetAt;
 
   const categorySections = [
     { id: "STREAMING", label: "Streaming", products: streaming },
