@@ -1,4 +1,4 @@
-// v3 - bottom sheet mobile nav
+// v4 - no Tailwind responsive classes, pure JS/inline-style responsive
 "use client";
 
 import { useState, useEffect } from "react";
@@ -28,6 +28,14 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -37,7 +45,6 @@ export default function Navbar() {
 
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
-  // Lock body scroll when mobile menu open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -47,37 +54,35 @@ export default function Navbar() {
     <>
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
 
-      {/* ── Desktop + Mobile pill ── */}
-      <div className="fixed top-0 left-0 right-0 z-40 flex justify-center px-4 pt-4">
-        <header
-          style={{
-            width: "100%",
-            maxWidth: 960,
-            background: scrolled ? "rgba(6,6,6,0.92)" : "rgba(255,255,255,0.04)",
-            backdropFilter: "blur(40px) saturate(180%)",
-            WebkitBackdropFilter: "blur(40px) saturate(180%)",
-            border: "1px solid rgba(255,255,255,0.09)",
-            borderRadius: 20,
-            boxShadow: scrolled
-              ? "0 8px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06)"
-              : "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)",
-            transition: "all 0.4s ease",
-          }}
-        >
+      {/* Navbar pill */}
+      <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 40, display: "flex", justifyContent: "center", padding: "16px 16px 0" }}>
+        <header style={{
+          width: "100%", maxWidth: 960,
+          background: scrolled ? "rgba(6,6,6,0.92)" : "rgba(255,255,255,0.04)",
+          backdropFilter: "blur(40px) saturate(180%)",
+          WebkitBackdropFilter: "blur(40px) saturate(180%)",
+          border: "1px solid rgba(255,255,255,0.09)",
+          borderRadius: 20,
+          boxShadow: scrolled
+            ? "0 8px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06)"
+            : "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)",
+          transition: "all 0.4s ease",
+        }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", height: 56 }}>
+
             {/* Logo */}
             <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
               <VelxoLogo size={22} />
               <span style={{ fontWeight: 700, fontSize: 15, color: "#fff", letterSpacing: "-0.3px" }}>Velxo</span>
             </Link>
 
-            {/* Desktop nav links */}
-            <nav style={{ display: "flex", alignItems: "center", gap: 2 }} className="hidden md:flex">
-              {NAV_LINKS.map(({ href, label }) => {
-                const active = pathname === href || (href !== "/" && pathname.startsWith(href));
-                return (
-                  <Link key={href} href={href}
-                    style={{
+            {/* Desktop nav — hidden on mobile */}
+            {!isMobile && (
+              <nav style={{ display: "flex", alignItems: "center", gap: 2 }}>
+                {NAV_LINKS.map(({ href, label }) => {
+                  const active = pathname === href || (href !== "/" && pathname.startsWith(href));
+                  return (
+                    <Link key={href} href={href} style={{
                       padding: "6px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500,
                       textDecoration: "none",
                       color: active ? "#fff" : "rgba(255,255,255,0.45)",
@@ -85,30 +90,32 @@ export default function Navbar() {
                       border: active ? "1px solid rgba(255,255,255,0.1)" : "1px solid transparent",
                       transition: "all 0.15s ease",
                     }}>
-                    {label}
-                  </Link>
-                );
-              })}
-            </nav>
+                      {label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            )}
 
             {/* Right actions */}
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
               {/* Search */}
-              <Link href="/search" aria-label="Search"
-                style={{ padding: 8, borderRadius: 10, color: "rgba(255,255,255,0.5)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Link href="/search" aria-label="Search" style={{
+                padding: 8, borderRadius: 10, color: "rgba(255,255,255,0.5)",
+                textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
                 <Search size={17} />
               </Link>
 
               {/* Cart */}
-              <button onClick={() => setCartOpen(true)} aria-label="Cart"
-                style={{
-                  position: "relative", padding: 8, borderRadius: 10, cursor: "pointer",
-                  background: count > 0 ? "rgba(167,139,250,0.12)" : "transparent",
-                  border: count > 0 ? "1px solid rgba(167,139,250,0.25)" : "1px solid transparent",
-                  color: count > 0 ? "#c4b5fd" : "rgba(255,255,255,0.5)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  transition: "all 0.15s ease",
-                }}>
+              <button onClick={() => setCartOpen(true)} aria-label="Cart" style={{
+                position: "relative", padding: 8, borderRadius: 10, cursor: "pointer",
+                background: count > 0 ? "rgba(167,139,250,0.12)" : "transparent",
+                border: count > 0 ? "1px solid rgba(167,139,250,0.25)" : "1px solid transparent",
+                color: count > 0 ? "#c4b5fd" : "rgba(255,255,255,0.5)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "all 0.15s ease",
+              }}>
                 <ShoppingCart size={17} />
                 {count > 0 && (
                   <span style={{
@@ -124,30 +131,55 @@ export default function Navbar() {
                 )}
               </button>
 
-              {/* Dashboard / Sign in — desktop only */}
-              {session ? (
-                <Link href="/dashboard" className="hidden sm:flex"
-                  style={{ alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500, textDecoration: "none", color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                  <User size={13} /> Dashboard
-                </Link>
-              ) : (
-                <Link href="/auth/login" className="hidden sm:flex"
-                  style={{ alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500, textDecoration: "none", color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                  <User size={13} /> Sign In
+              {/* Desktop-only: Dashboard / Sign in */}
+              {!isMobile && (
+                session ? (
+                  <Link href="/dashboard" style={{
+                    display: "flex", alignItems: "center", gap: 6,
+                    padding: "6px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500,
+                    textDecoration: "none", color: "rgba(255,255,255,0.6)",
+                    background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
+                  }}>
+                    <User size={13} /> Dashboard
+                  </Link>
+                ) : (
+                  <Link href="/auth/login" style={{
+                    display: "flex", alignItems: "center", gap: 6,
+                    padding: "6px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500,
+                    textDecoration: "none", color: "rgba(255,255,255,0.6)",
+                    background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
+                  }}>
+                    <User size={13} /> Sign In
+                  </Link>
+                )
+              )}
+
+              {/* Desktop-only: Shop CTA */}
+              {!isMobile && (
+                <Link href="/products" style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  padding: "6px 14px", borderRadius: 10, fontSize: 13, fontWeight: 600,
+                  textDecoration: "none", color: "#fff",
+                  background: "rgba(167,139,250,0.15)", border: "1px solid rgba(167,139,250,0.3)",
+                  boxShadow: "0 0 16px rgba(167,139,250,0.12)",
+                }}>
+                  <Zap size={12} /> Shop
                 </Link>
               )}
 
-              {/* Shop CTA — desktop only */}
-              <Link href="/products" className="hidden sm:flex"
-                style={{ alignItems: "center", gap: 6, padding: "6px 14px", borderRadius: 10, fontSize: 13, fontWeight: 600, textDecoration: "none", color: "#fff", background: "rgba(167,139,250,0.15)", border: "1px solid rgba(167,139,250,0.3)", boxShadow: "0 0 16px rgba(167,139,250,0.12)" }}>
-                <Zap size={12} /> Shop
-              </Link>
-
-              {/* Mobile hamburger */}
-              <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden" aria-label="Menu"
-                style={{ padding: 8, borderRadius: 10, background: mobileOpen ? "rgba(255,255,255,0.08)" : "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.7)", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.15s ease" }}>
-                {mobileOpen ? <X size={19} /> : <Menu size={19} />}
-              </button>
+              {/* Mobile-only: Hamburger */}
+              {isMobile && (
+                <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu" style={{
+                  padding: 8, borderRadius: 10,
+                  background: mobileOpen ? "rgba(255,255,255,0.08)" : "none",
+                  border: "none", cursor: "pointer",
+                  color: "rgba(255,255,255,0.7)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  transition: "all 0.15s ease",
+                }}>
+                  {mobileOpen ? <X size={19} /> : <Menu size={19} />}
+                </button>
+              )}
             </div>
           </div>
         </header>
@@ -156,29 +188,26 @@ export default function Navbar() {
       {/* Spacer */}
       <div style={{ height: 80 }} />
 
-      {/* ── Mobile menu — full-screen overlay ── */}
-      {mobileOpen && (
-        <div className="md:hidden" style={{ position: "fixed", inset: 0, zIndex: 39 }}>
+      {/* Mobile menu — bottom sheet, only on mobile */}
+      {isMobile && mobileOpen && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 39 }}>
           {/* Backdrop */}
-          <div
-            onClick={() => setMobileOpen(false)}
-            style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}
-          />
+          <div onClick={() => setMobileOpen(false)} style={{
+            position: "absolute", inset: 0,
+            background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)",
+          }} />
 
-          {/* Panel — slides up from bottom */}
+          {/* Bottom sheet panel */}
           <div style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
+            position: "absolute", bottom: 0, left: 0, right: 0,
             background: "rgba(8,8,8,0.98)",
             borderTop: "1px solid rgba(255,255,255,0.1)",
             borderRadius: "20px 20px 0 0",
-            padding: "8px 0 32px",
+            paddingBottom: 32,
             backdropFilter: "blur(40px)",
           }}>
             {/* Drag handle */}
-            <div style={{ display: "flex", justifyContent: "center", padding: "8px 0 16px" }}>
+            <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 16px" }}>
               <div style={{ width: 36, height: 4, borderRadius: 100, background: "rgba(255,255,255,0.15)" }} />
             </div>
 
@@ -187,21 +216,17 @@ export default function Navbar() {
               {NAV_LINKS.map(({ href, label, icon: Icon }) => {
                 const active = pathname === href || (href !== "/" && pathname.startsWith(href));
                 return (
-                  <Link key={href} href={href}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 14,
-                      padding: "14px 16px", borderRadius: 14,
-                      textDecoration: "none",
-                      color: active ? "#fff" : "rgba(255,255,255,0.6)",
-                      background: active ? "rgba(167,139,250,0.1)" : "transparent",
-                      fontSize: 16, fontWeight: active ? 600 : 500,
-                      transition: "all 0.15s ease",
-                    }}>
+                  <Link key={href} href={href} style={{
+                    display: "flex", alignItems: "center", gap: 14,
+                    padding: "13px 16px", borderRadius: 14, textDecoration: "none",
+                    color: active ? "#fff" : "rgba(255,255,255,0.6)",
+                    background: active ? "rgba(167,139,250,0.1)" : "transparent",
+                    fontSize: 16, fontWeight: active ? 600 : 500,
+                  }}>
                     <div style={{
-                      width: 36, height: 36, borderRadius: 10,
+                      width: 36, height: 36, borderRadius: 10, flexShrink: 0,
                       background: active ? "rgba(167,139,250,0.15)" : "rgba(255,255,255,0.05)",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      flexShrink: 0,
                     }}>
                       <Icon size={17} color={active ? "#c4b5fd" : "rgba(255,255,255,0.4)"} />
                     </div>
@@ -211,16 +236,14 @@ export default function Navbar() {
                 );
               })}
 
-              {/* Cart */}
-              <button onClick={() => { setMobileOpen(false); setCartOpen(true); }}
-                style={{
-                  display: "flex", alignItems: "center", gap: 14,
-                  padding: "14px 16px", borderRadius: 14,
-                  background: "transparent", border: "none", cursor: "pointer",
-                  color: "rgba(255,255,255,0.6)", fontSize: 16, fontWeight: 500,
-                  width: "100%", textAlign: "left",
-                  transition: "all 0.15s ease",
-                }}>
+              {/* Cart row */}
+              <button onClick={() => { setMobileOpen(false); setCartOpen(true); }} style={{
+                display: "flex", alignItems: "center", gap: 14,
+                padding: "13px 16px", borderRadius: 14,
+                background: "transparent", border: "none", cursor: "pointer",
+                color: "rgba(255,255,255,0.6)", fontSize: 16, fontWeight: 500,
+                width: "100%", textAlign: "left",
+              }}>
                 <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <ShoppingCart size={17} color="rgba(255,255,255,0.4)" />
                 </div>
@@ -236,16 +259,14 @@ export default function Navbar() {
             {/* Divider */}
             <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "12px 16px" }} />
 
-            {/* Auth section */}
+            {/* Auth */}
             <div style={{ padding: "0 16px", display: "flex", flexDirection: "column", gap: 8 }}>
               {session ? (
-                <Link href="/dashboard"
-                  style={{
-                    display: "flex", alignItems: "center", gap: 14,
-                    padding: "14px 16px", borderRadius: 14,
-                    textDecoration: "none", color: "rgba(255,255,255,0.6)",
-                    background: "transparent", fontSize: 16, fontWeight: 500,
-                  }}>
+                <Link href="/dashboard" style={{
+                  display: "flex", alignItems: "center", gap: 14,
+                  padding: "13px 16px", borderRadius: 14, textDecoration: "none",
+                  color: "rgba(255,255,255,0.6)", background: "transparent", fontSize: 16, fontWeight: 500,
+                }}>
                   <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <LayoutDashboard size={17} color="rgba(255,255,255,0.4)" />
                   </div>
@@ -253,28 +274,22 @@ export default function Navbar() {
                 </Link>
               ) : (
                 <>
-                  <Link href="/auth/login"
-                    style={{
-                      display: "flex", alignItems: "center", gap: 14,
-                      padding: "14px 16px", borderRadius: 14,
-                      textDecoration: "none", color: "rgba(255,255,255,0.6)",
-                      background: "transparent", fontSize: 16, fontWeight: 500,
-                    }}>
+                  <Link href="/auth/login" style={{
+                    display: "flex", alignItems: "center", gap: 14,
+                    padding: "13px 16px", borderRadius: 14, textDecoration: "none",
+                    color: "rgba(255,255,255,0.6)", background: "transparent", fontSize: 16, fontWeight: 500,
+                  }}>
                     <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                       <LogIn size={17} color="rgba(255,255,255,0.4)" />
                     </div>
                     Sign In
                   </Link>
-                  <Link href="/auth/register"
-                    style={{
-                      display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-                      padding: "15px 20px", borderRadius: 14,
-                      textDecoration: "none", color: "#fff",
-                      background: "rgba(167,139,250,0.15)",
-                      border: "1px solid rgba(167,139,250,0.3)",
-                      fontSize: 15, fontWeight: 700,
-                      boxShadow: "0 4px 20px rgba(167,139,250,0.15)",
-                    }}>
+                  <Link href="/auth/register" style={{
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                    padding: "15px 20px", borderRadius: 14, textDecoration: "none", color: "#fff",
+                    background: "rgba(167,139,250,0.15)", border: "1px solid rgba(167,139,250,0.3)",
+                    fontSize: 15, fontWeight: 700, boxShadow: "0 4px 20px rgba(167,139,250,0.15)",
+                  }}>
                     <ShoppingBag size={16} />
                     Get Started — It&apos;s Free
                   </Link>
