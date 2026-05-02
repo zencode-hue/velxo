@@ -4,16 +4,19 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Menu, X, Search, User, Zap, ShoppingBag, ShoppingCart } from "lucide-react";
+import {
+  Menu, X, Search, User, Zap, ShoppingBag, ShoppingCart,
+  Package, Tag, BookOpen, Users, LayoutDashboard, LogIn,
+} from "lucide-react";
 import VelxoLogo from "@/components/VelxoLogo";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/storefront/CartDrawer";
 
 const NAV_LINKS = [
-  { href: "/products", label: "Products" },
-  { href: "/deals", label: "Deals" },
-  { href: "/blog", label: "Blog" },
-  { href: "/affiliate", label: "Affiliate" },
+  { href: "/products", label: "Products", icon: Package },
+  { href: "/deals", label: "Deals", icon: Tag },
+  { href: "/blog", label: "Blog", icon: BookOpen },
+  { href: "/affiliate", label: "Affiliate", icon: Users },
 ];
 
 export default function Navbar() {
@@ -31,15 +34,19 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => { setMobileOpen(false); }, [pathname]);
+
+  // Lock body scroll when mobile menu open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
 
   return (
     <>
-      {/* Cart drawer — rendered at top level so it's always in the DOM */}
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
 
-      {/* Navbar pill */}
+      {/* ── Desktop + Mobile pill ── */}
       <div className="fixed top-0 left-0 right-0 z-40 flex justify-center px-4 pt-4">
         <header
           style={{
@@ -63,90 +70,54 @@ export default function Navbar() {
               <span style={{ fontWeight: 700, fontSize: 15, color: "#fff", letterSpacing: "-0.3px" }}>Velxo</span>
             </Link>
 
-            {/* Desktop nav */}
+            {/* Desktop nav links */}
             <nav style={{ display: "flex", alignItems: "center", gap: 2 }} className="hidden md:flex">
               {NAV_LINKS.map(({ href, label }) => {
                 const active = pathname === href || (href !== "/" && pathname.startsWith(href));
                 return (
-                  <Link
-                    key={href}
-                    href={href}
+                  <Link key={href} href={href}
                     style={{
-                      padding: "6px 14px",
-                      borderRadius: 12,
-                      fontSize: 13,
-                      fontWeight: 500,
+                      padding: "6px 14px", borderRadius: 12, fontSize: 13, fontWeight: 500,
                       textDecoration: "none",
                       color: active ? "#fff" : "rgba(255,255,255,0.45)",
                       background: active ? "rgba(255,255,255,0.09)" : "transparent",
                       border: active ? "1px solid rgba(255,255,255,0.1)" : "1px solid transparent",
                       transition: "all 0.15s ease",
-                    }}
-                  >
+                    }}>
                     {label}
                   </Link>
                 );
               })}
             </nav>
 
-            {/* Right side actions */}
+            {/* Right actions */}
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
               {/* Search */}
-              <Link
-                href="/search"
-                aria-label="Search"
-                style={{
-                  padding: 8,
-                  borderRadius: 10,
-                  color: "rgba(255,255,255,0.5)",
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "all 0.15s ease",
-                }}
-              >
+              <Link href="/search" aria-label="Search"
+                style={{ padding: 8, borderRadius: 10, color: "rgba(255,255,255,0.5)", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Search size={17} />
               </Link>
 
-              {/* Cart button */}
-              <button
-                onClick={() => setCartOpen(true)}
-                aria-label={`Cart${count > 0 ? ` (${count} items)` : ""}`}
+              {/* Cart */}
+              <button onClick={() => setCartOpen(true)} aria-label="Cart"
                 style={{
-                  position: "relative",
-                  padding: 8,
-                  borderRadius: 10,
+                  position: "relative", padding: 8, borderRadius: 10, cursor: "pointer",
                   background: count > 0 ? "rgba(167,139,250,0.12)" : "transparent",
                   border: count > 0 ? "1px solid rgba(167,139,250,0.25)" : "1px solid transparent",
                   color: count > 0 ? "#c4b5fd" : "rgba(255,255,255,0.5)",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: "flex", alignItems: "center", justifyContent: "center",
                   transition: "all 0.15s ease",
-                }}
-              >
+                }}>
                 <ShoppingCart size={17} />
                 {count > 0 && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: -2,
-                      right: -2,
-                      minWidth: 16,
-                      height: 16,
-                      borderRadius: 100,
-                      background: "#a78bfa",
-                      color: "#fff",
-                      fontSize: 10,
-                      fontWeight: 700,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "0 3px",
-                    }}
-                  >
+                  <span style={{
+                    position: "absolute", top: -2, right: -2,
+                    minWidth: 16, height: 16, borderRadius: 100,
+                    background: "#a78bfa", color: "#fff",
+                    fontSize: 10, fontWeight: 700,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    padding: "0 3px",
+                  }}>
                     {count > 9 ? "9+" : count}
                   </span>
                 )}
@@ -154,83 +125,26 @@ export default function Navbar() {
 
               {/* Dashboard / Sign in — desktop only */}
               {session ? (
-                <Link
-                  href="/dashboard"
-                  className="hidden sm:flex"
-                  style={{
-                    alignItems: "center",
-                    gap: 6,
-                    padding: "6px 12px",
-                    borderRadius: 10,
-                    fontSize: 13,
-                    fontWeight: 500,
-                    textDecoration: "none",
-                    color: "rgba(255,255,255,0.6)",
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                  }}
-                >
+                <Link href="/dashboard" className="hidden sm:flex"
+                  style={{ alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500, textDecoration: "none", color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
                   <User size={13} /> Dashboard
                 </Link>
               ) : (
-                <Link
-                  href="/auth/login"
-                  className="hidden sm:flex"
-                  style={{
-                    alignItems: "center",
-                    gap: 6,
-                    padding: "6px 12px",
-                    borderRadius: 10,
-                    fontSize: 13,
-                    fontWeight: 500,
-                    textDecoration: "none",
-                    color: "rgba(255,255,255,0.6)",
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                  }}
-                >
+                <Link href="/auth/login" className="hidden sm:flex"
+                  style={{ alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500, textDecoration: "none", color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
                   <User size={13} /> Sign In
                 </Link>
               )}
 
               {/* Shop CTA — desktop only */}
-              <Link
-                href="/products"
-                className="hidden sm:flex"
-                style={{
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "6px 14px",
-                  borderRadius: 10,
-                  fontSize: 13,
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  color: "#fff",
-                  background: "rgba(167,139,250,0.15)",
-                  border: "1px solid rgba(167,139,250,0.3)",
-                  boxShadow: "0 0 16px rgba(167,139,250,0.12)",
-                }}
-              >
+              <Link href="/products" className="hidden sm:flex"
+                style={{ alignItems: "center", gap: 6, padding: "6px 14px", borderRadius: 10, fontSize: 13, fontWeight: 600, textDecoration: "none", color: "#fff", background: "rgba(167,139,250,0.15)", border: "1px solid rgba(167,139,250,0.3)", boxShadow: "0 0 16px rgba(167,139,250,0.12)" }}>
                 <Zap size={12} /> Shop
               </Link>
 
-              {/* Mobile menu toggle */}
-              <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden"
-                aria-label="Menu"
-                style={{
-                  padding: 8,
-                  borderRadius: 10,
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "rgba(255,255,255,0.6)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+              {/* Mobile hamburger */}
+              <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden" aria-label="Menu"
+                style={{ padding: 8, borderRadius: 10, background: mobileOpen ? "rgba(255,255,255,0.08)" : "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.7)", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.15s ease" }}>
                 {mobileOpen ? <X size={19} /> : <Menu size={19} />}
               </button>
             </div>
@@ -241,97 +155,131 @@ export default function Navbar() {
       {/* Spacer */}
       <div style={{ height: 80 }} />
 
-      {/* Mobile menu */}
+      {/* ── Mobile menu — full-screen overlay ── */}
       {mobileOpen && (
-        <div className="md:hidden" style={{ position: "fixed", inset: 0, zIndex: 39, paddingTop: 80, paddingLeft: 16, paddingRight: 16 }}>
+        <div className="md:hidden" style={{ position: "fixed", inset: 0, zIndex: 39 }}>
+          {/* Backdrop */}
           <div
             onClick={() => setMobileOpen(false)}
-            style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.8)", backdropFilter: "blur(16px)" }}
+            style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}
           />
-          <div
-            style={{
-              position: "relative",
-              borderRadius: 16,
-              overflow: "hidden",
-              background: "rgba(10,10,10,0.97)",
-              border: "1px solid rgba(255,255,255,0.1)",
-            }}
-          >
-            <nav style={{ display: "flex", flexDirection: "column", padding: 12, gap: 2 }}>
-              {NAV_LINKS.map(({ href, label }) => {
+
+          {/* Panel — slides up from bottom */}
+          <div style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background: "rgba(8,8,8,0.98)",
+            borderTop: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: "20px 20px 0 0",
+            padding: "8px 0 32px",
+            backdropFilter: "blur(40px)",
+          }}>
+            {/* Drag handle */}
+            <div style={{ display: "flex", justifyContent: "center", padding: "8px 0 16px" }}>
+              <div style={{ width: 36, height: 4, borderRadius: 100, background: "rgba(255,255,255,0.15)" }} />
+            </div>
+
+            {/* Nav links */}
+            <div style={{ padding: "0 16px", display: "flex", flexDirection: "column", gap: 2 }}>
+              {NAV_LINKS.map(({ href, label, icon: Icon }) => {
                 const active = pathname === href || (href !== "/" && pathname.startsWith(href));
                 return (
-                  <Link
-                    key={href}
-                    href={href}
+                  <Link key={href} href={href}
                     style={{
-                      padding: "12px 16px",
-                      borderRadius: 10,
-                      fontSize: 14,
-                      fontWeight: 500,
+                      display: "flex", alignItems: "center", gap: 14,
+                      padding: "14px 16px", borderRadius: 14,
                       textDecoration: "none",
-                      color: active ? "#fff" : "rgba(255,255,255,0.55)",
-                      background: active ? "rgba(255,255,255,0.08)" : "transparent",
-                    }}
-                  >
+                      color: active ? "#fff" : "rgba(255,255,255,0.6)",
+                      background: active ? "rgba(167,139,250,0.1)" : "transparent",
+                      fontSize: 16, fontWeight: active ? 600 : 500,
+                      transition: "all 0.15s ease",
+                    }}>
+                    <div style={{
+                      width: 36, height: 36, borderRadius: 10,
+                      background: active ? "rgba(167,139,250,0.15)" : "rgba(255,255,255,0.05)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      flexShrink: 0,
+                    }}>
+                      <Icon size={17} color={active ? "#c4b5fd" : "rgba(255,255,255,0.4)"} />
+                    </div>
                     {label}
+                    {active && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: "#a78bfa" }} />}
                   </Link>
                 );
               })}
 
-              {/* Cart in mobile menu */}
-              <button
-                onClick={() => { setMobileOpen(false); setCartOpen(true); }}
+              {/* Cart */}
+              <button onClick={() => { setMobileOpen(false); setCartOpen(true); }}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: "12px 16px",
-                  borderRadius: 10,
-                  fontSize: 14,
-                  fontWeight: 500,
-                  color: "rgba(255,255,255,0.55)",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  textAlign: "left",
-                  width: "100%",
-                }}
-              >
-                <ShoppingCart size={15} />
+                  display: "flex", alignItems: "center", gap: 14,
+                  padding: "14px 16px", borderRadius: 14,
+                  background: "transparent", border: "none", cursor: "pointer",
+                  color: "rgba(255,255,255,0.6)", fontSize: 16, fontWeight: 500,
+                  width: "100%", textAlign: "left",
+                  transition: "all 0.15s ease",
+                }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <ShoppingCart size={17} color="rgba(255,255,255,0.4)" />
+                </div>
                 Cart
                 {count > 0 && (
-                  <span style={{
-                    marginLeft: "auto",
-                    background: "#a78bfa",
-                    color: "#fff",
-                    borderRadius: 100,
-                    padding: "1px 7px",
-                    fontSize: 11,
-                    fontWeight: 700,
-                  }}>
+                  <span style={{ marginLeft: "auto", background: "#a78bfa", color: "#fff", borderRadius: 100, padding: "2px 8px", fontSize: 12, fontWeight: 700 }}>
                     {count}
                   </span>
                 )}
               </button>
+            </div>
 
-              <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "4px 0" }} />
+            {/* Divider */}
+            <div style={{ height: 1, background: "rgba(255,255,255,0.06)", margin: "12px 16px" }} />
 
+            {/* Auth section */}
+            <div style={{ padding: "0 16px", display: "flex", flexDirection: "column", gap: 8 }}>
               {session ? (
-                <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", borderRadius: 10, fontSize: 14, fontWeight: 500, textDecoration: "none", color: "rgba(255,255,255,0.6)" }}>
-                  <User size={14} /> Dashboard
+                <Link href="/dashboard"
+                  style={{
+                    display: "flex", alignItems: "center", gap: 14,
+                    padding: "14px 16px", borderRadius: 14,
+                    textDecoration: "none", color: "rgba(255,255,255,0.6)",
+                    background: "transparent", fontSize: 16, fontWeight: 500,
+                  }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <LayoutDashboard size={17} color="rgba(255,255,255,0.4)" />
+                  </div>
+                  Dashboard
                 </Link>
               ) : (
                 <>
-                  <Link href="/auth/login" style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", borderRadius: 10, fontSize: 14, fontWeight: 500, textDecoration: "none", color: "rgba(255,255,255,0.6)" }}>
-                    <User size={14} /> Sign In
+                  <Link href="/auth/login"
+                    style={{
+                      display: "flex", alignItems: "center", gap: 14,
+                      padding: "14px 16px", borderRadius: 14,
+                      textDecoration: "none", color: "rgba(255,255,255,0.6)",
+                      background: "transparent", fontSize: 16, fontWeight: 500,
+                    }}>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <LogIn size={17} color="rgba(255,255,255,0.4)" />
+                    </div>
+                    Sign In
                   </Link>
-                  <Link href="/auth/register" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "12px 16px", borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: "none", color: "#fff", background: "rgba(167,139,250,0.15)", border: "1px solid rgba(167,139,250,0.3)", marginTop: 4 }}>
-                    <ShoppingBag size={14} /> Get Started
+                  <Link href="/auth/register"
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                      padding: "15px 20px", borderRadius: 14,
+                      textDecoration: "none", color: "#fff",
+                      background: "rgba(167,139,250,0.15)",
+                      border: "1px solid rgba(167,139,250,0.3)",
+                      fontSize: 15, fontWeight: 700,
+                      boxShadow: "0 4px 20px rgba(167,139,250,0.15)",
+                    }}>
+                    <ShoppingBag size={16} />
+                    Get Started — It&apos;s Free
                   </Link>
                 </>
               )}
-            </nav>
+            </div>
           </div>
         </div>
       )}
