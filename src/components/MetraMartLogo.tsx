@@ -18,14 +18,26 @@ export default function MetraMartLogo({ size = 32, className = "" }: MetraMartLo
           <stop offset="0%" stopColor="#fde68a" />
           <stop offset="100%" stopColor="#d97706" />
         </linearGradient>
-        <linearGradient id="mg2" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f59e0b" />
-          <stop offset="100%" stopColor="#92400e" stopOpacity="0.6" />
+        <linearGradient id="mg2" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#92400e" stopOpacity="0.5" />
+          <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.8" />
         </linearGradient>
       </defs>
-      <polygon points="18,22 82,22 50,78" fill="url(#mg2)" opacity="0.5" transform="translate(6,4)" />
-      <polygon points="18,22 82,22 50,78" fill="url(#mg1)" />
-      <polygon points="30,30 70,30 50,65" fill="#0a0b0f" opacity="0.85" />
+      {/* Rounded background */}
+      <rect x="4" y="4" width="92" height="92" rx="22" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.25)" strokeWidth="1.5" />
+      {/* M letterform */}
+      <text
+        x="50"
+        y="72"
+        textAnchor="middle"
+        fontFamily="system-ui, -apple-system, sans-serif"
+        fontWeight="900"
+        fontSize="62"
+        fill="url(#mg1)"
+        letterSpacing="-2"
+      >
+        M
+      </text>
     </svg>
   );
 }

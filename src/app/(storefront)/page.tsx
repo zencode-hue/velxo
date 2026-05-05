@@ -16,12 +16,12 @@ import DealCountdown from "@/components/storefront/DealCountdown";
 import { getDealsData, getSiteSettings } from "@/lib/server-data";
 
 export const metadata: Metadata = {
-  title: "MetraMart - Cheap Netflix, Spotify & Digital Subscriptions",
-  description: "Buy cheap Netflix, Spotify Premium, IPTV, ChatGPT Plus, gaming keys and software licenses at the best prices. Instant automated delivery. Secure payments worldwide.",
-  keywords: ["cheap netflix subscription", "buy spotify premium cheap", "affordable IPTV", "cheap streaming services", "buy digital products", "instant delivery subscriptions"],
+  title: "MetraMart — Buy Netflix, Spotify & Digital Subscriptions at Best Prices",
+  description: "MetraMart is your #1 digital marketplace. Buy Netflix, Spotify Premium, ChatGPT Plus, gaming keys and software licenses at unbeatable prices. Instant automated delivery worldwide.",
+  keywords: ["buy netflix cheap", "spotify premium discount", "chatgpt plus cheap", "buy digital subscriptions", "instant delivery digital products", "cheap streaming services", "gaming keys", "software licenses", "metramart"],
   openGraph: {
-    title: "MetraMart - Cheap Netflix, Spotify & Digital Subscriptions",
-    description: "Buy cheap Netflix, Spotify Premium, IPTV, ChatGPT Plus, gaming keys and software licenses. Instant delivery, secure payments.",
+    title: "MetraMart — Premium Digital Subscriptions at Unbeatable Prices",
+    description: "Netflix, Spotify, ChatGPT Plus, gaming keys and more. Instant delivery, secure payments, best prices guaranteed.",
     url: process.env.NEXT_PUBLIC_APP_URL,
     siteName: "MetraMart",
     type: "website",
@@ -146,7 +146,7 @@ export default async function HomePage() {
               <h2 className="text-2xl font-bold text-white">New Arrivals</h2>
               <p className="text-gray-500 text-sm mt-1">Latest digital products</p>
             </div>
-            <Link href="/products" className="flex items-center gap-1.5 text-sm text-purple-400 hover:text-purple-300 transition-colors">
+            <Link href="/products" className="flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 transition-colors">
               View all <ArrowRight size={14} />
             </Link>
           </div>
@@ -161,7 +161,7 @@ export default async function HomePage() {
         <section key={section.id} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-white/5">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-white">Top {section.label} Products</h2>
-            <Link href={`/products?category=${section.id}`} className="flex items-center gap-1.5 text-sm text-purple-400 hover:text-purple-300 transition-colors">
+            <Link href={`/products?category=${section.id}`} className="flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 transition-colors">
               See all <ArrowRight size={14} />
             </Link>
           </div>
@@ -177,18 +177,19 @@ export default async function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5">
         <div className="text-center mb-12">
           <h2 className="text-2xl font-bold text-white mb-2">Why Choose MetraMart?</h2>
-          <p className="text-gray-500">Everything you need, nothing you don&apos;t</p>
+          <p className="text-gray-500">Trusted by thousands of customers worldwide</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            { icon: Zap, color: "text-yellow-400", title: "Instant Delivery", desc: "Credentials delivered automatically to your email the moment payment confirms. No waiting, no manual steps." },
-            { icon: Lock, color: "text-green-400", title: "Secure & Safe Transactions", desc: "All inventory encrypted with AES-256-GCM. Payments processed through trusted crypto providers." },
-            { icon: Gem, color: "text-[#fbbf24]", title: "Affordable Prices", desc: "Get cheap Netflix, Spotify, IPTV and more at prices far below official plans. Best value guaranteed." },
-            { icon: Flame, color: "text-orange-400", title: "24/7 Customer Support", desc: "Our team is available on Discord around the clock. Open a ticket and get help within minutes." },
-            { icon: Zap, color: "text-blue-400", title: "Trusted by Thousands", desc: "Over 10,000 orders delivered to happy customers across 50+ countries worldwide." },
-            { icon: Lock, color: "text-purple-400", title: "Premium Quality Products", desc: "Every product is verified before listing. We stand behind everything in our catalog with a replacement guarantee." },
+            { icon: Zap, color: "text-amber-400", title: "Instant Delivery", desc: "Credentials hit your inbox the moment payment confirms. Fully automated — no waiting, no manual steps, ever." },
+            { icon: Lock, color: "text-green-400", title: "Secure & Encrypted", desc: "All inventory encrypted with AES-256-GCM. Payments processed through trusted crypto providers with zero data exposure." },
+            { icon: Gem, color: "text-amber-300", title: "Unbeatable Prices", desc: "Get Netflix, Spotify, IPTV and more at prices far below official plans. We source in bulk and pass every saving to you." },
+            { icon: Flame, color: "text-orange-400", title: "24/7 Live Support", desc: "Real humans on Discord around the clock. Open a ticket and get a response within minutes — not hours." },
+            { icon: Zap, color: "text-amber-500", title: "4.7★ Customer Rating", desc: "Thousands of verified reviews from happy customers across 50+ countries. We deliver on every promise." },
+            { icon: Lock, color: "text-emerald-400", title: "Replacement Guarantee", desc: "Every product is verified before listing. If anything goes wrong, we replace it — no questions asked." },
           ].map((item) => (
-            <div key={item.title} className="glass-card p-6 text-center hover:border-purple-500/20 transition-colors">
+            <div key={item.title} className="glass-card p-6 text-center transition-all duration-300 hover:-translate-y-1"
+              style={{ borderColor: "rgba(245,158,11,0.08)" }}>
               <div className="flex justify-center mb-4">
                 <item.icon size={36} className={item.color} />
               </div>
@@ -235,7 +236,7 @@ export default async function HomePage() {
             { q: "What payment methods do you accept?", a: "We accept crypto via NOWPayments (BTC, ETH, USDT, 100+ coins), Binance gift cards, Discord manual payment, and wallet balance." },
             { q: "Why are your prices cheaper than official plans?", a: "We source subscriptions in bulk and pass the savings on to you. All products are legitimate and fully functional." },
           ].map((item) => (
-            <details key={item.q} className="group rounded-xl border border-white/8 glass-card hover:border-purple-600/20 transition-all">
+            <details key={item.q} className="group rounded-xl border border-white/8 glass-card hover:border-amber-500/20 transition-all">
               <summary className="p-5 cursor-pointer font-semibold text-white text-sm flex items-center justify-between list-none">
                 {item.q}
                 <span className="text-gray-500 group-open:rotate-180 transition-transform">▾</span>

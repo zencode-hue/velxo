@@ -13,25 +13,22 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0a0800",
+          background: "linear-gradient(135deg, #1a0f00, #0a0800)",
           borderRadius: 8,
+          border: "1px solid rgba(245,158,11,0.3)",
         }}
       >
-        <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
-          <defs>
-            <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#fde68a" />
-              <stop offset="100%" stopColor="#d97706" />
-            </linearGradient>
-            <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f59e0b" />
-              <stop offset="100%" stopColor="#92400e" stopOpacity="0.6" />
-            </linearGradient>
-          </defs>
-          <polygon points="18,22 82,22 50,78" fill="url(#g2)" opacity="0.5" transform="translate(6,4)" />
-          <polygon points="18,22 82,22 50,78" fill="url(#g1)" />
-          <polygon points="30,30 70,30 50,65" fill="#0a0800" opacity="0.85" />
-        </svg>
+        <span style={{
+          fontSize: 22,
+          fontWeight: 900,
+          fontFamily: "system-ui, sans-serif",
+          background: "linear-gradient(135deg, #fde68a, #d97706)",
+          backgroundClip: "text",
+          color: "transparent",
+          lineHeight: 1,
+        }}>
+          M
+        </span>
       </div>
     ),
     { ...size }

@@ -10,23 +10,23 @@ const inter = Inter({
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 const APP_NAME = "MetraMart";
-const APP_DESCRIPTION = "Buy cheap Netflix, Spotify, IPTV, ChatGPT Plus, gaming keys and software licenses. Instant automated delivery. Secure crypto payments. Best prices guaranteed.";
+const APP_DESCRIPTION = "MetraMart is your #1 digital marketplace for Netflix, Spotify, ChatGPT Plus, gaming keys and software licenses. Instant automated delivery. Secure crypto payments. Best prices guaranteed.";
 const OG_IMAGE = `${APP_URL}/opengraph-image`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "MetraMart — Cheap Netflix, Spotify & Digital Subscriptions",
+    default: "MetraMart — Premium Digital Subscriptions at Unbeatable Prices",
     template: "%s | MetraMart",
   },
   description: APP_DESCRIPTION,
   keywords: [
-    "buy digital products", "streaming subscriptions", "cheap Netflix subscription",
-    "buy Spotify premium cheap", "affordable IPTV", "ChatGPT Plus cheap",
+    "buy digital products", "streaming subscriptions", "Netflix subscription",
+    "Spotify premium discount", "affordable IPTV", "ChatGPT Plus cheap",
     "gaming keys", "software licenses", "instant delivery digital goods",
     "crypto payment digital store", "buy Netflix account", "buy Spotify account",
     "digital marketplace", "MetraMart", "metramart.xyz",
-    "cheap streaming services", "digital subscriptions",
+    "digital subscriptions", "best price subscriptions", "instant digital delivery",
   ],
   authors: [{ name: "MetraMart", url: APP_URL }],
   creator: "MetraMart",
@@ -40,14 +40,14 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: APP_URL,
     siteName: "MetraMart",
-    title: "MetraMart — Cheap Netflix, Spotify & Digital Subscriptions",
+    title: "MetraMart — Premium Digital Subscriptions at Unbeatable Prices",
     description: APP_DESCRIPTION,
     images: [
       {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "MetraMart — Buy Cheap Digital Subscriptions",
+        alt: "MetraMart — Premium Digital Subscriptions",
         type: "image/png",
       },
     ],
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@metramart",
     creator: "@metramart",
-    title: "MetraMart — Cheap Netflix, Spotify & Digital Subscriptions",
+    title: "MetraMart — Premium Digital Subscriptions at Unbeatable Prices",
     description: APP_DESCRIPTION,
     images: [OG_IMAGE],
   },
