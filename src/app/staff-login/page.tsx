@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import MetraMartLogo fr@/components/MetraMartLogoMartLogo";
+import MetraMartLogo from "@/components/MetraMartLogo";
 
 export default function StaffLoginPage() {
   const router = useRouter();

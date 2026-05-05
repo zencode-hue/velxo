@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import MetraMartLogo fr@/components/MetraMartLogoMartLogo";
+import MetraMartLogo from "@/components/MetraMartLogo";
 import {
   LayoutDashboard, ShoppingCart, Package, AlertTriangle,
   Menu, LogOut, ExternalLink, Users, User, X,

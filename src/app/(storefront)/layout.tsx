@@ -8,7 +8,7 @@ import FloatingSupportButton from "@/components/storefront/FloatingSupportButton
 import ExitIntentPopup from "@/components/storefront/ExitIntentPopup";
 import Link from "next/link";
 import { MessageCircle, Mail, XIcon } from "lucide-react";
-import MetraMartLogo from "@/components/MetraMartLogo";go";
+import MetraMartLogo from "@/components/MetraMartLogo";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { CartProvider } from "@/contexts/CartContext";
 

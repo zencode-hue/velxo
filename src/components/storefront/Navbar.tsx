@@ -9,7 +9,7 @@ import {
   Menu, X, Search, User, Zap, ShoppingBag, ShoppingCart,
   Package, Tag, BookOpen, Users, LayoutDashboard, LogIn,
 } from "lucide-react";
-import MetraMartLogo fr@/components/MetraMartLogoMartLogo";
+import MetraMartLogo from "@/components/MetraMartLogo";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/storefront/CartDrawer";
 
