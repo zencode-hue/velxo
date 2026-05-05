@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ArrowRight, DollarSign, Users, Zap, Share2, Handshake, TrendingUp } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Affiliate Program — Velxo",
-  description: "Earn commission on every sale you refer. Join the Velxo affiliate program today.",
+  title: "Affiliate Program — MetraMart",
+  description: "Earn commission on every sale you refer. Join the MetraMart affiliate program today.",
 };
 
 const G = "rgba(255,255,255,0.04)";
@@ -23,7 +23,7 @@ export default function AffiliatePage() {
         <h1 className="text-4xl sm:text-6xl font-black text-white mb-5 leading-tight tracking-tight">
           Earn by Sharing<br />
           <span style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.4))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-            Velxo
+            MetraMart
           </span>
         </h1>
         <p className="text-lg max-w-2xl mx-auto mb-10" style={{ color: "rgba(255,255,255,0.45)" }}>
@@ -132,7 +132,7 @@ export default function AffiliatePage() {
 
       {/* Why */}
       <div className="rounded-2xl p-8 mb-16" style={{ background: G, border: `1px solid ${BORDER}` }}>
-        <h2 className="text-xl font-bold text-white mb-6">Why Affiliate with Velxo?</h2>
+        <h2 className="text-xl font-bold text-white mb-6">Why Affiliate with MetraMart?</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
             { icon: Zap, text: "Real-time commission tracking in your dashboard" },

@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { amount, paymentProvider } = parsed.data;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
   const topupRef = `TOPUP-${session.user.id}-${Date.now()}`;
 
   if (paymentProvider === "nowpayments") {
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         price_amount: amount,
         price_currency: "usd",
         order_id: topupRef,
-        order_description: `Velxo Balance Top-Up $${amount}`,
+        order_description: `MetraMart Balance Top-Up $${amount}`,
         ipn_callback_url: `${appUrl}/api/webhooks/nowpayments`,
         success_url: `${appUrl}/dashboard?topup=success`,
         cancel_url: `${appUrl}/dashboard?topup=cancelled`,
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
 
   if (paymentProvider === "discord") {
     const DISCORD_SERVER_URL = process.env.DISCORD_SERVER_URL ?? "https://discord.gg/your-server";
-    const msg = encodeURIComponent(`Hi! I want to top up my Velxo balance by $${amount}. My account: ${session.user.email} — Ref: ${topupRef}`);
+    const msg = encodeURIComponent(`Hi! I want to top up my MetraMart balance by $${amount}. My account: ${session.user.email} — Ref: ${topupRef}`);
     return NextResponse.json({
       data: { redirectUrl: `${DISCORD_SERVER_URL}?message=${msg}`, ref: topupRef },
       error: null,

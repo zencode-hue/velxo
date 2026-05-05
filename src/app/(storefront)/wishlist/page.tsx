@@ -16,7 +16,7 @@ export default function WishlistPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const ids = JSON.parse(localStorage.getItem("velxo_wishlist") ?? "[]") as string[];
+    const ids = JSON.parse(localStorage.getItem("metramart_wishlist") ?? "[]") as string[];
     if (ids.length === 0) { setLoading(false); return; }
 
     Promise.all(ids.map((id) => fetch(`/api/v1/products/${id}`).then((r) => r.json())))

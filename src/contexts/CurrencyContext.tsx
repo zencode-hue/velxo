@@ -46,7 +46,7 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const saved = localStorage.getItem("velxo_currency");
+    const saved = localStorage.getItem("metramart_currency");
     if (saved) {
       setCurrencyState(saved);
       fetchRates();
@@ -62,7 +62,7 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
 
   function setCurrency(c: string) {
     setCurrencyState(c);
-    localStorage.setItem("velxo_currency", c);
+    localStorage.setItem("metramart_currency", c);
   }
 
   return (

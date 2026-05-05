@@ -38,7 +38,7 @@ export default function ProductActions({
   );
   const [wishlisted, setWishlisted] = useState(() => {
     if (typeof window === "undefined") return false;
-    return (JSON.parse(localStorage.getItem("velxo_wishlist") ?? "[]") as string[]).includes(productId);
+    return (JSON.parse(localStorage.getItem("metramart_wishlist") ?? "[]") as string[]).includes(productId);
   });
   const [addedToCart, setAddedToCart] = useState(false);
 
@@ -53,9 +53,9 @@ export default function ProductActions({
     : null;
 
   function toggleWishlist() {
-    const list = JSON.parse(localStorage.getItem("velxo_wishlist") ?? "[]") as string[];
+    const list = JSON.parse(localStorage.getItem("metramart_wishlist") ?? "[]") as string[];
     const next = wishlisted ? list.filter((id) => id !== productId) : [...list, productId];
-    localStorage.setItem("velxo_wishlist", JSON.stringify(next));
+    localStorage.setItem("metramart_wishlist", JSON.stringify(next));
     setWishlisted(!wishlisted);
   }
 

@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Lock } from "lucide-react";
-import VelxoLogo from "@/components/VelxoLogo";
+import MetraMartLogo from "@/components/MetraMartLogo";
 
 function LoginPageInner() {
   const router = useRouter();
@@ -98,8 +98,8 @@ function LoginPageInner() {
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 font-bold text-2xl">
-            <VelxoLogo size={28} />
-            <span style={{ background: "linear-gradient(135deg, #60a5fa, #818cf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Velxo</span>
+            <MetraMartLogo size={28} />
+            <span style={{ background: "linear-gradient(135deg, #60a5fa, #818cf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>MetraMart</span>
           </Link>
           <p className="text-slate-500 mt-2 text-sm">Sign in to your account</p>
         </div>

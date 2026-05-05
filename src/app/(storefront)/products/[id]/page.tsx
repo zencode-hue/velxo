@@ -94,9 +94,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     where: { id: realId, isActive: true },
     select: { title: true, description: true, imageUrl: true, price: true, avgRating: true, category: true },
   });
-  if (!product) return { title: "Product Not Found - Velxo Shop" };
+  if (!product) return { title: "Product Not Found - MetraMart" };
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
   const slugUrl = `${appUrl}${productPath(realId, product.title)}`;
   const catLabel = CATEGORY_LABELS[product.category] ?? "Digital";
   const price = Number(product.price).toFixed(2);
@@ -105,26 +105,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const ogDescription = `Buy ${product.title} for $${price} — Instant delivery to your email. ${product.description.slice(0, 100)}`;
 
   const ogImage = product.imageUrl
-    ? [{ url: product.imageUrl, width: 1200, height: 630, alt: `${product.title} - Velxo Shop` }]
-    : [{ url: `${appUrl}/opengraph-image`, width: 1200, height: 630, alt: "Velxo Shop" }];
+    ? [{ url: product.imageUrl, width: 1200, height: 630, alt: `${product.title} - MetraMart` }]
+    : [{ url: `${appUrl}/opengraph-image`, width: 1200, height: 630, alt: "MetraMart" }];
 
   return {
-    title: `Buy ${product.title} — $${price} | Velxo Shop`,
+    title: `Buy ${product.title} — $${price} | MetraMart`,
     description: `${product.title} for $${price}. ${catLabel} subscription with instant delivery. ${product.description.slice(0, 100)}`,
     alternates: { canonical: slugUrl },
     openGraph: {
-      title: `${product.title} — $${price} | Velxo Shop`,
+      title: `${product.title} — $${price} | MetraMart`,
       description: ogDescription,
       url: slugUrl,
-      siteName: "Velxo Shop",
+      siteName: "MetraMart",
       type: "website",
       images: ogImage,
       locale: "en_US",
     },
     twitter: {
       card: "summary_large_image",
-      site: "@velxoshop",
-      title: `${product.title} — $${price} | Velxo Shop`,
+      site: "@metramart",
+      title: `${product.title} — $${price} | MetraMart`,
       description: ogDescription,
       images: ogImage.map((i) => i.url),
     },
@@ -139,7 +139,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const catColor = CATEGORY_COLORS[product.category] ?? "text-gray-400 bg-gray-500/10 border-gray-500/20";
   const reviewCount = product.reviews.length;
   const avgRating = product.avgRating;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -154,7 +154,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       price: product.price.toFixed(2),
       availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       url: `${appUrl}${productPath(product.id, product.title)}`,
-      seller: { "@type": "Organization", name: "Velxo Shop" },
+      seller: { "@type": "Organization", name: "MetraMart" },
     },
     ...(avgRating > 0 ? {
       aggregateRating: {
@@ -283,7 +283,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           {/* SEO keyword content — hidden visually, readable by Google */}
           <div className="sr-only" aria-hidden="false">
             <p>
-              Get access to {product.title} at a lower cost with our affordable subscription plans on Velxo Shop.
+              Get access to {product.title} at a lower cost with our affordable subscription plans on MetraMart.
               Enjoy premium {CATEGORY_LABELS[product.category] ?? "digital"} access without paying full price.
               Our service is fast, reliable, and easy to use — credentials are delivered instantly after payment with no waiting.
               This is one of the best cheap {CATEGORY_LABELS[product.category]?.toLowerCase() ?? "digital"} deals available online.

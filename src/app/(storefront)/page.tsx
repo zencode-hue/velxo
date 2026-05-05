@@ -16,14 +16,14 @@ import DealCountdown from "@/components/storefront/DealCountdown";
 import { getDealsData, getSiteSettings } from "@/lib/server-data";
 
 export const metadata: Metadata = {
-  title: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
+  title: "MetraMart - Cheap Netflix, Spotify & Digital Subscriptions",
   description: "Buy cheap Netflix, Spotify Premium, IPTV, ChatGPT Plus, gaming keys and software licenses at the best prices. Instant automated delivery. Secure payments worldwide.",
   keywords: ["cheap netflix subscription", "buy spotify premium cheap", "affordable IPTV", "cheap streaming services", "buy digital products", "instant delivery subscriptions"],
   openGraph: {
-    title: "Velxo Shop - Cheap Netflix, Spotify & Digital Subscriptions",
+    title: "MetraMart - Cheap Netflix, Spotify & Digital Subscriptions",
     description: "Buy cheap Netflix, Spotify Premium, IPTV, ChatGPT Plus, gaming keys and software licenses. Instant delivery, secure payments.",
     url: process.env.NEXT_PUBLIC_APP_URL,
-    siteName: "Velxo Shop",
+    siteName: "MetraMart",
     type: "website",
   },
 };
@@ -69,7 +69,7 @@ export default async function HomePage() {
     getSiteSettings(),
   ]);
 
-  const discordUrl = siteSettings["discord_url"] || process.env.DISCORD_SERVER_URL || "https://discord.gg/velxo";
+  const discordUrl = siteSettings["discord_url"] || process.env.DISCORD_SERVER_URL || "https://discord.gg/metramart";
   const telegramUrl = siteSettings["telegram_url"] || "";
   const discordMembers = siteSettings["discord_members"] || "1,000+";
   const telegramMembers = siteSettings["telegram_members"] || "";
@@ -95,7 +95,7 @@ export default async function HomePage() {
       <section className="sr-only" aria-hidden="false">
         <h2>Affordable Premium Subscriptions in One Place</h2>
         <p>
-          Velxo Shop is your trusted platform to buy cheap Netflix, Spotify, IPTV, and gaming subscriptions at the best prices.
+          MetraMart is your trusted platform to buy cheap Netflix, Spotify, IPTV, and gaming subscriptions at the best prices.
           We provide instant delivery, secure payments, and reliable access to your favorite digital services worldwide.
           Whether you need a cheap Netflix subscription, affordable Spotify Premium, or discounted AI tools — we have it all.
         </p>
@@ -176,7 +176,7 @@ export default async function HomePage() {
       {/* ── Section 2: Why Choose Us ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-white/5">
         <div className="text-center mb-12">
-          <h2 className="text-2xl font-bold text-white mb-2">Why Choose Velxo Shop?</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">Why Choose MetraMart?</h2>
           <p className="text-gray-500">Everything you need, nothing you don&apos;t</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -203,7 +203,7 @@ export default async function HomePage() {
       <section className="sr-only" aria-hidden="false">
         <h2>Cheap Netflix, Spotify &amp; IPTV Subscriptions</h2>
         <p>
-          Looking for cheap Netflix subscriptions or affordable Spotify Premium accounts? Velxo Shop offers some of the best deals online.
+          Looking for cheap Netflix subscriptions or affordable Spotify Premium accounts? MetraMart offers some of the best deals online.
           Whether you want IPTV for unlimited channels or discounted streaming services, we provide high-quality access at unbeatable prices.
           Our shop specializes in cheap digital subscriptions — from Netflix and Spotify to ChatGPT Plus, gaming keys, and AI tools.
           All products come with instant automated delivery and a replacement guarantee, making us the most reliable place to buy affordable streaming services.

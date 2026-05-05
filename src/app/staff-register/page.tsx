@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import VelxoLogo from "@/components/VelxoLogo";
+import MetraMartLogo fr@/components/MetraMartLogoMartLogo";
 
 export default function StaffRegisterPage() {
   const [name, setName] = useState("");
@@ -56,7 +56,7 @@ export default function StaffRegisterPage() {
     <div className="min-h-screen bg-[#0a0b0f] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-8">
-          <VelxoLogo size={40} />
+          <MetraMartLogo size={40} />
           <h1 className="text-2xl font-bold text-white mt-4">Request Staff Access</h1>
           <p className="text-gray-500 text-sm mt-1">Your account will need admin approval</p>
         </div>

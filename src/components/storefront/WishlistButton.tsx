@@ -7,16 +7,16 @@ export default function WishlistButton({ productId }: { productId: string }) {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    const list = JSON.parse(localStorage.getItem("velxo_wishlist") ?? "[]") as string[];
+    const list = JSON.parse(localStorage.getItem("metramart_wishlist") ?? "[]") as string[];
     setSaved(list.includes(productId));
   }, [productId]);
 
   function toggle(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    const list = JSON.parse(localStorage.getItem("velxo_wishlist") ?? "[]") as string[];
+    const list = JSON.parse(localStorage.getItem("metramart_wishlist") ?? "[]") as string[];
     const next = saved ? list.filter((id) => id !== productId) : [...list, productId];
-    localStorage.setItem("velxo_wishlist", JSON.stringify(next));
+    localStorage.setItem("metramart_wishlist", JSON.stringify(next));
     setSaved(!saved);
   }
 

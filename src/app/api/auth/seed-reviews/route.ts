@@ -43,12 +43,12 @@ export async function GET() {
   }
 
   // Get or create a seed user for reviews
-  let seedUser = await db.user.findFirst({ where: { email: "reviews@velxo.shop" } });
+  let seedUser = await db.user.findFirst({ where: { email: "reviews@metramart.xyz" } });
   if (!seedUser) {
     seedUser = await db.user.create({
       data: {
-        email: "reviews@velxo.shop",
-        name: "Velxo Customer",
+        email: "reviews@metramart.xyz",
+        name: "MetraMart Customer",
         role: "CUSTOMER",
         emailVerified: new Date(),
       },
@@ -66,7 +66,7 @@ export async function GET() {
       const r = reviews[i];
 
       // Create a unique user per review per product
-      const email = `customer_${product.id.slice(0, 8)}_${i}@velxo.shop`;
+      const email = `customer_${product.id.slice(0, 8)}_${i}@metramart.xyz`;
       let user = await db.user.findFirst({ where: { email } });
       if (!user) {
         user = await db.user.create({

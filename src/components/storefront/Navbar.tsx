@@ -9,7 +9,7 @@ import {
   Menu, X, Search, User, Zap, ShoppingBag, ShoppingCart,
   Package, Tag, BookOpen, Users, LayoutDashboard, LogIn,
 } from "lucide-react";
-import VelxoLogo from "@/components/VelxoLogo";
+import MetraMartLogo fr@/components/MetraMartLogoMartLogo";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/storefront/CartDrawer";
 
@@ -72,8 +72,8 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
-              <VelxoLogo size={22} />
-              <span style={{ fontWeight: 700, fontSize: 15, color: "#fff", letterSpacing: "-0.3px" }}>Velxo</span>
+              <MetraMartLogo size={22} />
+              <span style={{ fontWeight: 700, fontSize: 15, color: "#fff", letterSpacing: "-0.3px" }}>MetraMart</span>
             </Link>
 
             {/* Desktop nav — hidden on mobile */}

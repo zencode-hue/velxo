@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     const webhookUrl = process.env.DISCORD_DEALS_WEBHOOK_URL ?? process.env.DISCORD_WEBHOOK_URL;
     if (!webhookUrl) return NextResponse.json({ error: "Discord webhook not configured" }, { status: 503 });
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 
     // Push today's deals
     if (type === "deals") {
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       }));
 
       await sendDiscordNotification(webhookUrl, {
-        username: "Velxo Shop",
+        username: "MetraMart",
         embeds: [{
           title: "DAILY DEAL VAULT — NOW OPEN",
           description: [
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
           ].join("\n"),
           color: 0xea580c,
           fields: dealFields,
-          footer: { text: `Velxo Shop • Deals reset daily at midnight UTC • Seed #${seed}` },
+          footer: { text: `MetraMart • Deals reset daily at midnight UTC • Seed #${seed}` },
           timestamp: new Date().toISOString(),
         }],
       });
@@ -83,13 +83,13 @@ export async function POST(req: NextRequest) {
     // Custom message
     if (message?.trim()) {
       await sendDiscordNotification(webhookUrl, {
-        username: "Velxo Shop",
+        username: "MetraMart",
         embeds: [{
           description: message,
           color: 0xea580c,
-          footer: { text: "Velxo Shop Admin Announcement" },
+          footer: { text: "MetraMart Admin Announcement" },
           timestamp: new Date().toISOString(),
-          author: { name: "Velxo Shop", url: appUrl },
+          author: { name: "MetraMart", url: appUrl },
         }],
       });
       return NextResponse.json({ ok: true });

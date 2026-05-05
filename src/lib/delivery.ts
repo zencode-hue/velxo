@@ -120,7 +120,7 @@ export async function deliverOrder(orderId: string): Promise<void> {
           { name: "Payment", value: order.paymentProvider, inline: true },
         ],
         timestamp: new Date().toISOString(),
-        footer: { text: "Velxo Shop" },
+        footer: { text: "MetraMart" },
       }],
     });
   }

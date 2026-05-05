@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Velxo Shop — Cheap Digital Subscriptions";
+export const alt = "MetraMart — Cheap Digital Subscriptions";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -62,7 +62,7 @@ export default function OGImage() {
               letterSpacing: "-1px",
             }}
           >
-            Velxo Shop
+            MetraMart
           </span>
         </div>
 
@@ -112,7 +112,7 @@ export default function OGImage() {
 
         {/* URL */}
         <p style={{ position: "absolute", bottom: 32, color: "rgba(255,255,255,0.25)", fontSize: 16 }}>
-          velxo.shop
+          metramart.xyz
         </p>
       </div>
     ),

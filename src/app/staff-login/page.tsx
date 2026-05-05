@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import VelxoLogo from "@/components/VelxoLogo";
+import MetraMartLogo fr@/components/MetraMartLogoMartLogo";
 
 export default function StaffLoginPage() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function StaffLoginPage() {
     <div className="min-h-screen bg-[#0a0b0f] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center mb-8">
-          <VelxoLogo size={40} />
+          <MetraMartLogo size={40} />
           <h1 className="text-2xl font-bold text-white mt-4">Staff Portal</h1>
           <p className="text-gray-500 text-sm mt-1">Sign in to your staff account</p>
         </div>

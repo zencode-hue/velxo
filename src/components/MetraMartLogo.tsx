@@ -1,9 +1,9 @@
-interface VelxoLogoProps {
+interface MetraMartLogoProps {
   size?: number;
   className?: string;
 }
 
-export default function VelxoLogo({ size = 32, className = "" }: VelxoLogoProps) {
+export default function MetraMartLogo({ size = 32, className = "" }: MetraMartLogoProps) {
   return (
     <svg
       width={size}

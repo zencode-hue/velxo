@@ -15,7 +15,7 @@ export default async function AffiliatePage() {
     include: { _count: { select: { referrals: true } } },
   });
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 
   return (
     <div>
@@ -44,7 +44,7 @@ export default async function AffiliatePage() {
             <p>• Share your unique referral link with friends, on social media, or your website.</p>
             <p>• When someone registers using your link and makes a purchase, you earn <span className="text-white font-medium">{Number(affiliate.commissionPct)}% commission</span>.</p>
             <p>• Earnings are added to your <span className="text-cyan-400">wallet balance</span> automatically.</p>
-            <p>• Use your balance to buy any product on Velxo instantly.</p>
+            <p>• Use your balance to buy any product on MetraMart instantly.</p>
             <p className="text-yellow-400/80">Note: Promo affiliate earnings are store credit only — not withdrawable cash. See Partner Program for cash payouts.</p>
           </div>
         </div>
