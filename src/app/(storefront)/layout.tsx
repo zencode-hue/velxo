@@ -20,7 +20,7 @@ function Footer() {
           <div className="col-span-2 sm:col-span-1">
             <div className="flex items-center gap-2.5 font-bold text-xl mb-3">
               <MetraMartLogo size={26} />
-              <span style={{ background: "linear-gradient(135deg, #60a5fa, #818cf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>MetraMart</span>
+              <span style={{ background: "linear-gradient(135deg, #fde68a, #d97706)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>MetraMart</span>
             </div>
             <p className="text-xs text-slate-600 leading-relaxed mb-4">Premium digital marketplace. Instant delivery, secure payments, 500+ products.</p>
             <div className="flex items-center gap-2">

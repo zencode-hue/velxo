@@ -99,7 +99,7 @@ function LoginPageInner() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 font-bold text-2xl">
             <MetraMartLogo size={28} />
-            <span style={{ background: "linear-gradient(135deg, #60a5fa, #818cf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>MetraMart</span>
+            <span style={{ background: "linear-gradient(135deg, #fde68a, #d97706)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>MetraMart</span>
           </Link>
           <p className="text-slate-500 mt-2 text-sm">Sign in to your account</p>
         </div>

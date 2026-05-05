@@ -16,7 +16,7 @@ export default function OGImage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #000000 0%, #0a0a0f 50%, #050510 100%)",
+          background: "linear-gradient(135deg, #000000 0%, #0a0800 50%, #050400 100%)",
           fontFamily: "system-ui, sans-serif",
           position: "relative",
         }}
@@ -31,7 +31,7 @@ export default function OGImage() {
             width: 600,
             height: 400,
             borderRadius: "50%",
-            background: "radial-gradient(ellipse, rgba(167,139,250,0.15) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse, rgba(245,158,11,0.15) 0%, transparent 70%)",
           }}
         />
 
@@ -42,8 +42,8 @@ export default function OGImage() {
               width: 56,
               height: 56,
               borderRadius: 16,
-              background: "rgba(167,139,250,0.2)",
-              border: "2px solid rgba(167,139,250,0.4)",
+              background: "rgba(245,158,11,0.2)",
+              border: "2px solid rgba(245,158,11,0.4)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -56,7 +56,7 @@ export default function OGImage() {
             style={{
               fontSize: 48,
               fontWeight: 800,
-              background: "linear-gradient(135deg, #c4b5fd, #818cf8)",
+              background: "linear-gradient(135deg, #fde68a, #d97706)",
               backgroundClip: "text",
               color: "transparent",
               letterSpacing: "-1px",
@@ -98,9 +98,9 @@ export default function OGImage() {
               style={{
                 padding: "8px 20px",
                 borderRadius: 100,
-                background: "rgba(167,139,250,0.12)",
-                border: "1px solid rgba(167,139,250,0.25)",
-                color: "#c4b5fd",
+                background: "rgba(245,158,11,0.12)",
+                border: "1px solid rgba(245,158,11,0.3)",
+                color: "#fde68a",
                 fontSize: 16,
                 fontWeight: 500,
               }}

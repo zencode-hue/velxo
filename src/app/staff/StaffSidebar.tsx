@@ -90,7 +90,7 @@ export default function StaffSidebar({ staffName, staffPosition }: { staffName: 
         <MetraMartLogo size={26} />
         <div>
           <span className="font-bold text-white text-sm block leading-tight">Staff Portal</span>
-          <span className="text-xs" style={{ color: "#a78bfa" }}>MetraMart</span>
+          <span className="text-xs" style={{ color: "#fde68a" }}>MetraMart</span>
         </div>
       </div>
 
