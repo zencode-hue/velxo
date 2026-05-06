@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Zap, Shield, Users, Star, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "About Us — Velxo",
-  description: "Learn about Velxo, the premium digital marketplace for streaming, AI tools, software, and gaming products.",
+  title: "About Us — MetraMart",
+  description: "Learn about MetraMart, the premium digital marketplace for streaming, AI tools, software, and gaming products.",
 };
 
 export default function AboutPage() {
@@ -14,7 +14,7 @@ export default function AboutPage() {
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ background: "linear-gradient(135deg, #ea580c, #fbbf24)" }}>
           <Zap size={28} className="text-white" />
         </div>
-        <h1 className="text-4xl font-bold text-white mb-4">About Velxo</h1>
+        <h1 className="text-4xl font-bold text-white mb-4">About MetraMart</h1>
         <p className="text-xl text-gray-400 max-w-2xl mx-auto">
           We&apos;re a premium digital marketplace built to make buying digital products fast, safe, and effortless.
         </p>
@@ -24,7 +24,7 @@ export default function AboutPage() {
         {[
           { icon: Zap, title: "Instant Delivery", desc: "Every order is delivered automatically within seconds of payment confirmation.", color: "text-yellow-400" },
           { icon: Shield, title: "Secure & Trusted", desc: "All credentials are encrypted with AES-256-GCM. Your data is always safe.", color: "text-green-400" },
-          { icon: Users, title: "10,000+ Customers", desc: "Thousands of happy customers across 50+ countries trust Velxo daily.", color: "text-blue-400" },
+          { icon: Users, title: "10,000+ Customers", desc: "Thousands of happy customers across 50+ countries trust MetraMart daily.", color: "text-blue-400" },
         ].map((item) => (
           <div key={item.title} className="rounded-xl p-6 text-center" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(255,255,255,0.08)" }}>
             <item.icon size={28} className={`${item.color} mx-auto mb-3`} />
@@ -37,7 +37,7 @@ export default function AboutPage() {
       <div className="rounded-2xl p-8 mb-12" style={{ background: "rgba(17,17,17,0.9)", border: "1px solid rgba(255,255,255,0.08)" }}>
         <h2 className="text-2xl font-bold text-white mb-4">Our Mission</h2>
         <p className="text-gray-400 leading-relaxed mb-4">
-          Velxo was founded with a simple mission: make premium digital products accessible to everyone, delivered instantly, at fair prices.
+          MetraMart was founded with a simple mission: make premium digital products accessible to everyone, delivered instantly, at fair prices.
         </p>
         <p className="text-gray-400 leading-relaxed mb-4">
           We source and verify every product before listing it. Our automated delivery system means you get your credentials the moment your payment clears — no waiting, no manual processing, no hassle.

@@ -20,7 +20,7 @@ export default function NewsletterSection() {
         style={{ background: "linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(139,92,246,0.08) 100%)", border: "1px solid rgba(124,58,237,0.25)" }}>
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "radial-gradient(circle at 50% 50%, #ea580c 0%, transparent 70%)" }} />
         <div className="relative z-10">
-          <Mail size={32} className="text-purple-400 mx-auto mb-4" />
+          <Mail size={32} className="text-amber-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">Stay in the Loop</h2>
           <p className="text-gray-400 text-sm mb-6">Get notified about new products, exclusive deals, and discount codes.</p>
           {done ? (

@@ -48,14 +48,14 @@ export default async function StaffPendingStockPage() {
                 const waitingDays = Math.floor((Date.now() - new Date(o.createdAt).getTime()) / (1000 * 60 * 60 * 24));
                 return (
                   <tr key={o.id} className="border-b border-white/5 hover:bg-white/2">
-                    <td className="px-4 py-3 font-mono text-xs text-blue-400">{o.id.slice(0, 12)}…</td>
+                    <td className="px-4 py-3 font-mono text-xs text-amber-400">{o.id.slice(0, 12)}…</td>
                     <td className="px-4 py-3 text-gray-300 text-xs truncate max-w-[160px]">
                       {o.user?.email ?? (o as { guestEmail?: string | null }).guestEmail ?? "Guest"}
                     </td>
                     <td className="px-4 py-3 text-white text-xs truncate max-w-[160px]">{o.product.title}</td>
                     <td className="px-4 py-3 text-right text-white">${Number(o.amount).toFixed(2)}</td>
                     <td className="px-4 py-3 text-center">
-                      <span className={o.product.unlimitedStock ? "text-blue-400 text-xs" : o.product.stockCount > 0 ? "text-green-400 text-xs" : "text-red-400 text-xs"}>
+                      <span className={o.product.unlimitedStock ? "text-amber-400 text-xs" : o.product.stockCount > 0 ? "text-green-400 text-xs" : "text-red-400 text-xs"}>
                         {o.product.unlimitedStock ? "∞" : o.product.stockCount === 0 ? "Out of stock" : `${o.product.stockCount} available`}
                       </span>
                     </td>

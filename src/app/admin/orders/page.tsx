@@ -38,7 +38,7 @@ export default async function AdminOrdersPage() {
     product: { title: string }; deliveryLog: { id: string } | null;
   }>;
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 
   return (
     <div>

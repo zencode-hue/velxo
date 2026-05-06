@@ -271,7 +271,7 @@ export default function PartnerSection({ partner: initial }: { partner: PartnerD
           <div className="p-3 bg-black/30 rounded-xl border border-white/5">
             {partner.cryptoWallet ? (
               <div className="flex items-center gap-3">
-                <span className="text-xs text-purple-400 font-medium">{partner.walletType?.replace("_", " ")}</span>
+                <span className="text-xs text-amber-400 font-medium">{partner.walletType?.replace("_", " ")}</span>
                 <code className="text-xs text-gray-300 font-mono break-all">{partner.cryptoWallet}</code>
               </div>
             ) : (

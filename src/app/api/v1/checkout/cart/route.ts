@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
     }
 
     const finalAmount = Math.max(0, totalAmount - discountAmount);
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 
     // ── Balance payment — deduct and deliver all items immediately ────────────
     if (paymentProvider === "balance") {

@@ -7,8 +7,8 @@ import Link from "next/link";
 import { Search, SlidersHorizontal } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Search Products — Velxo Shop",
-  description: "Search for digital products on Velxo Shop.",
+  title: "Search Products — MetraMart",
+  description: "Search for digital products on MetraMart.",
   robots: { index: false, follow: false },
 };
 
@@ -97,9 +97,9 @@ export default async function SearchPage({ searchParams }: Props) {
               href={`/search?q=${encodeURIComponent(q)}&category=${cat.value}`}
               className="px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
               style={{
-                background: category === cat.value ? "rgba(167,139,250,0.15)" : "rgba(255,255,255,0.04)",
-                border: category === cat.value ? "1px solid rgba(167,139,250,0.3)" : "1px solid rgba(255,255,255,0.07)",
-                color: category === cat.value ? "#c4b5fd" : "rgba(255,255,255,0.5)",
+                background: category === cat.value ? "rgba(245,158,11,0.15)" : "rgba(255,255,255,0.04)",
+                border: category === cat.value ? "1px solid rgba(245,158,11,0.3)" : "1px solid rgba(255,255,255,0.07)",
+                color: category === cat.value ? "#fbbf24" : "rgba(255,255,255,0.5)",
               }}>
               {cat.label}
             </Link>
@@ -118,12 +118,12 @@ export default async function SearchPage({ searchParams }: Props) {
         <div className="text-center py-20" style={{ color: "rgba(255,255,255,0.3)" }}>
           <Search size={48} className="mx-auto mb-4 opacity-20" />
           <p className="text-lg">Type something to search</p>
-          <Link href="/products" className="text-purple-400 hover:text-purple-300 text-sm mt-2 inline-block">Browse all products →</Link>
+          <Link href="/products" className="text-amber-400 hover:text-amber-300 text-sm mt-2 inline-block">Browse all products →</Link>
         </div>
       ) : mapped.length === 0 ? (
         <div className="text-center py-20" style={{ color: "rgba(255,255,255,0.3)" }}>
           <p className="text-lg mb-2">No results for &quot;{q}&quot;</p>
-          <p className="text-sm">Try a different search term or <Link href="/products" className="text-purple-400">browse all products</Link></p>
+          <p className="text-sm">Try a different search term or <Link href="/products" className="text-amber-400">browse all products</Link></p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

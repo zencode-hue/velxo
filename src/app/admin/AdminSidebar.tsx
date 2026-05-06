@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import VelxoLogo from "@/components/VelxoLogo";
+import MetraMartLogo from "@/components/MetraMartLogo";
 import {
   LayoutDashboard, Package, ShoppingCart, Users,
   Tag, UserCheck, Settings, Menu,
@@ -71,8 +71,8 @@ export default function AdminSidebar() {
       <aside className="hidden lg:flex w-60 shrink-0 flex-col fixed h-full z-30"
         style={{ background: "rgba(6,6,6,0.95)", borderRight: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(24px)" }}>
         <div className="h-16 flex items-center gap-2.5 px-5 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-          <VelxoLogo size={26} />
-          <span className="font-bold text-white text-sm">Velxo</span>
+          <MetraMartLogo size={26} />
+          <span className="font-bold text-white text-sm">MetraMart</span>
           <span className="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ background: "rgba(167,139,250,0.12)", color: "#c4b5fd", border: "1px solid rgba(167,139,250,0.2)" }}>ADMIN</span>
         </div>
         <NavLinks pathname={pathname} />
@@ -89,8 +89,8 @@ export default function AdminSidebar() {
         <button onClick={() => setOpen(true)} className="transition-colors" style={{ color: "rgba(255,255,255,0.5)" }}>
           <Menu size={20} />
         </button>
-        <VelxoLogo size={22} />
-        <span className="font-bold text-white text-sm">Velxo Admin</span>
+        <MetraMartLogo size={22} />
+        <span className="font-bold text-white text-sm">MetraMart Admin</span>
         <span className="ml-auto text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>{currentLabel}</span>
       </div>
 
@@ -102,8 +102,8 @@ export default function AdminSidebar() {
           <aside className="relative w-64 flex flex-col z-50 h-full"
             style={{ background: "rgba(6,6,6,0.98)", borderRight: "1px solid rgba(255,255,255,0.07)" }}>
             <div className="h-14 flex items-center gap-2.5 px-5 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-              <VelxoLogo size={22} />
-              <span className="font-bold text-white text-sm">Velxo Admin</span>
+              <MetraMartLogo size={22} />
+              <span className="font-bold text-white text-sm">MetraMart Admin</span>
             </div>
             <NavLinks pathname={pathname} onClick={() => setOpen(false)} />
             <div className="p-4 shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>

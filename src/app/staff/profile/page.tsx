@@ -102,7 +102,7 @@ export default function StaffProfilePage() {
   return (
     <div className="max-w-4xl">
       <h1 className="text-2xl font-bold text-white mb-8 flex items-center gap-2">
-        <User size={22} className="text-blue-400" /> My Profile
+        <User size={22} className="text-amber-400" /> My Profile
       </h1>
 
       {/* Profile card */}
@@ -111,12 +111,12 @@ export default function StaffProfilePage() {
           <div className="flex items-center gap-5">
             {/* Avatar */}
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-xl font-bold text-white shrink-0"
-              style={{ background: "linear-gradient(135deg, #3b82f6, #6366f1)" }}>
+              style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
               {initials}
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">{profile?.name ?? "—"}</h2>
-              <p className="text-sm text-blue-400 font-medium mt-0.5">{profile?.position ?? "Staff Member"}</p>
+              <p className="text-sm text-amber-400 font-medium mt-0.5">{profile?.position ?? "Staff Member"}</p>
               <div className="flex items-center gap-3 mt-2 flex-wrap">
                 <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${STATUS_COLOR[profile?.status ?? "PENDING"] ?? ""}`}>
                   {profile?.status ?? "—"}

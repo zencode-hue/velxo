@@ -34,7 +34,7 @@ export default async function AdminSettingsPage() {
             support_discord_url: map["support_discord_url"] ?? "",
             affiliate_commission_pct: map["affiliate_commission_pct"] ?? "10",
             partner_commission_pct: map["partner_commission_pct"] ?? "15",
-            store_name: map["store_name"] ?? "Velxo",
+            store_name: map["store_name"] ?? "MetraMart",
             store_tagline: map["store_tagline"] ?? "Premium Digital Marketplace",
             hero_title: map["hero_title"] ?? "",
             hero_subtitle: map["hero_subtitle"] ?? "",

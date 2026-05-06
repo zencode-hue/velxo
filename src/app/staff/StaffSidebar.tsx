@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import VelxoLogo from "@/components/VelxoLogo";
+import MetraMartLogo from "@/components/MetraMartLogo";
 import {
   LayoutDashboard, ShoppingCart, Package, AlertTriangle,
   Menu, LogOut, ExternalLink, Users, User, X,
@@ -71,10 +71,10 @@ export default function StaffSidebar({ staffName, staffPosition }: { staffName: 
                     background: active ? "rgba(255,255,255,0.08)" : "transparent",
                     border: active ? "1px solid rgba(255,255,255,0.1)" : "1px solid transparent",
                   }}>
-                  <Icon size={15} style={{ color: active ? "#c4b5fd" : "rgba(255,255,255,0.35)", flexShrink: 0 }} />
+                  <Icon size={15} style={{ color: active ? "#fbbf24" : "rgba(255,255,255,0.35)", flexShrink: 0 }} />
                   {label}
                   {alert && <div style={{ marginLeft: "auto", width: "7px", height: "7px", borderRadius: "50%", background: "#fbbf24", animation: "pulse 2s infinite" }} />}
-                  {active && !alert && <div style={{ marginLeft: "auto", width: "5px", height: "5px", borderRadius: "50%", background: "#a78bfa" }} />}
+                  {active && !alert && <div style={{ marginLeft: "auto", width: "5px", height: "5px", borderRadius: "50%", background: "#f59e0b" }} />}
                 </Link>
               );
             })}
@@ -87,10 +87,10 @@ export default function StaffSidebar({ staffName, staffPosition }: { staffName: 
   const SidebarContent = ({ onLinkClick }: { onLinkClick?: () => void }) => (
     <>
       <div className="h-16 flex items-center gap-2.5 px-5 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-        <VelxoLogo size={26} />
+        <MetraMartLogo size={26} />
         <div>
           <span className="font-bold text-white text-sm block leading-tight">Staff Portal</span>
-          <span className="text-xs" style={{ color: "#a78bfa" }}>Velxo</span>
+          <span className="text-xs" style={{ color: "#fde68a" }}>MetraMart</span>
         </div>
       </div>
 
@@ -98,7 +98,7 @@ export default function StaffSidebar({ staffName, staffPosition }: { staffName: 
       <div className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold text-white shrink-0"
-            style={{ background: "rgba(167,139,250,0.15)", border: "1px solid rgba(167,139,250,0.25)" }}>
+            style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.2)" }}>
             {initials}
           </div>
           <div className="min-w-0">
@@ -135,7 +135,7 @@ export default function StaffSidebar({ staffName, staffPosition }: { staffName: 
         <button onClick={() => setOpen(true)} style={{ color: "rgba(255,255,255,0.5)" }}>
           <Menu size={20} />
         </button>
-        <VelxoLogo size={22} />
+        <MetraMartLogo size={22} />
         <span className="font-bold text-white text-sm">Staff Portal</span>
         <span className="ml-auto text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>{currentLabel}</span>
       </div>

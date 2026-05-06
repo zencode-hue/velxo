@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import VelxoLogo from "@/components/VelxoLogo";
+import MetraMartLogo from "@/components/MetraMartLogo";
 import {
   LayoutDashboard, ShoppingBag, Wallet, Users, Handshake,
   Menu, ExternalLink, Star, Settings, X,
@@ -53,7 +53,7 @@ export default function DashboardSidebar({ userName }: { userName: string }) {
   const SidebarContent = ({ onLinkClick }: { onLinkClick?: () => void }) => (
     <>
       <div className="h-16 flex items-center gap-2.5 px-5 shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-        <VelxoLogo size={26} />
+        <MetraMartLogo size={26} />
         <span className="font-bold text-white text-sm">My Account</span>
       </div>
       <div className="px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
@@ -89,7 +89,7 @@ export default function DashboardSidebar({ userName }: { userName: string }) {
         <button onClick={() => setOpen(true)} style={{ color: "rgba(255,255,255,0.5)" }}>
           <Menu size={20} />
         </button>
-        <VelxoLogo size={22} />
+        <MetraMartLogo size={22} />
         <span className="font-bold text-white text-sm">My Account</span>
       </div>
       <div className="lg:hidden h-14" />

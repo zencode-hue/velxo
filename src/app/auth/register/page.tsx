@@ -67,8 +67,8 @@ function RegisterPageInner() {
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 font-bold text-2xl">
-            <Zap size={24} className="text-purple-500" />
-            <span className="gradient-text">Velxo</span>
+            <Zap size={24} className="text-amber-500" />
+            <span className="gradient-text">MetraMart</span>
           </Link>
           <p className="text-gray-500 mt-2 text-sm">Create your account</p>
         </div>
@@ -101,7 +101,7 @@ function RegisterPageInner() {
               </div>
             </div>
 
-            {ref && <p className="text-xs text-purple-400">Referred by a friend 🎉</p>}
+            {ref && <p className="text-xs text-amber-400">Referred by a friend 🎉</p>}
             {err && <p className="text-red-400 text-sm">{err}</p>}
 
             <button type="submit" disabled={loading} className="btn-primary w-full py-3">
@@ -126,7 +126,7 @@ function RegisterPageInner() {
 
           <p className="text-center text-sm text-gray-500 mt-5">
             Already have an account?{" "}
-            <Link href="/auth/login" className="text-purple-400 hover:text-purple-300 transition-colors">Sign in</Link>
+            <Link href="/auth/login" className="text-amber-400 hover:text-amber-300 transition-colors">Sign in</Link>
           </p>
         </div>
       </div>

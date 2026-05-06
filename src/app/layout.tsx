@@ -8,55 +8,55 @@ const inter = Inter({
   display: "swap",
 });
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
-const APP_NAME = "Velxo Shop";
-const APP_DESCRIPTION = "Buy cheap Netflix, Spotify, IPTV, ChatGPT Plus, gaming keys and software licenses. Instant automated delivery. Secure crypto payments. Best prices guaranteed.";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
+const APP_NAME = "MetraMart";
+const APP_DESCRIPTION = "MetraMart is your #1 digital marketplace for Netflix, Spotify, ChatGPT Plus, gaming keys and software licenses. Instant automated delivery. Secure crypto payments. Best prices guaranteed.";
 const OG_IMAGE = `${APP_URL}/opengraph-image`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "Velxo Shop — Cheap Netflix, Spotify & Digital Subscriptions",
-    template: "%s | Velxo Shop",
+    default: "MetraMart — Premium Digital Subscriptions at Unbeatable Prices",
+    template: "%s | MetraMart",
   },
   description: APP_DESCRIPTION,
   keywords: [
-    "buy digital products", "streaming subscriptions", "cheap Netflix subscription",
-    "buy Spotify premium cheap", "affordable IPTV", "ChatGPT Plus cheap",
+    "buy digital products", "streaming subscriptions", "Netflix subscription",
+    "Spotify premium discount", "affordable IPTV", "ChatGPT Plus cheap",
     "gaming keys", "software licenses", "instant delivery digital goods",
     "crypto payment digital store", "buy Netflix account", "buy Spotify account",
-    "digital marketplace", "Velxo Shop", "velxo.shop",
-    "cheap streaming services", "digital subscriptions",
+    "digital marketplace", "MetraMart", "metramart.xyz",
+    "digital subscriptions", "best price subscriptions", "instant digital delivery",
   ],
-  authors: [{ name: "Velxo Shop", url: APP_URL }],
-  creator: "Velxo Shop",
-  publisher: "Velxo Shop",
+  authors: [{ name: "MetraMart", url: APP_URL }],
+  creator: "MetraMart",
+  publisher: "MetraMart",
   category: "shopping",
-  applicationName: "Velxo Shop",
+  applicationName: "MetraMart",
   referrer: "origin-when-cross-origin",
   formatDetection: { email: false, address: false, telephone: false },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: APP_URL,
-    siteName: "Velxo Shop",
-    title: "Velxo Shop — Cheap Netflix, Spotify & Digital Subscriptions",
+    siteName: "MetraMart",
+    title: "MetraMart — Premium Digital Subscriptions at Unbeatable Prices",
     description: APP_DESCRIPTION,
     images: [
       {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Velxo Shop — Buy Cheap Digital Subscriptions",
+        alt: "MetraMart — Premium Digital Subscriptions",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@velxoshop",
-    creator: "@velxoshop",
-    title: "Velxo Shop — Cheap Netflix, Spotify & Digital Subscriptions",
+    site: "@metramart",
+    creator: "@metramart",
+    title: "MetraMart — Premium Digital Subscriptions at Unbeatable Prices",
     description: APP_DESCRIPTION,
     images: [OG_IMAGE],
   },
@@ -91,8 +91,8 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Velxo Shop",
-    alternateName: "Velxo",
+    name: "MetraMart",
+    alternateName: "MetraMart",
     url: APP_URL,
     description: APP_DESCRIPTION,
     potentialAction: {
@@ -104,7 +104,7 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Velxo Shop",
+    name: "MetraMart",
     url: APP_URL,
     logo: {
       "@type": "ImageObject",
@@ -122,7 +122,7 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "Store",
-    name: "Velxo Shop",
+    name: "MetraMart",
     url: APP_URL,
     description: APP_DESCRIPTION,
     priceRange: "$1 - $500",

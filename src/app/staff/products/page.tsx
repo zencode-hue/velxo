@@ -20,7 +20,7 @@ export default async function StaffProductsPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-white mb-8 flex items-center gap-2">
-        <Package size={22} className="text-purple-400" /> Products
+        <Package size={22} className="text-amber-400" /> Products
         <span className="text-sm font-normal text-gray-500 ml-2">({products.length})</span>
       </h1>
 
@@ -43,7 +43,7 @@ export default async function StaffProductsPage() {
                 <td className="px-5 py-3"><span className="badge-purple">{CATEGORY_LABELS[p.category] ?? p.category}</span></td>
                 <td className="px-5 py-3 text-right text-white">${Number(p.price).toFixed(2)}</td>
                 <td className="px-5 py-3 text-right">
-                  <span className={p.unlimitedStock ? "text-blue-400 text-xs" : p.stockCount > 0 ? "text-green-400" : "text-red-400"}>
+                  <span className={p.unlimitedStock ? "text-amber-400 text-xs" : p.stockCount > 0 ? "text-green-400" : "text-red-400"}>
                     {p.unlimitedStock ? "∞" : p.stockCount}
                   </span>
                 </td>
@@ -51,7 +51,7 @@ export default async function StaffProductsPage() {
                   <span className={p.isActive ? "badge-green" : "badge-red"}>{p.isActive ? "Active" : "Inactive"}</span>
                 </td>
                 <td className="px-5 py-3 text-right">
-                  <Link href={`/staff/inventory/${p.id}`} className="text-xs text-purple-400 hover:text-purple-300 transition-colors">
+                  <Link href={`/staff/inventory/${p.id}`} className="text-xs text-amber-400 hover:text-amber-300 transition-colors">
                     Add Stock
                   </Link>
                 </td>

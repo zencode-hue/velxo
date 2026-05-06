@@ -3,10 +3,10 @@
  * Each email type has its own branded design.
  */
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
-const APP_NAME = "Velxo Shop";
-const FROM = process.env.EMAIL_FROM ?? "Velxo Shop <noreply@velxo.shop>";
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "noreply@velxo.shop";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
+const APP_NAME = "MetraMart";
+const FROM = process.env.EMAIL_FROM ?? "MetraMart <noreply@metramart.xyz>";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "noreply@metramart.xyz";
 
 // ─── Send helper ─────────────────────────────────────────────────────────────
 
@@ -71,10 +71,10 @@ function footer(): string {
     <tr>
       <td style="padding:24px 36px;border-top:1px solid rgba(255,255,255,0.06);">
         <p style="margin:0 0 8px;font-size:12px;color:#4b5563;text-align:center;font-family:system-ui,sans-serif;">
-          © ${new Date().getFullYear()} ${APP_NAME} · <a href="${APP_URL}" style="color:#7c3aed;text-decoration:none;">velxo.shop</a>
+          © ${new Date().getFullYear()} ${APP_NAME} · <a href="${APP_URL}" style="color:#7c3aed;text-decoration:none;">metramart.xyz</a>
         </p>
         <p style="margin:0;font-size:11px;color:#374151;text-align:center;font-family:system-ui,sans-serif;">
-          You received this email because you have an account or placed an order at Velxo Shop.
+          You received this email because you have an account or placed an order at MetraMart.
         </p>
       </td>
     </tr>`;
@@ -128,7 +128,7 @@ export async function sendVerificationEmail(email: string, token: string): Promi
   const link = `${APP_URL}/api/auth/verify-email?token=${token}`;
   await send(
     email,
-    `Verify your Velxo Shop account`,
+    `Verify your MetraMart account`,
     wrap(
       header("#7c3aed", "⚡"),
       `<p style="margin:0 0 6px;font-size:13px;color:#7c3aed;font-weight:600;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:1px;">ACCOUNT SETUP</p>
@@ -153,13 +153,13 @@ export async function sendPasswordResetEmail(email: string, token: string): Prom
   const link = `${APP_URL}/auth/reset-password?token=${token}`;
   await send(
     email,
-    `Reset your Velxo Shop password`,
+    `Reset your MetraMart password`,
     wrap(
       header("#dc2626", "🔐"),
       `<p style="margin:0 0 6px;font-size:13px;color:#ef4444;font-weight:600;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:1px;">SECURITY</p>
        <h1 style="margin:0 0 16px;font-size:26px;font-weight:800;color:#f9fafb;font-family:system-ui,sans-serif;line-height:1.2;">Reset your password</h1>
        <p style="margin:0 0 24px;font-size:15px;color:#9ca3af;line-height:1.7;font-family:system-ui,sans-serif;">
-         We received a request to reset the password for your Velxo Shop account. Click the button below to set a new password.
+         We received a request to reset the password for your MetraMart account. Click the button below to set a new password.
        </p>
        <div style="margin:28px 0;text-align:center;">
          ${btn(link, "Reset Password", "#dc2626")}
@@ -177,11 +177,11 @@ export async function sendPasswordResetEmail(email: string, token: string): Prom
 export async function sendWelcomeEmail(email: string): Promise<void> {
   await send(
     email,
-    `Welcome to Velxo Shop 🎉`,
+    `Welcome to MetraMart 🎉`,
     wrap(
       header("#059669", "🎉"),
       `<p style="margin:0 0 6px;font-size:13px;color:#10b981;font-weight:600;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:1px;">YOU'RE IN</p>
-       <h1 style="margin:0 0 16px;font-size:26px;font-weight:800;color:#f9fafb;font-family:system-ui,sans-serif;line-height:1.2;">Welcome to Velxo Shop!</h1>
+       <h1 style="margin:0 0 16px;font-size:26px;font-weight:800;color:#f9fafb;font-family:system-ui,sans-serif;line-height:1.2;">Welcome to MetraMart!</h1>
        <p style="margin:0 0 20px;font-size:15px;color:#9ca3af;line-height:1.7;font-family:system-ui,sans-serif;">
          Your account is ready. You now have access to 500+ premium digital products — streaming subscriptions, AI tools, software licenses, and gaming products — all at the best prices with instant delivery.
        </p>
@@ -254,7 +254,7 @@ export async function sendDeliveryEmail(email: string, orderDetails: object): Pr
 export async function sendLockoutEmail(email: string): Promise<void> {
   await send(
     email,
-    `⚠️ Your Velxo Shop account has been temporarily locked`,
+    `⚠️ Your MetraMart account has been temporarily locked`,
     wrap(
       header("#d97706", "⚠️"),
       `<p style="margin:0 0 6px;font-size:13px;color:#f59e0b;font-weight:600;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:1px;">SECURITY ALERT</p>
@@ -374,7 +374,7 @@ export async function sendPayoutNotificationEmail(
 
   await send(
     email,
-    isApproved ? `💸 Payout of $${amount.toFixed(2)} sent to your wallet` : `Payout request update — Velxo Shop`,
+    isApproved ? `💸 Payout of $${amount.toFixed(2)} sent to your wallet` : `Payout request update — MetraMart`,
     wrap(
       header(accentColor, emoji),
       isApproved

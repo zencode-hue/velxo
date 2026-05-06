@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://velxo.shop/sitemap.xml",
+    sitemap: "https://metramart.xyz/sitemap.xml",
   };
 }

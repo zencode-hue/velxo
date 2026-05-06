@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Lock } from "lucide-react";
-import VelxoLogo from "@/components/VelxoLogo";
+import MetraMartLogo from "@/components/MetraMartLogo";
 
 function LoginPageInner() {
   const router = useRouter();
@@ -98,8 +98,8 @@ function LoginPageInner() {
       <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 font-bold text-2xl">
-            <VelxoLogo size={28} />
-            <span style={{ background: "linear-gradient(135deg, #60a5fa, #818cf8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Velxo</span>
+            <MetraMartLogo size={28} />
+            <span style={{ background: "linear-gradient(135deg, #fde68a, #d97706)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>MetraMart</span>
           </Link>
           <p className="text-slate-500 mt-2 text-sm">Sign in to your account</p>
         </div>
@@ -152,7 +152,7 @@ function LoginPageInner() {
             {err && <p className="text-red-400 text-sm">{err}</p>}
 
             <div className="flex items-center justify-end">
-              <Link href="/auth/forgot-password" className="text-xs text-blue-400 hover:text-blue-300 transition-colors">
+              <Link href="/auth/forgot-password" className="text-xs text-amber-400 hover:text-amber-300 transition-colors">
                 Forgot password?
               </Link>
             </div>
@@ -186,7 +186,7 @@ function LoginPageInner() {
 
           <p className="text-center text-sm text-slate-500 mt-5">
             Don&apos;t have an account?{" "}
-            <Link href="/auth/register" className="text-blue-400 hover:text-blue-300 transition-colors">
+            <Link href="/auth/register" className="text-amber-400 hover:text-amber-300 transition-colors">
               Sign up
             </Link>
           </p>
@@ -209,7 +209,7 @@ function LoginPageInner() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
           <div className="glass-card p-6 w-full max-w-sm">
             <div className="flex items-center gap-2 mb-4">
-              <Lock size={16} className="text-purple-400" />
+              <Lock size={16} className="text-amber-400" />
               <h2 className="text-base font-semibold text-white">Admin Access</h2>
             </div>
             <form onSubmit={handleAdminLogin} className="space-y-4">

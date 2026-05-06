@@ -13,16 +13,16 @@ const config: Config = {
         background: "#000000",
         surface: "rgba(255,255,255,0.04)",
         border: "#1a1a1a",
-        accent: "#a78bfa",
-        "accent-2": "#818cf8",
+        accent: "#f59e0b",
+        "accent-2": "#d97706",
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
       },
       boxShadow: {
         glass: "0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)",
-        "glow-violet": "0 0 30px rgba(167,139,250,0.25)",
-        "glow-violet-lg": "0 0 60px rgba(167,139,250,0.35)",
+        "glow-violet": "0 0 30px rgba(245,158,11,0.25)",
+        "glow-violet-lg": "0 0 60px rgba(245,158,11,0.35)",
       },
       backdropBlur: {
         xs: "4px",
@@ -34,7 +34,7 @@ const config: Config = {
       },
       backgroundImage: {
         "glass-shine": "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%)",
-        "violet-glow": "radial-gradient(ellipse at center, rgba(167,139,250,0.15) 0%, transparent 70%)",
+        "violet-glow": "radial-gradient(ellipse at center, rgba(245,158,11,0.15) 0%, transparent 70%)",
       },
     },
   },

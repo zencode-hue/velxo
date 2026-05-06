@@ -12,7 +12,7 @@ const STATUS_CONFIG: Record<string, { color: string; label: string; icon: typeof
   PENDING: { color: "text-yellow-400", label: "Pending Payment", icon: Clock },
   PENDING_STOCK: { color: "text-yellow-400", label: "Pending Stock", icon: Clock },
   FAILED: { color: "text-red-400", label: "Failed", icon: XCircle },
-  REFUNDED: { color: "text-purple-400", label: "Refunded", icon: CheckCircle },
+  REFUNDED: { color: "text-amber-400", label: "Refunded", icon: CheckCircle },
 };
 
 const PAYMENT_LABELS: Record<string, string> = {
@@ -144,10 +144,10 @@ export default async function StaffOrderDetailPage({ params }: { params: { id: s
 
         {/* Delivery */}
         {credentials && (
-          <div className="glass-card p-5" style={{ borderColor: "rgba(167,139,250,0.2)" }}>
+          <div className="glass-card p-5" style={{ borderColor: "rgba(245,158,11,0.2)" }}>
             <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">Delivered Credentials</p>
-            <code className="text-sm text-purple-300 break-all font-mono block p-3 rounded-xl"
-              style={{ background: "rgba(167,139,250,0.08)", border: "1px solid rgba(167,139,250,0.15)" }}>
+            <code className="text-sm text-amber-300 break-all font-mono block p-3 rounded-xl"
+              style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.15)" }}>
               {credentials}
             </code>
             <p className="text-xs text-gray-600 mt-2">

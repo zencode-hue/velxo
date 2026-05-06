@@ -38,7 +38,7 @@ export default function ProductActions({
   );
   const [wishlisted, setWishlisted] = useState(() => {
     if (typeof window === "undefined") return false;
-    return (JSON.parse(localStorage.getItem("velxo_wishlist") ?? "[]") as string[]).includes(productId);
+    return (JSON.parse(localStorage.getItem("metramart_wishlist") ?? "[]") as string[]).includes(productId);
   });
   const [addedToCart, setAddedToCart] = useState(false);
 
@@ -53,9 +53,9 @@ export default function ProductActions({
     : null;
 
   function toggleWishlist() {
-    const list = JSON.parse(localStorage.getItem("velxo_wishlist") ?? "[]") as string[];
+    const list = JSON.parse(localStorage.getItem("metramart_wishlist") ?? "[]") as string[];
     const next = wishlisted ? list.filter((id) => id !== productId) : [...list, productId];
-    localStorage.setItem("velxo_wishlist", JSON.stringify(next));
+    localStorage.setItem("metramart_wishlist", JSON.stringify(next));
     setWishlisted(!wishlisted);
   }
 
@@ -135,8 +135,8 @@ export default function ProductActions({
                     {/* Radio indicator */}
                     <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-all"
                       style={{
-                        borderColor: isSelected ? "#a78bfa" : "rgba(255,255,255,0.2)",
-                        background: isSelected ? "#a78bfa" : "transparent",
+                        borderColor: isSelected ? "#f59e0b" : "rgba(255,255,255,0.2)",
+                        background: isSelected ? "#f59e0b" : "transparent",
                       }}>
                       {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                     </div>
@@ -149,7 +149,7 @@ export default function ProductActions({
                       )}
                     </div>
                   </div>
-                  <span className="font-bold text-base shrink-0" style={{ color: isSelected ? "#c4b5fd" : "rgba(255,255,255,0.6)" }}>
+                  <span className="font-bold text-base shrink-0" style={{ color: isSelected ? "#fbbf24" : "rgba(255,255,255,0.6)" }}>
                     ${v.price.toFixed(2)}
                   </span>
                 </button>

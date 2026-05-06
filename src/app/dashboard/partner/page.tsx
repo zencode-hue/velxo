@@ -22,7 +22,7 @@ export default async function PartnerPage() {
     },
   });
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 
   return (
     <div>

@@ -79,7 +79,7 @@ export default function StaffInventoryPage() {
         </button>
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Package size={22} className="text-purple-400" /> Add Inventory
+            <Package size={22} className="text-amber-400" /> Add Inventory
           </h1>
           <p className="text-gray-500 text-sm mt-1">Upload credentials or license keys — one per line.</p>
         </div>
@@ -99,7 +99,7 @@ export default function StaffInventoryPage() {
             <div className="text-xs text-gray-500 mt-1">Available</div>
           </div>
           <div className="glass-card p-4 text-center">
-            <div className="text-2xl font-bold text-purple-400">{stockInfo.delivered}</div>
+            <div className="text-2xl font-bold text-amber-400">{stockInfo.delivered}</div>
             <div className="text-xs text-gray-500 mt-1">Delivered</div>
           </div>
         </div>

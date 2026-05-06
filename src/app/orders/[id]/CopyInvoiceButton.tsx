@@ -11,7 +11,7 @@ export default function CopyInvoiceButton({ text }: { text: string }) {
     });
   }
   return (
-    <button onClick={copy} className="flex items-center gap-1 text-xs text-purple-400 hover:text-purple-300 transition-colors">
+    <button onClick={copy} className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 transition-colors">
       {copied ? <><Check size={12} className="text-green-400" /> Copied!</> : <><Copy size={12} /> Copy</>}
     </button>
   );

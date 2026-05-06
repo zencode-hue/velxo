@@ -7,15 +7,15 @@ export const dynamic = "force-dynamic";
  * Cleans up fake seed users created by seed-reviews:
  * - Keeps all reviews (reassigns them to a ghost user)
  * - Deletes fake orders (amount = 0, paymentProvider = "balance", userId = seed user)
- * - Deletes fake users (emails matching customer_*@velxo.shop and reviews@velxo.shop)
+ * - Deletes fake users (emails matching customer_*@metramart.xyz and reviews@metramart.xyz)
  */
 export async function GET() {
   // 1. Find all seed users
   const seedUsers = await db.user.findMany({
     where: {
       OR: [
-        { email: { startsWith: "customer_", endsWith: "@velxo.shop" } },
-        { email: "reviews@velxo.shop" },
+        { email: { startsWith: "customer_", endsWith: "@metramart.xyz" } },
+        { email: "reviews@metramart.xyz" },
       ],
     },
     select: { id: true, email: true },
@@ -28,11 +28,11 @@ export async function GET() {
   const seedUserIds = seedUsers.map((u) => u.id);
 
   // 2. Get or create a ghost user to hold the reviews
-  let ghost = await db.user.findFirst({ where: { email: "ghost@velxo.shop" } });
+  let ghost = await db.user.findFirst({ where: { email: "ghost@metramart.xyz" } });
   if (!ghost) {
     ghost = await db.user.create({
       data: {
-        email: "ghost@velxo.shop",
+        email: "ghost@metramart.xyz",
         name: "Verified Customer",
         role: "CUSTOMER",
         emailVerified: new Date(),

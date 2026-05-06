@@ -5,9 +5,9 @@ export const dynamic = "force-dynamic";
 const spec = {
   openapi: "3.0.0",
   info: {
-    title: "Velxo API",
+    title: "MetraMart API",
     version: "1.0.0",
-    description: "REST API for the Velxo digital product marketplace.",
+    description: "REST API for the MetraMart digital product marketplace.",
   },
   servers: [{ url: `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/api/v1` }],
   components: {

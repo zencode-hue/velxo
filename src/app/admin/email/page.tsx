@@ -194,7 +194,7 @@ export default function AdminEmailPage() {
         <div>
           <label className="block text-xs text-gray-500 mb-1">Subject</label>
           <input value={subject} onChange={(e) => setSubject(e.target.value)}
-            placeholder="e.g. New products just dropped at Velxo Shop!" className="input-field text-sm py-2.5 w-full" />
+            placeholder="e.g. New products just dropped at MetraMart!" className="input-field text-sm py-2.5 w-full" />
         </div>
 
         {/* Message */}

@@ -123,7 +123,7 @@ function GiftCardInstructions({ amount, orderId, onClose }: { amount: number; or
               {/* Support link */}
               <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
                 Need help?{" "}
-                <a href="https://discord.gg/velxo" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:text-indigo-300">
+                <a href="https://discord.gg/metramart" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:text-amber-300">
                   Ask on Discord
                 </a>
               </p>
@@ -245,17 +245,17 @@ function CheckoutPageInner() {
 
   if (!productId) return (
     <div className="min-h-screen flex items-center justify-center text-gray-500">
-      No product selected. <Link href="/products" className="text-purple-400 ml-2">Browse products</Link>
+      No product selected. <Link href="/products" className="text-amber-400 ml-2">Browse products</Link>
     </div>
   );
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
-      <Loader2 size={32} className="animate-spin text-purple-400" />
+      <Loader2 size={32} className="animate-spin text-amber-400" />
     </div>
   );
   if (!product) return (
     <div className="min-h-screen flex items-center justify-center text-gray-500">
-      Product not found. <Link href="/products" className="text-purple-400 ml-2">Browse products</Link>
+      Product not found. <Link href="/products" className="text-amber-400 ml-2">Browse products</Link>
     </div>
   );
 
@@ -278,7 +278,7 @@ function CheckoutPageInner() {
             <div>
               <p className="text-xs text-gray-500 mb-1">{product.category}</p>
               <p className="font-semibold text-white">{product.title}</p>
-              {selectedVariant && <p className="text-xs text-purple-400 mt-0.5">{selectedVariant.name}</p>}
+              {selectedVariant && <p className="text-xs text-amber-400 mt-0.5">{selectedVariant.name}</p>}
             </div>
             <div className="text-right shrink-0">
               {discountInfo && <p className="text-xs text-gray-500 line-through">${(selectedVariant ? selectedVariant.price : product.price).toFixed(2)}</p>}

@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { FileText } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Blog — Velxo",
+  title: "Blog — MetraMart",
   description: "Tips, guides, and news about digital products, streaming, AI tools, and more.",
 };
 
@@ -31,7 +31,7 @@ export default async function BlogPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="mb-14 text-center">
-        <h1 className="text-4xl sm:text-5xl font-black text-white mb-3 tracking-tight">Velxo Blog</h1>
+        <h1 className="text-4xl sm:text-5xl font-black text-white mb-3 tracking-tight">MetraMart Blog</h1>
         <p className="text-lg" style={{ color: "rgba(255,255,255,0.4)" }}>Guides, tips, and news about digital products</p>
       </div>
 

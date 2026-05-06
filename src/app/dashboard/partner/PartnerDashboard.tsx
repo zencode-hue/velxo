@@ -268,7 +268,7 @@ export default function PartnerDashboard({ partner: initial }: { partner: Partne
               <div className="p-3 bg-black/30 rounded-xl border border-white/5 flex-1 mr-4">
                 {partner.cryptoWallet ? (
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-purple-400 font-medium shrink-0">{partner.walletType?.replace(/_/g, " ")}</span>
+                    <span className="text-xs text-amber-400 font-medium shrink-0">{partner.walletType?.replace(/_/g, " ")}</span>
                     <code className="text-xs text-gray-300 font-mono break-all">{partner.cryptoWallet}</code>
                   </div>
                 ) : <p className="text-xs text-gray-600">No wallet set.</p>}

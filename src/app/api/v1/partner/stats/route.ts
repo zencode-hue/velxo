@@ -22,7 +22,7 @@ export async function GET() {
 
   if (!partner) return NextResponse.json({ data: null, error: null });
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 
   return NextResponse.json({
     data: {

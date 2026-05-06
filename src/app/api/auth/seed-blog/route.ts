@@ -47,7 +47,7 @@ const posts = [
 
 If you're a developer or need image generation, go with ChatGPT Pro. If you work with long documents or need detailed writing assistance, Claude Pro is excellent.
 
-Many power users subscribe to both — they're complementary tools rather than direct competitors. Both are available instantly on Velxo.`,
+Many power users subscribe to both — they're complementary tools rather than direct competitors. Both are available instantly on MetraMart.`,
   },
   {
     slug: "vpn-guide-2025",
@@ -70,7 +70,7 @@ A VPN encrypts your internet traffic, hides your IP address, and lets you access
 
 **TunnelBear** is great for beginners with a simple interface and a free tier to try before buying.
 
-**Our pick:** NordVPN for most users. ExpressVPN if speed is your priority. Both are available on Velxo with instant delivery.`,
+**Our pick:** NordVPN for most users. ExpressVPN if speed is your priority. Both are available on MetraMart with instant delivery.`,
   },
   {
     slug: "gaming-subscriptions-worth-it",
@@ -85,7 +85,7 @@ A VPN encrypts your internet traffic, hides your IP address, and lets you access
 
 **Ubisoft+** makes sense if you play Ubisoft games regularly. Assassin's Creed, Far Cry, Rainbow Six — all included. Great value if you're a fan of the studio.
 
-**Steam** doesn't have a subscription but their sales are legendary. Combine with a gaming account from Velxo for the best deals.
+**Steam** doesn't have a subscription but their sales are legendary. Combine with a gaming account from MetraMart for the best deals.
 
 **Bottom line:** Xbox Game Pass is the best value for most gamers. PS Plus Extra is worth it for PlayStation exclusives. Ubisoft+ only if you love their games.`,
   },
@@ -96,7 +96,7 @@ A VPN encrypts your internet traffic, hides your IP address, and lets you access
     category: "Tips", emoji: "💰", published: true,
     content: `The average person spends over $200/month on digital subscriptions. Here's how to cut that down significantly.
 
-**1. Buy from Velxo** — We offer subscriptions at competitive prices with instant delivery. No need to pay full retail.
+**1. Buy from MetraMart** — We offer subscriptions at competitive prices with instant delivery. No need to pay full retail.
 
 **2. Rotate subscriptions** — Don't keep all streaming services active at once. Watch what you need, cancel, then switch.
 
@@ -104,7 +104,7 @@ A VPN encrypts your internet traffic, hides your IP address, and lets you access
 
 **4. Annual vs monthly** — Annual plans are typically 20-40% cheaper than monthly billing.
 
-**5. Use discount codes** — Check Velxo's discount section regularly for promo codes.
+**5. Use discount codes** — Check MetraMart's discount section regularly for promo codes.
 
 **6. Bundle services** — Some providers offer bundles (Disney+, Hulu, ESPN+) at a discount.
 
@@ -114,7 +114,7 @@ A VPN encrypts your internet traffic, hides your IP address, and lets you access
 
 **9. Cancel unused subscriptions** — Audit your subscriptions monthly. Cancel anything you haven't used in 2 weeks.
 
-**10. Use wallet balance** — Top up your Velxo wallet and use it for instant purchases without payment friction.`,
+**10. Use wallet balance** — Top up your MetraMart wallet and use it for instant purchases without payment friction.`,
   },
   {
     slug: "adobe-creative-cloud-guide",
@@ -144,7 +144,7 @@ The full Creative Cloud plan includes 20+ apps: Photoshop, Illustrator, Premiere
 
 If you use 3+ Adobe apps professionally, Creative Cloud pays for itself quickly. The integration between apps is unmatched. For casual users, consider the single-app plan or alternatives.
 
-Get Adobe Creative Cloud at a competitive price on Velxo with instant delivery.`,
+Get Adobe Creative Cloud at a competitive price on MetraMart with instant delivery.`,
   },
 ];
 

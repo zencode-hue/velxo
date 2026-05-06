@@ -13,10 +13,10 @@ const CATEGORY_LABELS: Record<string, string> = {
   STREAMING: "Streaming", AI_TOOLS: "AI Tools", SOFTWARE: "Software", GAMING: "Gaming",
 };
 const CATEGORY_COLORS: Record<string, string> = {
-  STREAMING: "text-red-400 bg-red-500/10 border-red-500/20",
-  AI_TOOLS: "text-blue-400 bg-blue-500/10 border-blue-500/20",
-  SOFTWARE: "text-green-400 bg-green-500/10 border-green-500/20",
-  GAMING: "text-purple-400 bg-purple-500/10 border-purple-500/20",
+  STREAMING: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+  AI_TOOLS: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
+  SOFTWARE: "text-orange-400 bg-orange-500/10 border-orange-500/20",
+  GAMING: "text-amber-300 bg-amber-400/10 border-amber-400/20",
 };
 
 // Generate feature bullets from description
@@ -94,9 +94,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     where: { id: realId, isActive: true },
     select: { title: true, description: true, imageUrl: true, price: true, avgRating: true, category: true },
   });
-  if (!product) return { title: "Product Not Found - Velxo Shop" };
+  if (!product) return { title: "Product Not Found - MetraMart" };
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
   const slugUrl = `${appUrl}${productPath(realId, product.title)}`;
   const catLabel = CATEGORY_LABELS[product.category] ?? "Digital";
   const price = Number(product.price).toFixed(2);
@@ -105,26 +105,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const ogDescription = `Buy ${product.title} for $${price} — Instant delivery to your email. ${product.description.slice(0, 100)}`;
 
   const ogImage = product.imageUrl
-    ? [{ url: product.imageUrl, width: 1200, height: 630, alt: `${product.title} - Velxo Shop` }]
-    : [{ url: `${appUrl}/opengraph-image`, width: 1200, height: 630, alt: "Velxo Shop" }];
+    ? [{ url: product.imageUrl, width: 1200, height: 630, alt: `${product.title} - MetraMart` }]
+    : [{ url: `${appUrl}/opengraph-image`, width: 1200, height: 630, alt: "MetraMart" }];
 
   return {
-    title: `Buy ${product.title} — $${price} | Velxo Shop`,
+    title: `Buy ${product.title} — $${price} | MetraMart`,
     description: `${product.title} for $${price}. ${catLabel} subscription with instant delivery. ${product.description.slice(0, 100)}`,
     alternates: { canonical: slugUrl },
     openGraph: {
-      title: `${product.title} — $${price} | Velxo Shop`,
+      title: `${product.title} — $${price} | MetraMart`,
       description: ogDescription,
       url: slugUrl,
-      siteName: "Velxo Shop",
+      siteName: "MetraMart",
       type: "website",
       images: ogImage,
       locale: "en_US",
     },
     twitter: {
       card: "summary_large_image",
-      site: "@velxoshop",
-      title: `${product.title} — $${price} | Velxo Shop`,
+      site: "@metramart",
+      title: `${product.title} — $${price} | MetraMart`,
       description: ogDescription,
       images: ogImage.map((i) => i.url),
     },
@@ -139,7 +139,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const catColor = CATEGORY_COLORS[product.category] ?? "text-gray-400 bg-gray-500/10 border-gray-500/20";
   const reviewCount = product.reviews.length;
   const avgRating = product.avgRating;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -154,7 +154,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       price: product.price.toFixed(2),
       availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       url: `${appUrl}${productPath(product.id, product.title)}`,
-      seller: { "@type": "Organization", name: "Velxo Shop" },
+      seller: { "@type": "Organization", name: "MetraMart" },
     },
     ...(avgRating > 0 ? {
       aggregateRating: {
@@ -207,7 +207,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <Image src={product.imageUrl} alt={product.title} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" priority />
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                <Package size={64} className="text-purple-400/40" />
+                <Package size={64} className="text-amber-400/40" />
                 <span className="text-gray-600 text-sm">{CATEGORY_LABELS[product.category]}</span>
               </div>
             )}
@@ -224,7 +224,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {[
               { icon: Zap, label: "Instant Delivery", color: "text-yellow-400" },
               { icon: Shield, label: "Secure Payment", color: "text-green-400" },
-              { icon: RefreshCw, label: "Replacement Guarantee", color: "text-blue-400" },
+              { icon: RefreshCw, label: "Replacement Guarantee", color: "text-amber-400" },
             ].map((b) => (
               <div key={b.label} className="flex flex-col items-center gap-1.5 p-3 rounded-xl text-center" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
                 <b.icon size={16} className={b.color} />
@@ -283,7 +283,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           {/* SEO keyword content — hidden visually, readable by Google */}
           <div className="sr-only" aria-hidden="false">
             <p>
-              Get access to {product.title} at a lower cost with our affordable subscription plans on Velxo Shop.
+              Get access to {product.title} at a lower cost with our affordable subscription plans on MetraMart.
               Enjoy premium {CATEGORY_LABELS[product.category] ?? "digital"} access without paying full price.
               Our service is fast, reliable, and easy to use — credentials are delivered instantly after payment with no waiting.
               This is one of the best cheap {CATEGORY_LABELS[product.category]?.toLowerCase() ?? "digital"} deals available online.

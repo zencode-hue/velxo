@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { Tv, Bot, Package, Gamepad2, ArrowRight } from "lucide-react";
 
 const categories = [
-  { id: "STREAMING", label: "Streaming", desc: "Netflix, Spotify, Disney+ and more", icon: Tv, color: "from-red-500/20 to-pink-500/10", iconColor: "text-red-400" },
-  { id: "AI_TOOLS", label: "AI Tools", desc: "ChatGPT, Midjourney, and top AI subs", icon: Bot, color: "from-blue-500/20 to-cyan-500/10", iconColor: "text-blue-400" },
-  { id: "SOFTWARE", label: "Software", desc: "Licenses for productivity & creative tools", icon: Package, color: "from-green-500/20 to-emerald-500/10", iconColor: "text-green-400" },
-  { id: "GAMING", label: "Gaming", desc: "Game keys, credits, and subscriptions", icon: Gamepad2, color: "from-purple-500/20 to-violet-500/10", iconColor: "text-purple-400" },
+  { id: "STREAMING", label: "Streaming", desc: "Netflix, Spotify, Disney+ and more", icon: Tv, color: "from-amber-500/20 to-yellow-500/10", iconColor: "text-amber-400" },
+  { id: "AI_TOOLS", label: "AI Tools", desc: "ChatGPT, Midjourney, and top AI subs", icon: Bot, color: "from-yellow-500/20 to-amber-500/10", iconColor: "text-yellow-400" },
+  { id: "SOFTWARE", label: "Software", desc: "Licenses for productivity & creative tools", icon: Package, color: "from-orange-500/20 to-amber-500/10", iconColor: "text-orange-400" },
+  { id: "GAMING", label: "Gaming", desc: "Game keys, credits, and subscriptions", icon: Gamepad2, color: "from-amber-600/20 to-orange-500/10", iconColor: "text-amber-500" },
 ];
 
 export default function FeaturedCategories() {
@@ -33,10 +33,10 @@ export default function FeaturedCategories() {
                 <cat.icon size={26} className={cat.iconColor} />
               </div>
               <div className="flex-1">
-                <h3 className="font-bold text-white text-lg group-hover:text-purple-300 transition-colors">{cat.label}</h3>
+                <h3 className="font-bold text-white text-lg group-hover:text-amber-300 transition-colors">{cat.label}</h3>
                 <p className="text-sm text-gray-500 mt-1">{cat.desc}</p>
               </div>
-              <div className="flex items-center gap-1 text-xs text-purple-400 group-hover:gap-2 transition-all">
+              <div className="flex items-center gap-1 text-xs text-amber-400 group-hover:gap-2 transition-all">
                 Browse <ArrowRight size={12} />
               </div>
             </Link>

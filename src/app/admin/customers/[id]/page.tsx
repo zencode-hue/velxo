@@ -20,7 +20,7 @@ export default async function CustomerDetailPage({ params }: { params: { id: str
   await requireAdmin();
 
   const rawId = decodeURIComponent(params.id);
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 
   // Try user ID or email
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

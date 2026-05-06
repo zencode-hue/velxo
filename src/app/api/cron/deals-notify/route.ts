@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "No webhook configured" }, { status: 503 });
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://velxo.shop";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://metramart.xyz";
 
   // Fetch deals
   const res = await fetch(`${appUrl}/api/v1/deals`, { cache: "no-store" });
@@ -64,7 +64,7 @@ export async function GET(req: NextRequest) {
   }));
 
   const payload = {
-    username: "Velxo Shop",
+    username: "MetraMart",
     avatar_url: `${appUrl}/logo.png`,
     embeds: [
       {
@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
         color: 0xea580c, // orange
         fields: dealFields,
         footer: {
-          text: `Velxo Shop • Deals reset daily at midnight UTC • Seed #${seed}`,
+          text: `MetraMart • Deals reset daily at midnight UTC • Seed #${seed}`,
           icon_url: `${appUrl}/logo.png`,
         },
         timestamp: new Date().toISOString(),

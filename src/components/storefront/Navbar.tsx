@@ -9,7 +9,7 @@ import {
   Menu, X, Search, User, Zap, ShoppingBag, ShoppingCart,
   Package, Tag, BookOpen, Users, LayoutDashboard, LogIn,
 } from "lucide-react";
-import VelxoLogo from "@/components/VelxoLogo";
+import MetraMartLogo from "@/components/MetraMartLogo";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/storefront/CartDrawer";
 
@@ -72,8 +72,8 @@ export default function Navbar() {
 
             {/* Logo */}
             <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
-              <VelxoLogo size={22} />
-              <span style={{ fontWeight: 700, fontSize: 15, color: "#fff", letterSpacing: "-0.3px" }}>Velxo</span>
+              <MetraMartLogo size={22} />
+              <span style={{ fontWeight: 700, fontSize: 15, color: "#fff", letterSpacing: "-0.3px" }}>MetraMart</span>
             </Link>
 
             {/* Desktop nav — hidden on mobile */}
@@ -110,9 +110,9 @@ export default function Navbar() {
               {/* Cart */}
               <button onClick={() => setCartOpen(true)} aria-label="Cart" style={{
                 position: "relative", padding: 8, borderRadius: 10, cursor: "pointer",
-                background: count > 0 ? "rgba(167,139,250,0.12)" : "transparent",
-                border: count > 0 ? "1px solid rgba(167,139,250,0.25)" : "1px solid transparent",
-                color: count > 0 ? "#c4b5fd" : "rgba(255,255,255,0.5)",
+                background: count > 0 ? "rgba(245,158,11,0.12)" : "transparent",
+                border: count > 0 ? "1px solid rgba(245,158,11,0.25)" : "1px solid transparent",
+                color: count > 0 ? "#fde68a" : "rgba(255,255,255,0.5)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all 0.15s ease",
               }}>
@@ -121,7 +121,7 @@ export default function Navbar() {
                   <span style={{
                     position: "absolute", top: -2, right: -2,
                     minWidth: 16, height: 16, borderRadius: 100,
-                    background: "#a78bfa", color: "#fff",
+                    background: "#f59e0b", color: "#000",
                     fontSize: 10, fontWeight: 700,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     padding: "0 3px",
@@ -159,9 +159,9 @@ export default function Navbar() {
                 <Link href="/products" style={{
                   display: "flex", alignItems: "center", gap: 6,
                   padding: "6px 14px", borderRadius: 10, fontSize: 13, fontWeight: 600,
-                  textDecoration: "none", color: "#fff",
-                  background: "rgba(167,139,250,0.15)", border: "1px solid rgba(167,139,250,0.3)",
-                  boxShadow: "0 0 16px rgba(167,139,250,0.12)",
+                  textDecoration: "none", color: "#000",
+                  background: "rgba(245,158,11,0.9)", border: "1px solid rgba(245,158,11,0.6)",
+                  boxShadow: "0 0 16px rgba(245,158,11,0.25)",
                 }}>
                   <Zap size={12} /> Shop
                 </Link>
@@ -220,18 +220,18 @@ export default function Navbar() {
                     display: "flex", alignItems: "center", gap: 14,
                     padding: "13px 16px", borderRadius: 14, textDecoration: "none",
                     color: active ? "#fff" : "rgba(255,255,255,0.6)",
-                    background: active ? "rgba(167,139,250,0.1)" : "transparent",
+                    background: active ? "rgba(245,158,11,0.1)" : "transparent",
                     fontSize: 16, fontWeight: active ? 600 : 500,
                   }}>
                     <div style={{
                       width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                      background: active ? "rgba(167,139,250,0.15)" : "rgba(255,255,255,0.05)",
+                      background: active ? "rgba(245,158,11,0.15)" : "rgba(255,255,255,0.05)",
                       display: "flex", alignItems: "center", justifyContent: "center",
                     }}>
-                      <Icon size={17} color={active ? "#c4b5fd" : "rgba(255,255,255,0.4)"} />
+                      <Icon size={17} color={active ? "#fde68a" : "rgba(255,255,255,0.4)"} />
                     </div>
                     {label}
-                    {active && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: "#a78bfa" }} />}
+                    {active && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: "#f59e0b" }} />}
                   </Link>
                 );
               })}
@@ -249,7 +249,7 @@ export default function Navbar() {
                 </div>
                 Cart
                 {count > 0 && (
-                  <span style={{ marginLeft: "auto", background: "#a78bfa", color: "#fff", borderRadius: 100, padding: "2px 8px", fontSize: 12, fontWeight: 700 }}>
+                  <span style={{ marginLeft: "auto", background: "#f59e0b", color: "#000", borderRadius: 100, padding: "2px 8px", fontSize: 12, fontWeight: 700 }}>
                     {count}
                   </span>
                 )}
@@ -286,9 +286,9 @@ export default function Navbar() {
                   </Link>
                   <Link href="/auth/register" style={{
                     display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-                    padding: "15px 20px", borderRadius: 14, textDecoration: "none", color: "#fff",
-                    background: "rgba(167,139,250,0.15)", border: "1px solid rgba(167,139,250,0.3)",
-                    fontSize: 15, fontWeight: 700, boxShadow: "0 4px 20px rgba(167,139,250,0.15)",
+                    padding: "15px 20px", borderRadius: 14, textDecoration: "none", color: "#000",
+                    background: "rgba(245,158,11,0.9)", border: "1px solid rgba(245,158,11,0.6)",
+                    fontSize: 15, fontWeight: 700, boxShadow: "0 4px 20px rgba(245,158,11,0.25)",
                   }}>
                     <ShoppingBag size={16} />
                     Get Started — It&apos;s Free

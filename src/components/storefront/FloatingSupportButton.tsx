@@ -71,7 +71,7 @@ export default function FloatingSupportButton() {
         style={{
           background: open
             ? "rgba(30,30,30,0.95)"
-            : "linear-gradient(135deg, #5865f2, #7289da)",
+            : "linear-gradient(135deg, #f59e0b, #d97706)",
           backdropFilter: "blur(16px)",
           border: "1px solid rgba(255,255,255,0.18)",
           boxShadow: open

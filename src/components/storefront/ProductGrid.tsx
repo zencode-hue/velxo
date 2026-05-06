@@ -54,7 +54,7 @@ export default function ProductGrid({
         </div>
         <button
           onClick={() => setShowFilters((v) => !v)}
-          className={`btn-secondary text-sm px-4 py-3 gap-2 ${showFilters ? "border-purple-600/60" : ""}`}
+          className={`btn-secondary text-sm px-4 py-3 gap-2 ${showFilters ? "border-amber-500/60" : ""}`}
         >
           <SlidersHorizontal size={15} />
           Filters
