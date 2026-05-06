@@ -35,16 +35,7 @@ export default function ProductCard({ id, title, price, category, imageUrl, avgR
   const href = productPath(id, title);
 
   return (
-    <div className="group flex flex-col overflow-hidden rounded-2xl transition-all duration-200 hover:-translate-y-1"
-      style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(245,158,11,0.25)";
-        (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 32px rgba(245,158,11,0.08)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.07)";
-        (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-      }}>
+    <div className="product-card group flex flex-col overflow-hidden rounded-2xl transition-all duration-200 hover:-translate-y-1">
       <Link href={href} className="relative w-full aspect-video overflow-hidden block" style={{ background: "rgba(15,12,0,0.8)" }}>
         {imageUrl ? (
           <Image src={imageUrl} alt={title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />

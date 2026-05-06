@@ -239,6 +239,25 @@
   .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.08); }
   .glow-violet { box-shadow: 0 0 30px rgba(245,158,11,0.2); }
   .text-muted { color: rgba(248,250,252,0.45); }
+
+  /* Product card hover — CSS only, no JS handlers */
+  .product-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .product-card:hover {
+    border-color: rgba(245,158,11,0.25);
+    box-shadow: 0 8px 32px rgba(245,158,11,0.08);
+  }
+
+  /* Deal card hover — CSS only */
+  .deal-card {
+    border: 1px solid rgba(245,158,11,0.15);
+  }
+  .deal-card:hover {
+    border-color: rgba(245,158,11,0.45);
+    box-shadow: 0 0 30px rgba(245,158,11,0.12);
+  }
 }
 
 /* ─── Animations ─────────────────────────────────────────────────────────────── */

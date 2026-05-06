@@ -38,16 +38,8 @@ export default function DealCard({
   const catLabel = CATEGORY_LABELS[category] ?? category;
 
   return (
-    <div className="relative group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
-      style={{ background: "rgba(20,14,0,0.95)", border: "1px solid rgba(245,158,11,0.15)" }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(245,158,11,0.45)";
-        (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 30px rgba(245,158,11,0.12)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(245,158,11,0.15)";
-        (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
-      }}>
+    <div className="deal-card relative group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
+      style={{ background: "rgba(20,14,0,0.95)" }}>
 
       {/* Discount badge */}
       <div className="absolute top-3 left-3 z-10">
