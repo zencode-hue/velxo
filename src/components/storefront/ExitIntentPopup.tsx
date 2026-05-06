@@ -64,8 +64,8 @@ export default function ExitIntentPopup() {
         </button>
 
         <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5"
-          style={{ background: "rgba(167,139,250,0.12)", border: "1px solid rgba(167,139,250,0.2)" }}>
-          <Zap size={24} style={{ color: "#c4b5fd" }} />
+          style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)" }}>
+          <Zap size={24} style={{ color: "#fbbf24" }} />
         </div>
 
         <h2 className="text-2xl font-black text-white mb-2">Wait — Don&apos;t Leave!</h2>

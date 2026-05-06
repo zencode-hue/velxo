@@ -26,8 +26,8 @@ export default function CategoryNav({ active, onClick }: CategoryNavProps) {
           onClick={() => onClick(cat.id)}
           className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${
             active === cat.id
-              ? "bg-purple-600 text-white shadow-glow-purple"
-              : "glass-card text-gray-400 hover:text-white hover:border-purple-600/40"
+              ? "bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-none"
+              : "glass-card text-gray-400 hover:text-white hover:border-amber-500/30"
           }`}
         >
           {cat.icon}

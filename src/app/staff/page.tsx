@@ -77,11 +77,11 @@ export default async function StaffDashboardPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
         {[
           { label: "Today's Revenue", value: `$${todayRev.toFixed(2)}`, icon: DollarSign, color: "text-green-400", bg: "bg-green-500/10", sub: `${todayOrders} orders` },
-          { label: "Month Revenue", value: `$${monthRev.toFixed(2)}`, icon: TrendingUp, color: "text-cyan-400", bg: "bg-cyan-500/10", sub: `${weekOrders} this week` },
+          { label: "Month Revenue", value: `$${monthRev.toFixed(2)}`, icon: TrendingUp, color: "text-amber-400", bg: "bg-amber-500/10", sub: `${weekOrders} this week` },
           { label: "Pending Stock", value: pendingStock, icon: AlertTriangle, color: "text-yellow-400", bg: "bg-yellow-500/10", sub: "needs attention", link: "/staff/pending-stock" },
-          { label: "Total Customers", value: totalCustomers, icon: Users, color: "text-purple-400", bg: "bg-purple-500/10", sub: `+${newCustomersWeek} this week` },
+          { label: "Total Customers", value: totalCustomers, icon: Users, color: "text-amber-300", bg: "bg-amber-400/10", sub: `+${newCustomersWeek} this week` },
         ].map((s) => (
-          <div key={s.label} className={`glass-card p-5 ${s.link ? "cursor-pointer hover:border-blue-500/30 transition-colors" : ""}`}>
+          <div key={s.label} className={`glass-card p-5 ${s.link ? "cursor-pointer hover:border-amber-500/30 transition-colors" : ""}`}>
             {s.link ? (
               <Link href={s.link} className="block">
                 <StatCard {...s} />
@@ -96,7 +96,7 @@ export default async function StaffDashboardPage() {
         {[
           { label: "Paid Orders", value: totalOrders, icon: CheckCircle, color: "text-green-400" },
           { label: "Today Orders", value: todayOrders, icon: Clock, color: "text-yellow-400" },
-          { label: "Active Products", value: totalProducts, icon: Package, color: "text-purple-400" },
+          { label: "Active Products", value: totalProducts, icon: Package, color: "text-amber-400" },
           { label: "Low Stock", value: lowStockProducts, icon: AlertTriangle, color: lowStockProducts > 0 ? "text-red-400" : "text-gray-500" },
         ].map((s) => (
           <div key={s.label} className="glass-card p-4 flex items-center gap-3">
@@ -115,9 +115,9 @@ export default async function StaffDashboardPage() {
       <div className="glass-card">
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
           <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-            <ShoppingCart size={15} className="text-purple-400" /> Recent Orders
+            <ShoppingCart size={15} className="text-amber-400" /> Recent Orders
           </h2>
-          <Link href="/staff/orders" className="text-xs text-blue-400 hover:text-blue-300 transition-colors">View all</Link>
+          <Link href="/staff/orders" className="text-xs text-amber-400 hover:text-amber-300 transition-colors">View all</Link>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm min-w-[600px]">
@@ -134,7 +134,7 @@ export default async function StaffDashboardPage() {
             <tbody>
               {recentOrders.map((o) => (
                 <tr key={o.id} className="border-b border-white/5 hover:bg-white/2">
-                  <td className="px-5 py-3 font-mono text-xs text-purple-400">VLX-{o.id.slice(-6).toUpperCase()}</td>
+                  <td className="px-5 py-3 font-mono text-xs text-amber-400">MTM-{o.id.slice(-6).toUpperCase()}</td>
                   <td className="px-5 py-3 text-gray-400 text-xs truncate max-w-[140px]">
                     {o.user?.email ?? (o as { guestEmail?: string | null }).guestEmail ?? "Guest"}
                   </td>

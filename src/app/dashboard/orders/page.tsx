@@ -41,7 +41,7 @@ export default async function OrdersPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-        <ShoppingBag size={22} className="text-purple-400" /> My Orders
+        <ShoppingBag size={22} className="text-amber-400" /> My Orders
       </h1>
       <p className="text-gray-500 text-sm mb-8">{orders.length} order{orders.length !== 1 ? "s" : ""} total</p>
 
@@ -63,7 +63,7 @@ export default async function OrdersPage() {
                     <span className={`${STATUS_BADGE[order.status] ?? "badge-purple"} text-xs`}>{order.status}</span>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
-                    <Link href={`/invoice/${order.id}`} className="text-purple-400 hover:text-purple-300">VLX-{order.id.slice(-6).toUpperCase()}</Link>
+                    <Link href={`/invoice/${order.id}`} className="text-amber-400 hover:text-amber-300">MTM-{order.id.slice(-6).toUpperCase()}</Link>
                     {" · "}{new Date(order.createdAt).toLocaleDateString()}
                   </p>
                 </div>

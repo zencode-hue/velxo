@@ -103,33 +103,32 @@ export default async function HomePage() {
 
       {/* Hot Deals strip — neon green vault theme */}
       {dealsEnabled && hotDeals.length > 0 && (
-        <section className="py-16" style={{ background: "rgba(0,10,5,0.6)", borderTop: "1px solid rgba(0,255,136,0.1)", borderBottom: "1px solid rgba(0,255,136,0.1)" }}>
-          <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,136,0.008) 2px, rgba(0,255,136,0.008) 4px)" }} />
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <section className="py-16 relative" style={{ background: "rgba(10,7,0,0.7)", borderTop: "1px solid rgba(245,158,11,0.1)", borderBottom: "1px solid rgba(245,158,11,0.1)" }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: "#f59e0b" }} />
                 <div>
-                  <h2 className="text-2xl font-black font-mono flex items-center gap-2" style={{ color: "#00ff88" }}>
+                  <h2 className="text-2xl font-black flex items-center gap-2" style={{ color: "#fbbf24" }}>
                     DEAL VAULT
-                    <span className="text-xs font-normal px-2 py-0.5 rounded-full font-mono"
-                      style={{ background: "rgba(0,255,136,0.1)", border: "1px solid rgba(0,255,136,0.35)", color: "#00ff88" }}>
+                    <span className="text-xs font-normal px-2 py-0.5 rounded-full"
+                      style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.35)", color: "#fbbf24" }}>
                       20% OFF
                     </span>
                   </h2>
-                  <p className="text-xs font-mono mt-0.5" style={{ color: "rgba(0,255,136,0.5)" }}>Vault refreshes daily at midnight UTC</p>
+                  <p className="text-xs mt-0.5" style={{ color: "rgba(245,158,11,0.5)" }}>Vault refreshes daily at midnight UTC</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <DealCountdown resetAt={dealsResetAt} neon />
-                <Link href="/deals" className="flex items-center gap-1.5 text-sm font-mono font-bold transition-colors hover:opacity-70"
-                  style={{ color: "#00ff88" }}>
+                <DealCountdown resetAt={dealsResetAt} />
+                <Link href="/deals" className="flex items-center gap-1.5 text-sm font-bold transition-colors hover:opacity-70"
+                  style={{ color: "#fbbf24" }}>
                   View Vault <ArrowRight size={14} />
                 </Link>
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {hotDeals.map((deal) => <DealCard key={deal.id} {...deal} neon />)}
+              {hotDeals.map((deal) => <DealCard key={deal.id} {...deal} />)}
             </div>
           </div>
         </section>

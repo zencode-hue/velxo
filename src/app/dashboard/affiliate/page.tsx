@@ -20,7 +20,7 @@ export default async function AffiliatePage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-        <Users size={22} className="text-purple-400" /> Promo Affiliate
+        <Users size={22} className="text-amber-400" /> Promo Affiliate
       </h1>
       <p className="text-gray-500 text-sm mb-8">
         Share your link and earn store credit on every referred sale. Earnings go directly to your wallet balance.

@@ -13,10 +13,10 @@ const CATEGORY_LABELS: Record<string, string> = {
   STREAMING: "Streaming", AI_TOOLS: "AI Tools", SOFTWARE: "Software", GAMING: "Gaming",
 };
 const CATEGORY_COLORS: Record<string, string> = {
-  STREAMING: "text-red-400 bg-red-500/10 border-red-500/20",
-  AI_TOOLS: "text-blue-400 bg-blue-500/10 border-blue-500/20",
-  SOFTWARE: "text-green-400 bg-green-500/10 border-green-500/20",
-  GAMING: "text-purple-400 bg-purple-500/10 border-purple-500/20",
+  STREAMING: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+  AI_TOOLS: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
+  SOFTWARE: "text-orange-400 bg-orange-500/10 border-orange-500/20",
+  GAMING: "text-amber-300 bg-amber-400/10 border-amber-400/20",
 };
 
 // Generate feature bullets from description
@@ -207,7 +207,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <Image src={product.imageUrl} alt={product.title} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" priority />
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                <Package size={64} className="text-purple-400/40" />
+                <Package size={64} className="text-amber-400/40" />
                 <span className="text-gray-600 text-sm">{CATEGORY_LABELS[product.category]}</span>
               </div>
             )}
@@ -224,7 +224,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             {[
               { icon: Zap, label: "Instant Delivery", color: "text-yellow-400" },
               { icon: Shield, label: "Secure Payment", color: "text-green-400" },
-              { icon: RefreshCw, label: "Replacement Guarantee", color: "text-blue-400" },
+              { icon: RefreshCw, label: "Replacement Guarantee", color: "text-amber-400" },
             ].map((b) => (
               <div key={b.label} className="flex flex-col items-center gap-1.5 p-3 rounded-xl text-center" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
                 <b.icon size={16} className={b.color} />

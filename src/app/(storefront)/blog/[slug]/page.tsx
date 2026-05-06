@@ -92,7 +92,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
           <span className="text-3xl">{post.emoji}</span>
-          <span className="px-2.5 py-0.5 rounded-full text-xs font-medium text-purple-400 bg-purple-500/10">{post.category}</span>
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-medium text-amber-400 bg-amber-500/10">{post.category}</span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4 leading-tight">{post.title}</h1>
         <p className="text-gray-500 text-sm">
@@ -107,7 +107,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         ))}
       </div>
 
-      <div className="mt-12 p-6 rounded-xl border border-purple-600/20 bg-purple-600/5">
+      <div className="mt-12 p-6 rounded-xl border border-amber-500/20 bg-amber-500/5">
         <p className="text-white font-semibold mb-2">Ready to get started?</p>
         <p className="text-sm text-gray-500 mb-4">Browse our catalog of digital products with instant delivery.</p>
         <Link href="/products" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white"

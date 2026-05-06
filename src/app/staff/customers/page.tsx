@@ -20,7 +20,7 @@ export default async function StaffCustomersPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-white mb-8 flex items-center gap-2">
-        <Users size={22} className="text-blue-400" /> Customers
+        <Users size={22} className="text-amber-400" /> Customers
         <span className="text-sm font-normal text-gray-500 ml-2">({customers.length})</span>
       </h1>
 

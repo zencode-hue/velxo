@@ -16,7 +16,7 @@ const STATUS_CONFIG: Record<string, { icon: typeof CheckCircle; color: string; b
   PENDING: { icon: Clock, color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20", label: "Awaiting Payment" },
   PENDING_STOCK: { icon: Clock, color: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/20", label: "Processing" },
   FAILED: { icon: XCircle, color: "text-red-400", bg: "bg-red-500/10 border-red-500/20", label: "Payment Failed" },
-  REFUNDED: { icon: CheckCircle, color: "text-purple-400", bg: "bg-purple-500/10 border-purple-500/20", label: "Refunded" },
+  REFUNDED: { icon: CheckCircle, color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20", label: "Refunded" },
 };
 
 const PAYMENT_LABELS: Record<string, string> = {
@@ -116,7 +116,7 @@ export default async function InvoicePage({ params }: { params: { id: string } }
               {order.product.imageUrl ? (
                 <Image src={order.product.imageUrl} alt={order.product.title} fill className="object-cover" sizes="56px" />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center"><Package size={22} className="text-purple-400/50" /></div>
+                <div className="absolute inset-0 flex items-center justify-center"><Package size={22} className="text-amber-400/50" /></div>
               )}
             </div>
             <div className="flex-1">

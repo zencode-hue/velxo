@@ -45,11 +45,11 @@ export default async function SupportPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
         <a href={discordUrl} target="_blank" rel="noopener noreferrer"
-          className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-6 text-center hover:border-indigo-500/40 transition-all group">
-          <MessageCircle size={28} className="text-indigo-400 mx-auto mb-3" />
+          className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-6 text-center hover:border-amber-500/40 transition-all group">
+          <MessageCircle size={28} className="text-amber-400 mx-auto mb-3" />
           <h3 className="font-bold text-white mb-1">Discord</h3>
           <p className="text-xs text-gray-500">Fastest response. Join our server and open a ticket.</p>
-          <span className="inline-block mt-3 text-xs text-indigo-400 group-hover:text-indigo-300">Open Discord →</span>
+          <span className="inline-block mt-3 text-xs text-amber-400 group-hover:text-amber-300">Open Discord →</span>
         </a>
         {telegramUrl ? (
           <a href={telegramUrl} target="_blank" rel="noopener noreferrer"
@@ -61,7 +61,7 @@ export default async function SupportPage() {
           </a>
         ) : (
           <div className="rounded-xl border border-white/8 p-6 text-center" style={{ background: "rgba(255,255,255,0.02)" }}>
-            <Mail size={28} className="text-purple-400 mx-auto mb-3" />
+            <Mail size={28} className="text-amber-400 mx-auto mb-3" />
             <h3 className="font-bold text-white mb-1">Email</h3>
             <p className="text-xs text-gray-500">support@metramart.xyz</p>
             <span className="inline-block mt-3 text-xs text-gray-600">Response within 24h</span>
@@ -78,9 +78,9 @@ export default async function SupportPage() {
       <h2 className="text-2xl font-bold text-white mb-6">Frequently Asked Questions</h2>
       <div className="space-y-3 mb-12">
         {faqs.map((item) => (
-          <details key={item.q} className="group rounded-xl border border-white/8 hover:border-purple-600/20 transition-all" style={{ background: "rgba(255,255,255,0.02)" }}>
+          <details key={item.q} className="group rounded-xl border border-white/8 hover:border-amber-500/20 transition-all" style={{ background: "rgba(255,255,255,0.02)" }}>
             <summary className="p-5 cursor-pointer font-semibold text-white text-sm flex items-center justify-between list-none">
-              <span className="flex items-center gap-2"><CheckCircle size={14} className="text-purple-400 shrink-0" />{item.q}</span>
+              <span className="flex items-center gap-2"><CheckCircle size={14} className="text-amber-400 shrink-0" />{item.q}</span>
               <span className="text-gray-500 group-open:rotate-180 transition-transform shrink-0 ml-2">▾</span>
             </summary>
             <p className="px-5 pb-5 text-sm text-gray-500 leading-relaxed">{item.a}</p>
@@ -88,19 +88,19 @@ export default async function SupportPage() {
         ))}
       </div>
 
-      <div className="rounded-xl border border-purple-600/20 bg-purple-600/5 p-8 text-center">
+      <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-8 text-center">
         <h3 className="text-xl font-bold text-white mb-2">Still need help?</h3>
         <p className="text-gray-500 text-sm mb-4">Our team is active on Discord and responds within minutes during business hours.</p>
         <div className="flex items-center justify-center gap-3 flex-wrap">
           <Link href={discordUrl} target="_blank"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-white text-sm"
-            style={{ background: "linear-gradient(135deg, #5865f2, #7289da)" }}>
+            style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
             <MessageCircle size={16} /> Join Discord
           </Link>
           {telegramUrl && (
             <Link href={telegramUrl} target="_blank"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-white text-sm"
-              style={{ background: "linear-gradient(135deg, #0088cc, #229ed9)" }}>
+              style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }}>
               <Send size={16} /> Telegram
             </Link>
           )}

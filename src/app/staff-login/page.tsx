@@ -82,7 +82,7 @@ export default function StaffLoginPage() {
 
           <p className="text-center text-sm text-gray-600 mt-4">
             No account?{" "}
-            <Link href="/staff-register" className="text-blue-400 hover:text-blue-300 transition-colors">
+            <Link href="/staff-register" className="text-amber-400 hover:text-amber-300 transition-colors">
               Request access
             </Link>
           </p>

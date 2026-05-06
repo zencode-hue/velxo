@@ -74,7 +74,7 @@ export default function StaffOrdersPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-        <ShoppingCart size={22} className="text-purple-400" /> Orders
+        <ShoppingCart size={22} className="text-amber-400" /> Orders
         <span className="text-sm font-normal text-gray-500 ml-2">({orders.length})</span>
       </h1>
 
@@ -109,9 +109,9 @@ export default function StaffOrdersPage() {
             <tbody>
               {filtered.map((o) => (
                 <tr key={o.id} className="border-b border-white/5 hover:bg-white/2">
-                  <td className="px-4 py-3 font-mono text-xs text-purple-400">
-                    <a href={`/staff/orders/${o.id}`} className="hover:text-purple-300 transition-colors">
-                      VLX-{o.id.slice(-6).toUpperCase()}
+                  <td className="px-4 py-3 font-mono text-xs text-amber-400">
+                    <a href={`/staff/orders/${o.id}`} className="hover:text-amber-300 transition-colors">
+                      MTM-{o.id.slice(-6).toUpperCase()}
                     </a>
                   </td>
                   <td className="px-4 py-3 text-gray-300 text-xs truncate max-w-[160px]">
@@ -131,7 +131,7 @@ export default function StaffOrdersPage() {
                       <button
                         onClick={() => handleRedeliver(o.id)}
                         disabled={redelivering === o.id}
-                        className="text-xs text-purple-400 hover:text-purple-300 transition-colors flex items-center gap-1 ml-auto"
+                        className="text-xs text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1 ml-auto"
                       >
                         <RefreshCw size={12} className={redelivering === o.id ? "animate-spin" : ""} />
                         Re-deliver

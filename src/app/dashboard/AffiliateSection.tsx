@@ -42,7 +42,7 @@ export default function AffiliateSection({ affiliate }: { affiliate: AffiliateDa
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Users size={18} className="text-purple-400" /> Affiliate Program
+              <Users size={18} className="text-amber-400" /> Affiliate Program
             </h2>
             <p className="text-sm text-gray-500 mt-1">
               Earn {process.env.NEXT_PUBLIC_AFFILIATE_PCT ?? "10"}% commission on every sale you refer. Get your unique metramart.xyz link instantly.
@@ -60,7 +60,7 @@ export default function AffiliateSection({ affiliate }: { affiliate: AffiliateDa
   return (
     <div className="glass-card p-6 mb-8">
       <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-        <Users size={18} className="text-purple-400" /> Affiliate Program
+        <Users size={18} className="text-amber-400" /> Affiliate Program
       </h2>
 
       <div className="grid grid-cols-3 gap-4 mb-5">
@@ -82,10 +82,10 @@ export default function AffiliateSection({ affiliate }: { affiliate: AffiliateDa
         <div className="flex items-center justify-between mb-1">
           <span className="text-xs text-gray-500">Your referral link ({data.commissionPct}% commission)</span>
           <div className="flex items-center gap-2">
-            <button onClick={copyLink} className="text-gray-500 hover:text-purple-400 transition-colors">
+            <button onClick={copyLink} className="text-gray-500 hover:text-amber-400 transition-colors">
               {copied ? <Check size={13} className="text-green-400" /> : <Copy size={13} />}
             </button>
-            <a href={data.referralLink} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-purple-400 transition-colors">
+            <a href={data.referralLink} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-amber-400 transition-colors">
               <ExternalLink size={13} />
             </a>
           </div>

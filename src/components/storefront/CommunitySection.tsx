@@ -15,9 +15,9 @@ const slides = [
   {
     key: "discord",
     icon: MessageCircle,
-    color: "#5865f2",
-    glow: "rgba(88,101,242,0.15)",
-    border: "rgba(88,101,242,0.25)",
+    color: "#f59e0b",
+    glow: "rgba(245,158,11,0.12)",
+    border: "rgba(245,158,11,0.2)",
     label: "Discord Community",
     cta: "Join Discord",
     desc: "Get instant support, exclusive deals, and connect with thousands of members.",
@@ -25,9 +25,9 @@ const slides = [
   {
     key: "telegram",
     icon: Send,
-    color: "#0088cc",
-    glow: "rgba(0,136,204,0.15)",
-    border: "rgba(0,136,204,0.25)",
+    color: "#f59e0b",
+    glow: "rgba(245,158,11,0.12)",
+    border: "rgba(245,158,11,0.2)",
     label: "Telegram Channel",
     cta: "Join Telegram",
     desc: "Get deal alerts, restock notifications, and updates straight to your phone.",
@@ -107,8 +107,8 @@ export default function CommunitySection({ discordUrl, telegramUrl, discordMembe
               )}
 
               <Link href={url} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white text-sm transition-all hover:-translate-y-0.5"
-                style={{ background: slide.color, boxShadow: `0 4px 20px ${slide.glow}` }}>
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-black text-sm transition-all hover:-translate-y-0.5"
+                style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)", boxShadow: "0 4px 20px rgba(245,158,11,0.25)" }}>
                 <Icon size={15} />
                 {slide.cta}
               </Link>

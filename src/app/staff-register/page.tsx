@@ -112,7 +112,7 @@ export default function StaffRegisterPage() {
 
           <p className="text-center text-sm text-gray-600 mt-4">
             Already have access?{" "}
-            <Link href="/staff-login" className="text-blue-400 hover:text-blue-300 transition-colors">
+            <Link href="/staff-login" className="text-amber-400 hover:text-amber-300 transition-colors">
               Sign in
             </Link>
           </p>

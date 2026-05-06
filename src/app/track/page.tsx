@@ -36,8 +36,8 @@ export default function TrackOrderPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            style={{ background: "rgba(167,139,250,0.12)", border: "1px solid rgba(167,139,250,0.2)" }}>
-            <Package size={24} style={{ color: "#c4b5fd" }} />
+          style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)" }}>
+            <Package size={24} style={{ color: "#fbbf24" }} />
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">Track Your Order</h1>
           <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
@@ -87,7 +87,7 @@ export default function TrackOrderPage() {
         </div>
 
         <p className="text-center text-xs mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>
-          Signed in? <Link href="/dashboard/orders" style={{ color: "#c4b5fd" }}>View all orders in dashboard</Link>
+          Signed in? <Link href="/dashboard/orders" style={{ color: "#fbbf24" }}>View all orders in dashboard</Link>
         </p>
       </div>
     </div>

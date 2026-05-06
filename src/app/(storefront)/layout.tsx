@@ -24,10 +24,10 @@ function Footer() {
             </div>
             <p className="text-xs text-slate-600 leading-relaxed mb-4">Premium digital marketplace. Instant delivery, secure payments, 500+ products.</p>
             <div className="flex items-center gap-2">
-              <a href="https://discord.gg/metramart" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg text-slate-600 hover:text-indigo-400 hover:bg-indigo-500/10 transition-all">
+              <a href="https://discord.gg/metramart" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg text-slate-600 hover:text-amber-400 hover:bg-amber-500/10 transition-all">
                 <MessageCircle size={15} />
               </a>
-              <a href="https://twitter.com/metramart" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg text-slate-600 hover:text-blue-400 hover:bg-blue-500/10 transition-all">
+              <a href="https://twitter.com/metramart" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg text-slate-600 hover:text-amber-400 hover:bg-amber-500/10 transition-all">
                 <XIcon size={15} />
               </a>
               <a href="mailto:support@metramart.xyz" className="p-2 rounded-lg text-slate-600 hover:text-sky-400 hover:bg-sky-500/10 transition-all">

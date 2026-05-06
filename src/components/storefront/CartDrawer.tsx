@@ -79,13 +79,13 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           flexShrink: 0,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <ShoppingCart size={18} color="#a78bfa" />
+            <ShoppingCart size={18} color="#f59e0b" />
             <span style={{ fontWeight: 700, color: "#fff", fontSize: 15 }}>Cart</span>
             {items.length > 0 && (
               <span style={{
-                background: "rgba(167,139,250,0.15)",
-                border: "1px solid rgba(167,139,250,0.3)",
-                color: "#c4b5fd",
+                background: "rgba(245,158,11,0.15)",
+                border: "1px solid rgba(245,158,11,0.3)",
+                color: "#fbbf24",
                 borderRadius: 100,
                 padding: "1px 8px",
                 fontSize: 12,
@@ -129,12 +129,12 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", textAlign: "center", padding: "40px 0" }}>
               <div style={{
                 width: 56, height: 56, borderRadius: 16,
-                background: "rgba(167,139,250,0.08)",
-                border: "1px solid rgba(167,139,250,0.15)",
+                background: "rgba(245,158,11,0.08)",
+                border: "1px solid rgba(245,158,11,0.15)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 marginBottom: 16,
               }}>
-                <ShoppingCart size={24} color="rgba(167,139,250,0.5)" />
+                <ShoppingCart size={24} color="rgba(245,158,11,0.5)" />
               </div>
               <p style={{ color: "#fff", fontWeight: 600, marginBottom: 6 }}>Your cart is empty</p>
               <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13, marginBottom: 20 }}>Add products to get started</p>
@@ -143,7 +143,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 onClick={onClose}
                 style={{
                   fontSize: 13,
-                  color: "#c4b5fd",
+                  color: "#fbbf24",
                   textDecoration: "none",
                   display: "flex",
                   alignItems: "center",
@@ -223,16 +223,16 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 gap: 8,
                 padding: "12px 16px",
                 borderRadius: 12,
-                background: "rgba(167,139,250,0.15)",
-                border: "1px solid rgba(167,139,250,0.35)",
+                background: "rgba(245,158,11,0.15)",
+                border: "1px solid rgba(245,158,11,0.35)",
                 textDecoration: "none",
                 color: "#fff",
                 fontSize: 14,
                 fontWeight: 700,
-                boxShadow: "0 4px 20px rgba(167,139,250,0.2)",
+                boxShadow: "0 4px 20px rgba(245,158,11,0.2)",
               }}
             >
-              <Zap size={15} color="#c4b5fd" />
+              <Zap size={15} color="#fbbf24" />
               Checkout — ${total.toFixed(2)}
             </Link>
           </div>

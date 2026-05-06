@@ -69,9 +69,9 @@ export default async function DashboardPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {[
-          { label: "Total Orders", value: totalOrders, icon: ShoppingBag, color: "text-purple-400", bg: "bg-purple-500/10" },
+          { label: "Total Orders", value: totalOrders, icon: ShoppingBag, color: "text-amber-400", bg: "bg-amber-500/10" },
           { label: "Delivered", value: deliveredOrders, icon: Package, color: "text-green-400", bg: "bg-green-500/10" },
-          { label: "Balance", value: `$${balance.toFixed(2)}`, icon: Wallet, color: "text-cyan-400", bg: "bg-cyan-500/10" },
+          { label: "Balance", value: `$${balance.toFixed(2)}`, icon: Wallet, color: "text-amber-300", bg: "bg-amber-400/10" },
           { label: "Promo Earned", value: `$${Number(affiliate?.totalEarned ?? 0).toFixed(2)}`, icon: Star, color: "text-yellow-400", bg: "bg-yellow-500/10" },
         ].map((s) => (
           <div key={s.label} className="glass-card p-5">
@@ -96,19 +96,19 @@ export default async function DashboardPage() {
               <p className="text-xs text-gray-500">${balance.toFixed(2)} available</p>
             </div>
           </div>
-          <ArrowRight size={14} className="text-gray-600 group-hover:text-cyan-400 transition-colors" />
+          <ArrowRight size={14} className="text-gray-600 group-hover:text-amber-400 transition-colors" />
         </Link>
-        <Link href="/dashboard/affiliate" className="glass-card p-4 flex items-center justify-between hover:border-purple-500/40 transition-colors group">
+        <Link href="/dashboard/affiliate" className="glass-card p-4 flex items-center justify-between hover:border-amber-500/40 transition-colors group">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-purple-500/10 flex items-center justify-center">
-              <TrendingUp size={16} className="text-purple-400" />
+            <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center">
+              <TrendingUp size={16} className="text-amber-400" />
             </div>
             <div>
               <p className="text-sm font-medium text-white">Promo Affiliate</p>
               <p className="text-xs text-gray-500">{affiliate ? "Active" : "Join now"}</p>
             </div>
           </div>
-          <ArrowRight size={14} className="text-gray-600 group-hover:text-purple-400 transition-colors" />
+          <ArrowRight size={14} className="text-gray-600 group-hover:text-amber-400 transition-colors" />
         </Link>
         <Link href="/dashboard/partner" className="glass-card p-4 flex items-center justify-between hover:border-green-500/40 transition-colors group">
           <div className="flex items-center gap-3">
@@ -128,9 +128,9 @@ export default async function DashboardPage() {
       <div className="glass-card">
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
           <h2 className="text-sm font-semibold text-white flex items-center gap-2">
-            <ShoppingBag size={15} className="text-purple-400" /> Recent Orders
+            <ShoppingBag size={15} className="text-amber-400" /> Recent Orders
           </h2>
-          <Link href="/dashboard/orders" className="text-xs text-blue-400 hover:text-blue-300 transition-colors">View all</Link>
+          <Link href="/dashboard/orders" className="text-xs text-amber-400 hover:text-amber-300 transition-colors">View all</Link>
         </div>
         {recentOrders.length === 0 ? (
           <div className="p-12 text-center text-gray-600">
@@ -149,7 +149,7 @@ export default async function DashboardPage() {
                       <span className={`${STATUS_BADGE[order.status] ?? "badge-purple"} text-xs`}>{order.status}</span>
                     </div>
                     <p className="text-xs text-gray-500 mt-0.5">
-                      <Link href={`/invoice/${order.id}`} className="text-purple-400 hover:text-purple-300">VLX-{order.id.slice(-6).toUpperCase()}</Link>
+                      <Link href={`/invoice/${order.id}`} className="text-amber-400 hover:text-amber-300">MTM-{order.id.slice(-6).toUpperCase()}</Link>
                       {" · "}{new Date(order.createdAt).toLocaleDateString()}
                     </p>
                   </div>

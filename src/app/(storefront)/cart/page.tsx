@@ -237,8 +237,8 @@ export default function CartPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center">
         <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6"
-          style={{ background: "rgba(167,139,250,0.1)", border: "1px solid rgba(167,139,250,0.2)" }}>
-          <ShoppingBag size={36} className="text-purple-400" />
+          style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)" }}>
+          <ShoppingBag size={36} className="text-amber-400" />
         </div>
         <h1 className="text-2xl font-bold text-white mb-2">Your cart is empty</h1>
         <p className="text-gray-500 mb-6">Add some products to get started.</p>
@@ -264,7 +264,7 @@ export default function CartPage() {
       <div className="max-w-2xl mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <ShoppingBag size={22} className="text-purple-400" />
+            <ShoppingBag size={22} className="text-amber-400" />
             Cart
             <span className="text-sm font-normal text-gray-500">({items.length} item{items.length !== 1 ? "s" : ""})</span>
           </h1>
@@ -421,7 +421,7 @@ export default function CartPage() {
         </p>
 
         <div className="flex justify-center mt-6">
-          <Link href="/products" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-purple-400 transition-colors">
+          <Link href="/products" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-amber-400 transition-colors">
             Continue shopping <ArrowRight size={13} />
           </Link>
         </div>
